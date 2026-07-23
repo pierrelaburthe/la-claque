@@ -1,0 +1,105 @@
+---
+import Base from '../layouts/Base.astro';
+import PieceCard from '../components/PieceCard.astro';
+import Stars from '../components/Stars.astro';
+import Avatar from '../components/Avatar.astro';
+import { PIECES } from '../data/pieces';
+import { CRITICS } from '../data/critics';
+import { consensusScore, estPlebiscite, estDecouverteSolo, nbVus, verdictFor } from '../lib/rating';
+import { url } from '../lib/url';
+
+const plebiscite = PIECES.filter(estPlebiscite).sort((a, b) => consensusScore(b) - consensusScore(a));
+const une = plebiscite[0];
+const restePleb = plebiscite.slice(1);
+const coupsDeCoeur = PIECES.filter((p) => p.noteMoy >= 8 && !estPlebiscite(p)).sort((a, b) => b.noteMoy - a.noteMoy);
+const solos = PIECES.filter(estDecouverteSolo).sort((a, b) => b.noteMoy - a.noteMoy);
+
+const nbChefs = PIECES.filter((p) => p.noteMoy >= 8).length;
+const totalVues = PIECES.reduce((s, p) => s + nbVus(p), 0);
+const uneCritic = une ? CRITICS[une.signataire] : null;
+---
+<Base title="La Claque — critiques de théâtre" active="accueil">
+  <section class="intro">
+    <div class="wrap">
+      <p class="kicker">Critiques de théâtre · Dossier en cours : Avignon OFF 2026</p>
+      <h1>On va voir du théâtre. Et on a décidé d'applaudir.</h1>
+      <p class="lede">
+        La Claque, ce sont huit ami·es qui courent les salles, un carnet de notes rempli entre deux représentations, et une règle du jeu assumée : chercher la lumière dans chaque spectacle. On commence par le Festival OFF d'Avignon 2026, et on continue toute l'année. Voici nos {PIECES.length} premières critiques, en étoiles et en enthousiasme.
+      </p>
+      <div class="actions">
+        <a class="btn" href={url('/critiques')}>Lire les {PIECES.length} critiques</a>
+        <a class="btn btn-ghost" href={url('/a-propos')}>Notre manière de noter</a>
+      </div>
+      <div class="ours">
+        <div><strong>{PIECES.length}</strong><span>spectacles vus</span></div>
+        <div><strong>8</strong><span>plumes dans la bande</span></div>
+        <div><strong>{totalVues}</strong><span>billets tamponnés</span></div>
+        <div><strong>{nbChefs}</strong><span>chefs-d'œuvre</span></div>
+      </div>
+    </div>
+  </section>
+
+  {une && uneCritic && (
+    <div class="wrap">
+      <div class="rubric">
+        <h2>La Une</h2>
+        <span class="line"></span>
+        <span class="note">Le plébiscite absolu de la bande</span>
+      </div>
+      <article class="lead">
+        <a class="frame" href={url(`/critiques/${une.slug}`)}>
+          {une.image && <img src={url(une.image)} alt={`Affiche de ${une.titre}`} />}
+          <span class="corner">Vu par {nbVus(une)} d'entre nous</span>
+        </a>
+        <div>
+          <span class="kicker">{une.style}{une.salle ? ` · ${une.salle}` : ''}</span>
+          <h2><a class="title" href={url(`/critiques/${une.slug}`)}>{une.titre}</a></h2>
+          <p class="stand">{une.chapo}</p>
+          <div class="foot">
+            <Stars note={une.noteMoy} />
+            <span class="metaline">{verdictFor(une.noteMoy)} · vu par {nbVus(une)} d'entre nous</span>
+          </div>
+          <div class="byline" style="margin-top:14px; display:flex; align-items:center; gap:9px; font-family:var(--sans); font-size:0.72rem; text-transform:uppercase; letter-spacing:0.06em; color:var(--ink-3)">
+            <Avatar critic={une.signataire} size={26} ring={false} /> Par {uneCritic.plume}
+          </div>
+        </div>
+      </article>
+    </div>
+  )}
+
+  <div class="wrap">
+    <div class="rubric">
+      <h2>Le plébiscite de la bande</h2>
+      <span class="line"></span>
+      <span class="note">Vus et aimés par le plus grand nombre</span>
+    </div>
+    <p class="rubric-intro">Quand six ou sept avis différents tombent d'accord, on vous le signale : c'est là qu'il faut courir en priorité.</p>
+    <div class="cards">
+      {restePleb.map((p) => <PieceCard piece={p} />)}
+    </div>
+
+    <div class="rubric">
+      <h2>Les autres chefs-d'œuvre</h2>
+      <span class="line"></span>
+      <span class="note">Cinq étoiles</span>
+    </div>
+    <p class="rubric-intro">Moins de monde dans la salle, mais un niveau qui crève le plafond. À rattraper d'urgence.</p>
+    <div class="cards">
+      {coupsDeCoeur.map((p) => <PieceCard piece={p} />)}
+    </div>
+
+    <div class="rubric">
+      <h2>Les découvertes en solo</h2>
+      <span class="line"></span>
+      <span class="note">Vues par un·e seul·e d'entre nous</span>
+    </div>
+    <p class="rubric-intro">Un membre de la bande s'est aventuré seul dans une salle et en est ressorti conquis. On vous les offre comme des paris.</p>
+    <div class="cards">
+      {solos.map((p) => <PieceCard piece={p} />)}
+    </div>
+
+    <div class="center" style="margin:56px 0 10px;">
+      <a class="btn" href={url('/palmares')}>Le palmarès complet des {PIECES.length} spectacles</a>
+    </div>
+  </div>
+</Base>

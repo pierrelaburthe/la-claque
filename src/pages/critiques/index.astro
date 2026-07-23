@@ -1,0 +1,20 @@
+---
+import Base from '../../layouts/Base.astro';
+import PieceCard from '../../components/PieceCard.astro';
+import { PIECES } from '../../data/pieces';
+
+const pieces = [...PIECES].sort((a, b) => b.noteMoy - a.noteMoy);
+---
+<Base title="Toutes les critiques — La Claque" active="critiques" description="Les 34 spectacles du OFF d'Avignon 2026 vus et notés par la bande de La Claque.">
+  <div class="wrap">
+    <div class="rubric" style="margin-top:40px">
+      <h2>Les {pieces.length} critiques</h2>
+      <span class="line"></span>
+      <span class="note">Édition 2026</span>
+    </div>
+    <p class="rubric-intro">Tout ce qu'on a vu cette année, de la claque monumentale au pari qu'on a défendu bec et ongles. Classé de la meilleure note à la plus tendre.</p>
+    <div class="cards">
+      {pieces.map((p) => <PieceCard piece={p} />)}
+    </div>
+  </div>
+</Base>

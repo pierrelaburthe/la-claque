@@ -1,0 +1,104 @@
+---
+import Base from '../../layouts/Base.astro';
+import Stars from '../../components/Stars.astro';
+import Avatar from '../../components/Avatar.astro';
+import PieceCard from '../../components/PieceCard.astro';
+import { PIECES } from '../../data/pieces';
+import { CRITICS } from '../../data/critics';
+import { verdictFor, nbVus, estPlebiscite, consensusScore } from '../../lib/rating';
+import { url } from '../../lib/url';
+
+export function getStaticPaths() {
+  return PIECES.map((piece) => ({ params: { slug: piece.slug }, props: { piece } }));
+}
+
+const { piece } = Astro.props;
+const c = CRITICS[piece.signataire];
+const seen = nbVus(piece);
+const pleb = estPlebiscite(piece);
+const chef = piece.noteMoy >= 8;
+
+const suggestions = PIECES
+  .filter((p) => p.slug !== piece.slug)
+  .sort((a, b) => consensusScore(b) - consensusScore(a))
+  .slice(0, 3);
+
+const hostname = (u: string) => {
+  try { return new URL(u).hostname.replace(/^www\./, ''); } catch { return u; }
+};
+---
+<Base title={`${piece.titre} — La Claque`} active="critiques" description={piece.chapo}>
+  <div class="art-hero">
+    <div class="cover">
+      {piece.image
+        ? <img src={url(piece.image)} alt={`Affiche de ${piece.titre}`} />
+        : <div style={`position:absolute;inset:0;background:${c.couleur}`}></div>}
+    </div>
+    <div class="cap">
+      <div class="cap-inner">
+        <a href={url('/critiques')} class="back">← Toutes les critiques</a>
+        <p class="sub">{piece.style}{piece.salle ? ` · ${piece.salle}` : ''}</p>
+        <h1>{piece.titre}</h1>
+        <div class="rating">
+          <Stars note={piece.noteMoy} />
+          <span class="flag">{verdictFor(piece.noteMoy)}</span>
+          {pleb && <span class="flag"><span class="dot"></span> Plébiscite · vu par {seen}</span>}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <article class="wrap-narrow art-body">
+    <div class="byline-row">
+      <Avatar critic={piece.signataire} size={48} />
+      <div class="who">
+        <div class="n">Par {c.plume}</div>
+        <div class="r">{c.role}</div>
+      </div>
+    </div>
+
+    {piece.titreExact && piece.titreExact !== piece.titre && (
+      <p class="metaline" style="margin:-10px 0 14px">Titre complet : {piece.titreExact}</p>
+    )}
+    {piece.origine && <p class="metaline" style="margin:-6px 0 8px; color:var(--ink-2)">{piece.origine}</p>}
+    {piece.festival && <p class="metaline" style="margin:0 0 20px; color:var(--ink-3)">Dossier : {piece.festival}</p>}
+
+    <p class="stand">{piece.chapo}</p>
+
+    <div class="prose">
+      {piece.corps.map((par) => <p>{par}</p>)}
+    </div>
+
+    {piece.momentGarde && (
+      <div class="moment">
+        <div class="lbl">Le moment qu'on garde</div>
+        <p>{piece.momentGarde}</p>
+      </div>
+    )}
+
+    <div class="artfoot">
+      <Stars note={piece.noteMoy} />
+      <span class="big">{verdictFor(piece.noteMoy)}</span>
+      <span>vu par {seen} d'entre nous</span>
+    </div>
+
+    {piece.sources.length > 0 && (
+      <p class="sources">
+        Faits de production (autrice ou auteur, mise en scène, salle, synopsis) d'après
+        {piece.sources.map((u, i) => (
+          <> {i > 0 ? '· ' : ' '}<a href={u} rel="noopener nofollow">{hostname(u)}</a></>
+        ))}. Les impressions de salle sont les nôtres.
+      </p>
+    )}
+  </article>
+
+  <div class="wrap">
+    <div class="rubric">
+      <h2>À voir aussi</h2>
+      <span class="line"></span>
+    </div>
+    <div class="cards">
+      {suggestions.map((p) => <PieceCard piece={p} />)}
+    </div>
+  </div>
+</Base>

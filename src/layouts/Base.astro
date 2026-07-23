@@ -1,0 +1,73 @@
+---
+import '../styles/global.css';
+import { url } from '../lib/url';
+
+interface Props {
+  title: string;
+  description?: string;
+  active?: string;
+}
+const { title, description = "Critiques de théâtre par une bande d'ami·es qui applaudit fort. Étoiles, coups de cœur et découvertes, à Avignon et toute l'année.", active } = Astro.props;
+const nav = [
+  { href: url('/'), label: 'La Une', key: 'accueil' },
+  { href: url('/critiques'), label: 'Critiques', key: 'critiques' },
+  { href: url('/palmares'), label: 'Palmarès', key: 'palmares' },
+  { href: url('/equipe'), label: 'La rédaction', key: 'equipe' },
+  { href: url('/a-propos'), label: 'À propos', key: 'apropos' },
+];
+---
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <link rel="icon" href={url('/favicon.svg')} type="image/svg+xml" />
+  </head>
+  <body>
+    <header class="masthead">
+      <div class="top">
+        <a class="logo" href={url('/')}>La <b>Claque</b></a>
+        <div class="edition">
+          Critiques de théâtre<br />Dossier en cours : Avignon OFF 2026
+        </div>
+      </div>
+      <nav>
+        <div class="inner">
+          {nav.map((n) => (
+            <a href={n.href} class={active === n.key ? 'active' : ''}>{n.label}</a>
+          ))}
+        </div>
+      </nav>
+    </header>
+
+    <main>
+      <slot />
+    </main>
+
+    <footer class="foot-site">
+      <div class="inner">
+        <div>
+          <div class="logo">La <b>Claque</b></div>
+          <p style="margin-top:10px">Huit ami·es qui vont au théâtre et en parlent sans jamais bouder leur plaisir. On applaudit pour de vrai, à Avignon et toute l'année.</p>
+        </div>
+        <div>
+          <h4>Le journal</h4>
+          <a href={url('/critiques')}>Les critiques</a>
+          <a href={url('/palmares')}>Palmarès</a>
+          <a href={url('/equipe')}>La rédaction</a>
+          <a href={url('/a-propos')}>À propos</a>
+        </div>
+        <div>
+          <h4>En ce moment</h4>
+          <span class="metaline" style="color:var(--ink-3)">Dossier Avignon OFF 2026</span>
+          <a href="https://www.festivaloffavignon.com" rel="noopener">Festival OFF d'Avignon</a>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

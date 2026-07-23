@@ -1,0 +1,78 @@
+---
+import Base from '../layouts/Base.astro';
+import Stars from '../components/Stars.astro';
+import Avatar from '../components/Avatar.astro';
+import { PIECES } from '../data/pieces';
+import { CRITICS } from '../data/critics';
+import { nbVus, estPlebiscite, verdictFor } from '../lib/rating';
+import { url } from '../lib/url';
+
+const classement = [...PIECES].sort((a, b) => b.noteMoy - a.noteMoy);
+---
+<Base title="Palmarès 2026 — La Claque" active="palmares" description="Le classement complet des 34 spectacles du OFF d'Avignon 2026 notés par La Claque.">
+  <div class="wrap">
+    <div class="rubric" style="margin-top:40px">
+      <h2>Le palmarès 2026</h2>
+      <span class="line"></span>
+      <span class="note">De la claque à la caresse</span>
+    </div>
+    <p class="rubric-intro">Les {classement.length} spectacles rangés du meilleur au plus tendre. La pastille signale les plébiscites : ceux que la bande a vus en nombre et adorés ensemble.</p>
+
+    <ol class="rank">
+      {classement.map((p, i) => {
+        const c = CRITICS[p.signataire];
+        const seen = nbVus(p);
+        return (
+          <li>
+            <a href={url(`/critiques/${p.slug}`)}>
+              <span class="pos">{i + 1}</span>
+              <span class="thumb">
+                {p.image
+                  ? <img src={url(p.image)} alt={`Affiche de ${p.titre}`} loading="lazy" />
+                  : <span class="ph" style={`background:${c.couleur}`}></span>}
+              </span>
+              <span class="main">
+                <strong>{p.titre}{estPlebiscite(p) && <span class="dot" title="Plébiscite"></span>}</strong>
+                <span class="sub">{p.style}{p.salle ? ` · ${p.salle}` : ''} · par {c.plume}</span>
+              </span>
+              <span class="rating">
+                <Stars note={p.noteMoy} />
+                <span class="verdict">{verdictFor(p.noteMoy)}</span>
+              </span>
+              <span class="seen-col">vu par {seen}</span>
+            </a>
+          </li>
+        );
+      })}
+    </ol>
+  </div>
+</Base>
+
+<style>
+  .rank { list-style: none; padding: 0; margin: 8px 0 0; display: flex; flex-direction: column; }
+  .rank li { border-bottom: 1px solid var(--rule); }
+  .rank li:first-child { border-top: 1px solid var(--rule); }
+  .rank a {
+    display: grid; grid-template-columns: 42px 52px 1fr auto auto; align-items: center; gap: 18px;
+    padding: 12px 6px; text-decoration: none; color: var(--ink);
+  }
+  .rank a:hover { background: var(--card); }
+  .rank a:hover strong { color: var(--red); }
+  .pos { font-family: var(--serif); font-size: 1.5rem; color: var(--ink-3); font-weight: 700; text-align: center; }
+  .thumb { width: 52px; height: 66px; overflow: hidden; border: 1px solid var(--rule-2); background: var(--panel); }
+  .thumb img { width: 100%; height: 100%; object-fit: cover; }
+  .thumb .ph { display: block; width: 100%; height: 100%; }
+  .main { display: flex; flex-direction: column; min-width: 0; }
+  .main strong { font-family: var(--serif); font-size: 1.2rem; display: flex; align-items: center; gap: 8px; }
+  .main .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--red); flex: none; }
+  .main .sub { font-family: var(--sans); font-size: 0.74rem; color: var(--ink-3); text-transform: uppercase; letter-spacing: 0.05em; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .rating { display: flex; flex-direction: column; align-items: flex-end; gap: 3px; min-width: 118px; }
+  .rating .stars { font-size: 1.15rem; }
+  .rating .verdict { font-family: var(--sans); font-size: 0.64rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--ink-2); font-weight: 700; }
+  .seen-col { font-family: var(--sans); font-weight: 700; font-size: 0.66rem; color: var(--ink-3); text-transform: uppercase; letter-spacing: 0.06em; text-align: right; min-width: 66px; }
+  @media (max-width: 680px) {
+    .rank a { grid-template-columns: 30px 44px 1fr auto; gap: 12px; }
+    .seen-col { display: none; }
+    .thumb { width: 44px; height: 56px; }
+  }
+</style>

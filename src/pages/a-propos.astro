@@ -1,0 +1,47 @@
+---
+import Base from '../layouts/Base.astro';
+import { PIECES } from '../data/pieces';
+---
+<Base title="À propos — La Claque" active="apropos" description="La Claque, mode d'emploi : notre parti pris, notre barème d'étoiles et notre façon de mettre en avant les coups de cœur collectifs.">
+  <div class="wrap-narrow" style="padding-top:46px;">
+    <p class="kicker">Mode d'emploi</p>
+    <h1 style="font-size:clamp(2rem,5vw,3rem)">C'est quoi, La Claque ?</h1>
+
+    <div class="prose" style="margin-top:18px">
+      <p>
+        Au théâtre, <strong>la claque</strong>, c'était autrefois ce petit groupe de spectateurs placés dans la salle pour applaudir, rire au bon moment et lancer les bravos. Un public de mèche, toujours du côté de la scène. Nous en avons fait une devise. La Claque, ce sont huit ami·es qui vont voir du théâtre ensemble et qui ont décidé de rester du côté des artistes. On a commencé par le Festival OFF d'Avignon 2026, notre premier dossier, et on compte bien continuer toute l'année, saison après saison, salle après salle.
+      </p>
+      <p>
+        Notre règle du jeu tient en une phrase : <strong>on ne montre jamais qu'un spectacle nous a déçus.</strong> Monter sur un plateau au OFF, c'est déjà un acte de courage, souvent à perte d'argent et de sommeil. Alors on cherche la lumière : le geste juste, l'idée qui reste, la scène qu'on rejouera à la terrasse le soir même.
+      </p>
+
+      <h2>Nos plumes racontent la pièce</h2>
+      <p>
+        Chaque critique est signée par l'une de nos huit plumes, sous un nom de scène anonyme. On ne déballe pas le détail des notes de chacun : on préfère une voix qui raconte le spectacle, ce qui s'y joue et pourquoi ça vaut le détour. Pour les faits de production, on s'appuie sur les fiches Ticket'Off, les avis Billetreduc et la presse, tout est sourcé en bas de chaque article. Les emballements en salle, eux, sont les nôtres.
+      </p>
+
+      <h2>Notre barème d'étoiles</h2>
+      <p>Chaque spectacle reçoit une note moyenne sur 10, calculée à partir des notes de celles et ceux d'entre nous qui l'ont vu. On la traduit en étoiles avec un plancher volontairement haut : jamais moins de trois étoiles.</p>
+      <ul class="bareme">
+        <li><span class="s">★★★★★</span> <span><strong>Chef-d'œuvre.</strong> Moyenne de 8 et plus. On en parlera encore l'an prochain.</span></li>
+        <li><span class="s">★★★★</span> <span><strong>Coup de cœur.</strong> Moyenne au-dessus de 5. Foncez.</span></li>
+        <li><span class="s">★★★</span> <span><strong>Belle découverte.</strong> Tout le reste. Notre plancher : même là, on trouve toujours quelque chose à célébrer.</span></li>
+      </ul>
+
+      <h2>On applaudit plus fort à plusieurs</h2>
+      <p>
+        Un coup de cœur, c'est bien. Un coup de cœur partagé par six ou sept d'entre nous, c'est un signal. Sur la Une et dans le palmarès, on met donc en avant les <strong>plébiscites</strong> : les spectacles que le plus grand nombre a vus <em>et</em> aimés, pondérés par le nombre de spectateurs de la bande. Une pièce adorée par sept personnes passe devant un coup de foudre solitaire. À l'inverse, nos <strong>découvertes en solo</strong> sont signalées comme telles : des paris qu'on vous propose, pas encore vérifiés à plusieurs.
+      </p>
+
+      <p class="muted" style="margin-top:30px; font-family:var(--sans); font-size:0.92rem;">
+        {PIECES.length} spectacles pour ce premier dossier, 8 paires d'yeux, et la suite toute l'année. Bonne lecture, et surtout : allez au théâtre.
+      </p>
+    </div>
+  </div>
+</Base>
+
+<style>
+  .bareme { list-style: none; padding: 0; margin: 16px 0 8px; display: flex; flex-direction: column; gap: 12px; }
+  .bareme li { display: flex; gap: 16px; align-items: baseline; }
+  .bareme .s { color: var(--star); font-size: 1rem; min-width: 5.6ch; letter-spacing: 1px; white-space: nowrap; }
+</style>

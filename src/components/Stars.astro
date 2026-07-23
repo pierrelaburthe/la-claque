@@ -1,0 +1,32 @@
+---
+// Rangée d'étoiles avec support des demi-étoiles.
+interface Props { note: number; }
+import { starsFor } from '../lib/rating';
+const { note } = Astro.props;
+const value = starsFor(note);
+const items = [1, 2, 3, 4, 5].map((i) => {
+  if (value >= i) return 'full';
+  if (value >= i - 0.5) return 'half';
+  return 'empty';
+});
+---
+<span class="stars" aria-label={`${value} étoiles sur 5`} role="img">
+  {items.map((kind, i) => (
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <defs>
+        <linearGradient id={`half-${i}`}>
+          <stop offset="50%" stop-color="currentColor" />
+          <stop offset="50%" stop-color="transparent" />
+        </linearGradient>
+      </defs>
+      <path
+        d="M12 2.5l2.9 6.1 6.6.9-4.8 4.7 1.2 6.6L12 18.7 6 20.8l1.2-6.6L2.4 9.5l6.6-.9z"
+        fill={kind === 'full' ? 'currentColor' : kind === 'half' ? `url(#half-${i})` : 'none'}
+        stroke="currentColor"
+        stroke-width="1.2"
+        stroke-linejoin="round"
+        opacity={kind === 'empty' ? 0.32 : 1}
+      />
+    </svg>
+  ))}
+</span>

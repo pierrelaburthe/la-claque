@@ -1,0 +1,67 @@
+---
+import Base from '../layouts/Base.astro';
+import Avatar from '../components/Avatar.astro';
+import { CRITICS, CRITIC_ORDER } from '../data/critics';
+import { PIECES } from '../data/pieces';
+import { url } from '../lib/url';
+
+const team = CRITIC_ORDER.map((key) => {
+  const critic = CRITICS[key];
+  const signees = PIECES.filter((p) => p.signataire === key);
+  const notees = PIECES.filter((p) => p.notes[key] !== undefined);
+  return { critic, signees, notees };
+});
+---
+<Base title="La rédaction — La Claque" active="equipe" description="Les huit plumes de La Claque : des noms de scène empruntés à la comédie et au jargon des plateaux, et un avatar pour chacun·e.">
+  <div class="wrap">
+    <div class="rubric" style="margin-top:40px">
+      <h2>La rédaction</h2>
+      <span class="line"></span>
+      <span class="note">Huit plumes, huit avatars</span>
+    </div>
+    <p class="rubric-intro">On signe sous des noms de scène : un personnage de la comédie (Colombine, Scapin, Arlequin, Sganarelle…) marié à un terme du jargon des plateaux (côté cour et côté jardin, le strapontin, la servante, les trois coups). Nos vrais prénoms restent en coulisses.</p>
+
+    <div class="team">
+      {team.map(({ critic, signees, notees }) => (
+        <article class="member" style={`--acc:${critic.couleur}`}>
+          <div class="head">
+            <Avatar critic={critic.key} size={76} />
+            <div>
+              <h3>{critic.plume}</h3>
+              <p class="role">{critic.role}</p>
+            </div>
+          </div>
+          <p class="bio">{critic.bio}</p>
+          <div class="stats">
+            <span><strong>{notees.length}</strong> spectacle{notees.length > 1 ? 's' : ''} vu{notees.length > 1 ? 's' : ''}</span>
+            <span><strong>{signees.length}</strong> critique{signees.length > 1 ? 's' : ''} signée{signees.length > 1 ? 's' : ''}</span>
+          </div>
+          {signees.length > 0 ? (
+            <p class="signes">
+              Récemment :
+              {signees.slice(0, 3).map((p, i) => (
+                <> {i > 0 ? ', ' : ' '}<a href={url(`/critiques/${p.slug}`)}>{p.titre}</a></>
+              ))}.
+            </p>
+          ) : (
+            <p class="signes muted">Cette année, {critic.prenomScene} a surtout tenu la billetterie et distribué les bonnes adresses à toute la bande. Ses critiques signées, ce sera pour la prochaine édition.</p>
+          )}
+        </article>
+      ))}
+    </div>
+  </div>
+</Base>
+
+<style>
+  .team { display: grid; grid-template-columns: repeat(auto-fill, minmax(330px, 1fr)); gap: 22px; }
+  .member { background: var(--card); border: 1px solid var(--rule-2); border-top: 3px solid var(--acc); padding: 22px; }
+  .member .head { display: flex; gap: 15px; align-items: center; margin-bottom: 14px; }
+  .member h3 { margin: 0; font-size: 1.3rem; }
+  .member .role { margin: 3px 0 0; font-family: var(--sans); font-size: 0.68rem; color: var(--acc); font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; }
+  .member .bio { color: var(--ink-2); font-size: 0.98rem; }
+  .member .stats { display: flex; gap: 22px; margin: 14px 0 10px; padding-top: 12px; border-top: 1px solid var(--rule); }
+  .member .stats strong { font-family: var(--serif); color: var(--red); font-size: 1.15rem; }
+  .member .stats span { font-family: var(--sans); font-size: 0.72rem; color: var(--ink-3); text-transform: uppercase; letter-spacing: 0.04em; }
+  .member .signes { font-family: var(--sans); font-size: 0.84rem; color: var(--ink-2); margin: 0; }
+  .member .signes a { color: var(--red); }
+</style>
