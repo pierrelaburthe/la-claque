@@ -45,6 +45,7 @@ const jsonld = [
 
   <div class="wrap-narrow">
     <div class="game" id="game">
+      <p class="daycount" id="daycount" hidden></p>
       <div class="gauges" id="gauges" aria-hidden="true"></div>
 
       <div class="stage">
@@ -52,7 +53,7 @@ const jsonld = [
           <!-- écran de départ -->
           <div class="panel intro" id="intro">
             <p class="day-badge">Prêt·e ?</p>
-            <p class="intro-txt">Balayez la carte ou utilisez les deux boutons. Chaque choix a un prix. Quatre jauges à surveiller : <b>Trésorerie</b>, <b>Public</b>, <b>Moral</b>, <b>Presse</b>. Si l'une se vide ou déborde, le rideau tombe.</p>
+            <p class="intro-txt">Balayez la carte ou utilisez les deux boutons. Chaque choix a un prix. Quatre jauges à surveiller : <b>Trésorerie</b>, <b>Public</b>, <b>Moral</b>, <b>Presse</b>. Attention, chaque jour les <b>frais courent et la fatigue monte</b> tout seuls : impossible de se reposer sur ses lauriers. Si une jauge se vide ou déborde, le rideau tombe.</p>
             <button class="btn play" id="start">Lever le rideau</button>
           </div>
 
@@ -94,8 +95,10 @@ const jsonld = [
     { key: 'moral', label: 'Moral', bas: 'Épuisée et démoralisée, la troupe rend son tablier avant la fin.', haut: "L'euphorie tourne à la fête permanente : plus personne ne monte sur scène à l'heure." },
     { key: 'presse', label: 'Presse', bas: 'Aucun média ne parle de vous. Vous jouez dans l\'indifférence totale.', haut: 'Starisé·es trop vite, vous récoltez un retour de bâton médiatique qui vous enterre.' },
   ];
-  const START = { treso: 45, public: 30, moral: 68, presse: 22 };
+  const START = { treso: 42, public: 28, moral: 60, presse: 20 };
   const MAX_JOUR = 24;
+  // Usure quotidienne : les frais courent, la fatigue s'accumule. Impossible de coasting.
+  const DRIFT = { treso: -3, moral: -2 };
 
   // ---- Le paquet de cartes ----
   const DECK = [
@@ -165,37 +168,93 @@ const jsonld = [
     { perso: 'L\'AF&C', g: 'G', c: '#b5651d', t: "L'association du OFF propose de figurer dans une sélection thématique, moyennant un dossier à boucler ce soir.",
       L: { lab: 'On monte le dossier', fx: { moral: -6, presse: +12, public: +4 } },
       R: { lab: 'Trop tard, on dort', fx: { moral: +6, presse: -6 } } },
+    { perso: 'Un mécène du coin', g: 'N', c: '#2d4a3e', t: "Un notable avignonnais adore le spectacle et propose un chèque, en échange d'un remerciement appuyé qui gêne la troupe.",
+      L: { lab: 'On accepte le chèque', fx: { treso: +20, moral: -6 } },
+      R: { lab: 'On refuse poliment', fx: { moral: +6, treso: -2 } } },
+    { perso: 'Un atelier rémunéré', g: 'X', c: '#444', t: "Une MJC propose à la troupe d'animer un stage en matinée. Bien payé, mais c'est autant d'énergie en moins pour le soir.",
+      L: { lab: 'On prend le stage', fx: { treso: +14, moral: -8 } },
+      R: { lab: 'On garde nos forces', fx: { moral: +4, treso: -3 } } },
+    { perso: 'Une coquille sur l\'affiche', g: 'Q', c: '#7a2018', t: "L'imprimeur a écrit votre titre de travers sur 500 affiches déjà collées en ville.",
+      L: { lab: 'On réimprime tout', fx: { treso: -12, presse: +4 } },
+      R: { lab: 'On en rit sur les réseaux', fx: { presse: -6, public: +6, moral: +4 } } },
+    { perso: 'Une nomination surprise', g: 'Y', c: '#b5651d', t: "Votre spectacle est cité parmi les coups de cœur d'un site influent. Le téléphone s'emballe.",
+      L: { lab: 'On surfe sur la vague', fx: { presse: +14, public: +10, moral: -6 } },
+      R: { lab: 'On reste concentré', fx: { presse: +6, moral: +4 } } },
+    { perso: 'Une entorse en coulisses', g: 'I', c: '#5a3e7a', t: "Une comédienne se tord la cheville à l'échauffement. Jouer quand même, ou annuler la représentation ?",
+      L: { lab: 'On adapte la mise en scène', fx: { moral: -6, public: -4 } },
+      R: { lab: 'On annule ce soir', fx: { treso: -10, public: -8, moral: +4 } } },
+    { perso: 'Une matinée idéale', g: 'É', c: '#2d4a3e', t: "Ni trop chaud ni mistral : une journée parfaite pour tracter et remplir la salle.",
+      L: { lab: 'On tracte à fond', fx: { public: +12, moral: +4, treso: -2 } },
+      R: { lab: 'On répète plutôt', fx: { moral: +8, presse: +2 } } },
+    { perso: 'Le collectif d\'entraide', g: 'U', c: '#444', t: "D'autres compagnies proposent de mutualiser logement et repas pour alléger la note de tout le monde.",
+      L: { lab: 'On mutualise', fx: { treso: +12, moral: +6, presse: -2 } },
+      R: { lab: 'On reste entre nous', fx: { moral: +2 } } },
+    { perso: 'Un bug de billetterie', g: '#', c: '#7a2018', t: "La plateforme en ligne plante un week-end entier. Des spectateurs n'arrivent pas à réserver.",
+      L: { lab: 'On vend en direct, à la caisse', fx: { treso: +4, moral: -6, public: +2 } },
+      R: { lab: 'On attend que ça revienne', fx: { treso: -8, public: -6 } } },
+    { perso: 'Une radio locale', g: '@', c: '#b5651d', t: "France Bleu propose un direct à l'heure de la sieste, en plein cœur de journée.",
+      L: { lab: 'On y passe', fx: { presse: +12, public: +4, moral: -6 } },
+      R: { lab: 'On préserve la troupe', fx: { moral: +6, presse: -6 } } },
+    { perso: 'Un resto qui fait crédit', g: '&', c: '#5a3e7a', t: "Le patron du bistrot d'en face vous laisse une ardoise jusqu'à la fin du mois. Tentant, mais la note grimpera.",
+      L: { lab: 'On ouvre l\'ardoise', fx: { treso: +10, moral: +6, presse: -2 } },
+      R: { lab: 'On serre le budget', fx: { treso: -2, moral: -4 } } },
+    { perso: 'Un tract mal placé', g: '§', c: '#2d4a3e', t: "Votre équipe a tracté deux heures devant un spectacle concurrent. Ambiance tendue sur le trottoir.",
+      L: { lab: 'On assume le culot', fx: { public: +10, presse: -4, moral: -2 } },
+      R: { lab: 'On s\'excuse et on bouge', fx: { public: -4, moral: +4 } } },
+    { perso: 'La demi-jauge du lundi', g: '½', c: '#444', t: "Lundi creux, salle à moitié vide. Offrir des places aux étudiants pour faire du bruit, ou assumer la petite jauge ?",
+      L: { lab: 'Places offertes aux étudiants', fx: { treso: -6, public: +12, presse: +2 } },
+      R: { lab: 'On joue pour ceux qui sont là', fx: { moral: +6, public: -2 } } },
   ];
 
   // ---- État ----
   let g = { ...START };
   let jour = 1;
-  let last = [];
   let current = null;
+  let bag = [];
+  let lastCard = null;
+  let busy = false;
 
   const $ = (id) => document.getElementById(id);
   const clamp = (n) => Math.max(0, Math.min(100, n));
 
-  function renderGauges() {
-    const box = $('gauges');
-    box.innerHTML = GAUGES.map((G) => {
-      const v = g[G.key];
-      const danger = v <= 22 || v >= 78 ? ' danger' : '';
-      return `<div class="gauge${danger}"><span class="gl">${G.label}</span>
-        <span class="gbar"><span class="gfill" style="width:${clamp(v)}%"></span></span></div>`;
-    }).join('');
+  // Paquet mélangé : on voit toutes les cartes avant qu'une seule revienne. Vraie variété.
+  function shuffle(a) { for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); const t = a[i]; a[i] = a[j]; a[j] = t; } return a; }
+  function pick() {
+    if (bag.length === 0) bag = shuffle([...DECK]);
+    let c = bag.pop();
+    if (c === lastCard && bag.length > 0) { bag.unshift(c); c = bag.pop(); }
+    lastCard = c;
+    return c;
   }
 
-  function pick() {
-    let pool = DECK.filter((c) => !last.includes(c));
-    if (pool.length === 0) pool = DECK;
-    // rotation pseudo-aléatoire sans Math.random (déterministe mais variée selon l'état)
-    const idx = (jour * 7 + g.treso + g.public * 3 + g.moral + g.presse * 2) % pool.length;
-    const chosen = pool[idx];
-    last.push(chosen);
-    if (last.length > 5) last.shift();
-    return chosen;
+  function buildGauges() {
+    $('gauges').innerHTML = GAUGES.map((G) =>
+      `<div class="gauge" data-k="${G.key}"><span class="gl">${G.label}</span>` +
+      `<span class="gbar"><span class="gfill"></span></span><span class="gdelta"></span></div>`
+    ).join('');
+    updateGauges(null);
   }
+  function updateGauges(delta) {
+    for (const G of GAUGES) {
+      const el = $('gauges').querySelector(`.gauge[data-k="${G.key}"]`);
+      if (!el) continue;
+      const v = clamp(g[G.key]);
+      el.querySelector('.gfill').style.width = v + '%';
+      el.classList.toggle('danger', v <= 22 || v >= 78);
+      const badge = el.querySelector('.gdelta');
+      const d = delta && delta[G.key];
+      if (d) {
+        badge.textContent = (d > 0 ? '+' : '') + d;
+        badge.className = 'gdelta ' + (d > 0 ? 'up' : 'down');
+        badge.style.animation = 'none'; void badge.offsetWidth; badge.style.animation = '';
+      } else {
+        badge.textContent = '';
+        badge.className = 'gdelta';
+      }
+    }
+  }
+
+  function updateDayCount() { $('daycount').textContent = `Représentation ${Math.min(jour, MAX_JOUR)} sur ${MAX_JOUR}`; }
 
   function showCard() {
     current = pick();
@@ -205,10 +264,13 @@ const jsonld = [
     $('ctext').textContent = current.t;
     $('labL').textContent = current.L.lab;
     $('labR').textContent = current.R.lab;
+    updateDayCount();
+    $('daycount').hidden = false;
     $('card').hidden = false;
     $('choices').hidden = false;
     $('intro').hidden = true;
     $('end').hidden = true;
+    busy = false;
     resetCardPos();
   }
 
@@ -217,19 +279,26 @@ const jsonld = [
   }
 
   function apply(side) {
-    const choice = current[side];
-    const fx = choice.fx;
-    for (const k in fx) g[k] = g[k] + fx[k];
-    // mort si une jauge se vide ou déborde
+    if (busy || !current) return;
+    busy = true;
+    const fx = current[side].fx;
+    // Le choix, plus l'usure quotidienne (frais + fatigue).
+    const delta = {};
+    for (const G of GAUGES) delta[G.key] = (fx[G.key] || 0) + (DRIFT[G.key] || 0);
+    for (const k in g) g[k] = g[k] + delta[k];
+    // mort si une jauge se vide ou déborde (avant clamp)
+    let death = null;
     for (const G of GAUGES) {
-      if (g[G.key] <= 0) return end(false, G.bas);
-      if (g[G.key] >= 100) return end(false, G.haut);
+      if (g[G.key] <= 0) { death = G.bas; break; }
+      if (g[G.key] >= 100) { death = G.haut; break; }
     }
     for (const k in g) g[k] = clamp(g[k]);
-    renderGauges();
+    updateGauges(delta);
+    $('choices').hidden = true; // on laisse l'animation des jauges jouer
+    if (death) { setTimeout(() => end(false, death), 640); return; }
     jour++;
-    if (jour > MAX_JOUR) return end(true);
-    showCard();
+    if (jour > MAX_JOUR) { setTimeout(() => end(true), 640); return; }
+    setTimeout(showCard, 360);
   }
 
   function end(win, cause) {
@@ -259,13 +328,15 @@ const jsonld = [
   function reset() {
     g = { ...START };
     jour = 1;
-    last = [];
-    renderGauges();
+    bag = [];
+    lastCard = null;
+    busy = false;
+    buildGauges();
     showCard();
   }
 
   // ---- Interaction : boutons ----
-  $('start').addEventListener('click', () => { renderGauges(); showCard(); });
+  $('start').addEventListener('click', reset);
   $('again').addEventListener('click', reset);
   $('btnL').addEventListener('click', () => apply('L'));
   $('btnR').addEventListener('click', () => apply('R'));
@@ -308,16 +379,17 @@ const jsonld = [
     if (e.key === 'ArrowRight') apply('R');
   });
 
-  renderGauges();
+  buildGauges();
 </script>
 
 <style>
   .game { margin: 8px 0 20px; }
   /* .panel/.choices posent display:flex|grid, ce qui écrase [hidden]. On rétablit. */
   .game [hidden] { display: none !important; }
+  .daycount { font-family: var(--sans); font-size: 0.68rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.13em; color: var(--ink-3); text-align: center; margin: 0 0 14px; }
   .gauges { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 20px; }
   /* .gauge est injecté en JS : selecteurs :global sinon le scope Astro ne l'atteint pas. */
-  .gauges :global(.gauge) { text-align: center; }
+  .gauges :global(.gauge) { text-align: center; position: relative; }
   .gauges :global(.gl) { display: block; font-family: var(--sans); font-size: 0.62rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--ink-2); margin-bottom: 6px; }
   .gauges :global(.gbar) { display: block; height: 10px; background: rgba(0,0,0,0.12); border-radius: 999px; overflow: hidden; }
   .gauges :global(.gfill) { display: block; height: 100%; background: var(--ink); border-radius: 999px; transition: width .3s ease, background .3s ease; }
@@ -354,8 +426,23 @@ const jsonld = [
   .game-foot { font-family: var(--sans); font-size: 0.82rem; color: var(--ink-3); text-align: center; margin-top: 22px; }
 
   @media (max-width: 520px) {
-    .gauge .gl { font-size: 0.52rem; }
+    .gauges :global(.gl) { font-size: 0.52rem; }
     .ctext { font-size: 1.28rem; }
     .choice { font-size: 0.92rem; padding: 14px 12px; }
+  }
+</style>
+
+<!-- Les pastilles de variation sont injectées en JS : styles + keyframe en global
+     (le nom d'animation d'un <style> scopé serait renommé et ne matcherait plus). -->
+<style is:global>
+  .game .gdelta { position: absolute; top: -4px; right: 0; font-family: var(--sans); font-size: 0.74rem; font-weight: 800; opacity: 0; pointer-events: none; }
+  .game .gdelta.up { color: #2f7d4f; }
+  .game .gdelta.down { color: #c0392b; }
+  .game .gdelta.up, .game .gdelta.down { animation: laclaqueFloatDelta 0.95s ease-out; }
+  @keyframes laclaqueFloatDelta {
+    0% { opacity: 0; transform: translateY(8px); }
+    18% { opacity: 1; }
+    70% { opacity: 1; transform: translateY(-8px); }
+    100% { opacity: 0; transform: translateY(-18px); }
   }
 </style>
