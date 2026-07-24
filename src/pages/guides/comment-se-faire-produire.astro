@@ -1,0 +1,149 @@
+---
+import Base from '../../layouts/Base.astro';
+import { url } from '../../lib/url';
+
+const abs = (p: string) => new URL(url(p), Astro.site).href;
+
+const faqs = [
+  {
+    q: "Quelle différence entre produire et diffuser un spectacle ?",
+    r: "Produire, c'est monter le spectacle : choisir l'œuvre, réunir les moyens, employer les artistes et assumer le risque financier. Diffuser, c'est le vendre et le faire circuler dans les théâtres, en s'occupant de l'accueil du public, de la billetterie et de la sécurité. Le tourneur, lui, organise les tournées.",
+  },
+  {
+    q: "Combien coûte le Festival OFF pour une compagnie ?",
+    r: "Au OFF, la compagnie loue elle-même son créneau et s'autofinance. Le poste principal est la location de la salle pour trois semaines, dont le prix varie fortement selon la jauge, la réputation du lieu et l'horaire. À cela s'ajoutent salaires, logement et communication. Mieux vaut demander un devis précis à chaque théâtre, les fourchettes qui circulent n'étant qu'indicatives.",
+  },
+  {
+    q: "Le Festival IN et le OFF, c'est le même système ?",
+    r: "Non. Au IN, les compagnies sont programmées et rémunérées par le festival. Au OFF, elles se produisent elles-mêmes. On détaille tout dans notre guide sur la différence entre le IN et le OFF.",
+  },
+  {
+    q: "Quelles aides existent pour monter un spectacle ?",
+    r: "Selon les projets : la DRAC et les collectivités pour la création, la SACD, l'ADAMI, la SPEDIDAM pour les auteurs et interprètes, le CNM pour le spectacle musical, l'ONDA pour la diffusion nationale, ou encore les fonds dédiés d'AF&C pour le OFF. Les montants varient par commission, il faut consulter les appels de chaque organisme.",
+  },
+];
+
+const jsonld = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: "Comment se faire produire et programmer",
+    description: "Produire, diffuser, tourner : qui fait quoi ? Le modèle autofinancé du OFF d'Avignon, comment attirer les programmateurs et les principales aides à la création et à la diffusion.",
+    author: { '@type': 'Organization', name: 'La Claque' },
+    publisher: { '@type': 'Organization', name: 'La Claque' },
+    mainEntityOfPage: abs('/guides/comment-se-faire-produire'),
+    inLanguage: 'fr',
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqs.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.r } })),
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Accueil', item: abs('/') },
+      { '@type': 'ListItem', position: 2, name: 'Guides', item: abs('/guides') },
+      { '@type': 'ListItem', position: 3, name: "Se faire produire", item: abs('/guides/comment-se-faire-produire') },
+    ],
+  },
+];
+---
+<Base
+  title="Comment se faire produire et programmer au théâtre — La Claque"
+  description="Produire, diffuser, tourner : qui fait quoi ? Le modèle autofinancé du OFF d'Avignon, attirer les programmateurs, et les aides à la création et à la diffusion."
+  active="guides"
+  jsonld={jsonld}
+>
+  <article class="wrap-narrow guide">
+    <p class="breadcrumb"><a href={url('/')}>Accueil</a> › <a href={url('/guides')}>Guides</a> › Se faire produire</p>
+    <div class="guide-head">
+      <p class="kicker">Côté métier</p>
+      <h1>Comment se faire produire et programmer</h1>
+      <p class="stand">Monter un spectacle est une chose. Le faire exister, le financer et le vendre en est une autre. Petit tour d'horizon des rôles et des étapes.</p>
+    </div>
+
+    <div class="prose">
+      <p>
+        Derrière chaque spectacle qui tourne, il y a une petite mécanique de métiers et d'argent que le public ne voit jamais. En comprendre les rouages, c'est déjà mettre toutes les chances de son côté.
+      </p>
+
+      <h2>Produire, diffuser, tourner : qui fait quoi ?</h2>
+      <p>
+        Le ministère de la Culture distingue trois grands rôles d'entrepreneurs de spectacles. Ils peuvent être tenus par une même structure, ou par plusieurs.
+      </p>
+      <div class="gtable-wrap">
+        <table class="gtable">
+          <caption>Les trois métiers de l'entrepreneur de spectacles</caption>
+          <thead>
+            <tr><th>Rôle</th><th>Sa mission</th></tr>
+          </thead>
+          <tbody>
+            <tr><th>Exploitant de lieu</th><td>Gère un théâtre ou une salle aménagée pour recevoir les spectacles.</td></tr>
+            <tr><th>Producteur</th><td>Monte le spectacle : choisit l'œuvre, réunit les moyens, emploie le plateau artistique et assume le risque financier.</td></tr>
+            <tr><th>Diffuseur</th><td>Accueille le spectacle dans un lieu en ordre de marche : public, billetterie, sécurité.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>
+        À côté, le <strong>tourneur</strong> organise les tournées et vend le spectacle aux théâtres, sans forcément l'avoir produit. Retenez la ligne de partage : <strong>produire, c'est fabriquer le spectacle</strong> ; <strong>diffuser ou tourner, c'est le vendre</strong> et le faire circuler.
+      </p>
+
+      <h2>Le modèle du OFF d'Avignon</h2>
+      <p>
+        Au Festival OFF, il n'y a pas de directeur qui vous programme et vous paie. C'est l'inverse : <strong>la compagnie loue elle-même un créneau</strong> dans un théâtre pour la durée du festival, et <strong>s'autofinance</strong>. Elle assume la location de la salle, les salaires, le logement et la communication. Le OFF fonctionne moins comme une programmation que comme un immense marché où l'on vient se montrer.
+      </p>
+      <p>
+        Le poste le plus lourd est la location de salle sur trois semaines, dont le prix grimpe avec la jauge, la réputation du lieu et l'horaire. Les chiffres qui circulent vont de quelques milliers d'euros à bien davantage pour les meilleures adresses, mais ils restent indicatifs : demandez un devis. Adhérer à l'association organisatrice, AF&C, ouvre droit à certains services et à une réduction sur la facture globale.
+      </p>
+
+      <h2>Attirer les programmateurs</h2>
+      <p>
+        Jouer à Avignon, c'est surtout espérer être repéré pour la suite. Les professionnels et la presse peuvent demander une <strong>accréditation</strong>, mais attention : elle n'ouvre ni gratuité ni réduction automatique, c'est à chaque compagnie d'inviter les pros qu'elle vise. Le reste est un travail de démarchage : dossiers envoyés aux programmateurs, invitations ciblées, présence dans le programme, relations presse, et tractage dans la rue comme tout le monde.
+      </p>
+
+      <h2>Les aides à la création et à la diffusion</h2>
+      <p>Selon la nature du projet, plusieurs guichets existent. Les montants varient chaque année et par commission, aussi vaut-il mieux consulter les appels en cours de chaque organisme.</p>
+      <div class="gtable-wrap">
+        <table class="gtable">
+          <caption>Principaux soutiens (sans montants, qui évoluent chaque année)</caption>
+          <thead>
+            <tr><th>Organisme</th><th>Ce qu'il soutient</th></tr>
+          </thead>
+          <tbody>
+            <tr><th>DRAC et collectivités</th><td>Aide à la création, au fonctionnement, aux résidences, conventionnement.</td></tr>
+            <tr><th>SACD</th><td>Création d'œuvres contemporaines, et un fonds dédié à l'humour et au seul-en-scène à Avignon.</td></tr>
+            <tr><th>ADAMI</th><td>Projets portés par des artistes-interprètes (droits des interprètes).</td></tr>
+            <tr><th>SPEDIDAM</th><td>Spectacles où l'interprétation est prépondérante : déplacements, bande-son, supports.</td></tr>
+            <tr><th>CNM</th><td>Production et diffusion du spectacle musical et de variétés.</td></tr>
+            <tr><th>ONDA</th><td>Aide à la diffusion nationale, versée aux lieux qui accueillent.</td></tr>
+            <tr><th>FONPEPS</th><td>Soutien à l'emploi, notamment pour les représentations en petites salles.</td></tr>
+            <tr><th>AF&C</th><td>Fonds d'émergence pour accompagner les jeunes structures au OFF.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h2>Questions fréquentes</h2>
+      <div class="faq">
+        {faqs.map((f) => (
+          <details>
+            <summary>{f.q}</summary>
+            <p>{f.r}</p>
+          </details>
+        ))}
+      </div>
+
+      <p class="sources" style="font-size:0.86rem; margin-top:26px">
+        Rôles d'après la <a href="https://www.culture.gouv.fr/thematiques/theatre-spectacles/pour-les-professionnels/plateforme-des-entrepreneurs-de-spectacles-vivants" rel="noopener nofollow">plateforme des entrepreneurs de spectacles</a> du ministère de la Culture. Modèle et aides du OFF d'après <a href="https://www.festivaloffavignon.com/page/les-aides-financieres" rel="noopener nofollow">AF&C</a>. Les coûts de location et les montants d'aides ne sont pas des chiffres officiels figés : demandez les devis et consultez les appels en cours. Vérifié en juillet 2026.
+      </p>
+    </div>
+
+    <div class="related">
+      <h2>À lire aussi</h2>
+      <a href={url('/guides/creer-sa-compagnie-de-theatre')}>Créer sa compagnie</a>
+      <a href={url('/guides/intermittence-spectacle')}>L'intermittence, expliquée</a>
+      <a href={url('/guides/festival-in-et-off-avignon')}>IN et OFF : la différence</a>
+    </div>
+  </article>
+</Base>

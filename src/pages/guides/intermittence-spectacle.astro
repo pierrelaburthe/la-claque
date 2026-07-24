@@ -1,0 +1,130 @@
+---
+import Base from '../../layouts/Base.astro';
+import { url } from '../../lib/url';
+
+const abs = (p: string) => new URL(url(p), Astro.site).href;
+
+const faqs = [
+  {
+    q: "Qui a droit à l'intermittence du spectacle ?",
+    r: "Les artistes et les technicien·nes du spectacle employés en contrats courts (les fameux CDD d'usage). Les artistes relèvent de l'annexe 10 du régime d'assurance chômage, les ouvriers et technicien·nes de l'annexe 8. Encore faut-il avoir réuni assez d'heures de travail sur la période de référence.",
+  },
+  {
+    q: "Combien d'heures faut-il pour ouvrir des droits ?",
+    r: "Il faut justifier de 507 heures de travail (ou assimilées) au cours des 12 mois qui précèdent la fin de votre dernier contrat. Ce seuil de 507 heures sur un an est le socle du régime.",
+  },
+  {
+    q: "C'est quoi un « cachet » ?",
+    r: "Pour le calcul de l'assurance chômage, un cachet est converti en 12 heures, quelle que soit la durée réelle du contrat. C'est l'unité de base pour les artistes, dont les heures sont souvent comptées en cachets plutôt qu'en heures.",
+  },
+  {
+    q: "Peut-on additionner les heures d'artiste et de technicien ?",
+    r: "Non. Si vous avez travaillé dans les deux, on retient l'annexe où vous totalisez le plus d'heures. On ne peut pas cumuler les heures des annexes 8 et 10 pour atteindre les 507 heures.",
+  },
+];
+
+const jsonld = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: "L'intermittence du spectacle, expliquée simplement",
+    description: "Comprendre le régime des intermittents du spectacle : les annexes 8 et 10, le seuil de 507 heures, le cachet, la date anniversaire et les organismes à connaître.",
+    author: { '@type': 'Organization', name: 'La Claque' },
+    publisher: { '@type': 'Organization', name: 'La Claque' },
+    mainEntityOfPage: abs('/guides/intermittence-spectacle'),
+    inLanguage: 'fr',
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqs.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.r } })),
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Accueil', item: abs('/') },
+      { '@type': 'ListItem', position: 2, name: 'Guides', item: abs('/guides') },
+      { '@type': 'ListItem', position: 3, name: "L'intermittence", item: abs('/guides/intermittence-spectacle') },
+    ],
+  },
+];
+---
+<Base
+  title="L'intermittence du spectacle, expliquée simplement — La Claque"
+  description="Le régime des intermittents du spectacle sans jargon : annexes 8 et 10, seuil de 507 heures, cachet, date anniversaire, France Travail, Audiens et Congés Spectacles."
+  active="guides"
+  jsonld={jsonld}
+>
+  <article class="wrap-narrow guide">
+    <p class="breadcrumb"><a href={url('/')}>Accueil</a> › <a href={url('/guides')}>Guides</a> › L'intermittence</p>
+    <div class="guide-head">
+      <p class="kicker">Côté métier</p>
+      <h1>L'intermittence du spectacle, expliquée simplement</h1>
+      <p class="stand">Un mot qu'on entend partout à Avignon, et que personne n'explique jamais clairement. Voici l'essentiel, sans jargon.</p>
+    </div>
+
+    <div class="prose">
+      <p>
+        L'intermittence n'est pas un statut ni un métier : c'est un aménagement de l'assurance chômage, pensé pour des métiers où l'on enchaîne les contrats courts. Un·e comédien·ne joue trois semaines ici, tourne un mois là, répète ailleurs, et se retrouve régulièrement entre deux engagements. Le régime des intermittents indemnise ces périodes creuses, à condition d'avoir suffisamment travaillé.
+      </p>
+
+      <h2>Deux familles : les annexes 8 et 10</h2>
+      <p>
+        Le régime se divise en deux « annexes ». L'<strong>annexe 10</strong> couvre les <strong>artistes</strong> : comédien·nes, chanteur·ses, musicien·nes, danseur·ses. L'<strong>annexe 8</strong> couvre les <strong>ouvrier·es et technicien·nes</strong> : régie, son, lumière, machinerie, costumes, montage. Chaque annexe a ses règles de décompte. À noter, depuis quelques années, les réalisateur·rices sont rattaché·es aux artistes (annexe 10).
+      </p>
+      <p>
+        Si vous exercez les deux casquettes, on ne retient qu'une annexe, celle où vous cumulez le plus d'heures. Impossible d'additionner les heures des deux pour atteindre le seuil.
+      </p>
+
+      <h2>Le chiffre à retenir : 507 heures</h2>
+      <p>
+        Pour ouvrir des droits, il faut justifier de <strong>507 heures</strong> de travail (ou d'heures assimilées) au cours des <strong>12 mois</strong> qui précèdent la fin de votre dernier contrat. C'est le seuil fondateur du régime, stable depuis des années.
+      </p>
+      <div class="gtable-wrap">
+        <table class="gtable">
+          <caption>Les repères de base</caption>
+          <tbody>
+            <tr><th>Seuil d'ouverture</th><td>507 heures sur 12 mois (365 jours)</td></tr>
+            <tr><th>Un cachet</th><td>= 12 heures pour l'assurance chômage, quelle que soit la durée du contrat</td></tr>
+            <tr><th>Durée d'indemnisation</th><td>12 mois, jusqu'à la « date anniversaire »</td></tr>
+            <tr><th>Pour rester indemnisé</th><td>507 nouvelles heures à réunir chaque année</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h2>La « date anniversaire »</h2>
+      <p>
+        Une fois les 507 heures réunies, vos droits sont ouverts pour douze mois. Au terme de cette période, la fameuse <strong>date anniversaire</strong>, on refait les comptes : si vous avez de nouveau travaillé 507 heures sur l'année écoulée, vos droits sont rechargés pour un an. C'est ce rendez-vous annuel, instauré par la réforme de 2016, qui rythme la vie d'un·e intermittent·e.
+      </p>
+
+      <h2>À qui s'adresser</h2>
+      <ul>
+        <li><strong>France Travail</strong> (l'ex-Pôle emploi, et son service spécialisé longtemps appelé « Pôle emploi spectacle ») : c'est lui qui inscrit, calcule et verse l'allocation.</li>
+        <li><strong>Audiens</strong> : le groupe de protection sociale de la culture, pour la retraite complémentaire, la prévoyance et la santé.</li>
+        <li><strong>Congés Spectacles</strong> (géré par Audiens) : la caisse qui verse l'indemnité de congés payés, que les intermittents ne prennent pas chez chaque employeur.</li>
+      </ul>
+
+      <h2>Questions fréquentes</h2>
+      <div class="faq">
+        {faqs.map((f) => (
+          <details>
+            <summary>{f.q}</summary>
+            <p>{f.r}</p>
+          </details>
+        ))}
+      </div>
+
+      <p class="sources" style="font-size:0.86rem; margin-top:26px">
+        Ce guide vulgarise, il ne remplace pas les textes officiels. Les seuils (507 heures, cachet à 12 heures, date anniversaire) sont issus du <a href="https://www.francetravail.fr/candidat/vos-recherches/les-intermittents-du-spectacle.html" rel="noopener nofollow">guide France Travail des intermittents</a>, de l'<a href="https://www.unedic.org/" rel="noopener nofollow">Unédic</a> et d'<a href="https://www.artcena.fr/precis-juridique/droit-du-travail/assurance-chomage" rel="noopener nofollow">ARTCENA</a>. Les <strong>montants</strong> de l'allocation sont revalorisés chaque année : vérifiez la valeur en vigueur sur France Travail avant de vous y fier. Vérifié en juillet 2026.
+      </p>
+    </div>
+
+    <div class="related">
+      <h2>À lire aussi</h2>
+      <a href={url('/guides/comment-se-faire-produire')}>Se faire produire et programmer</a>
+      <a href={url('/guides/creer-sa-compagnie-de-theatre')}>Créer sa compagnie</a>
+      <a href={url('/guides/lexique-du-theatre')}>Lexique du théâtre</a>
+    </div>
+  </article>
+</Base>

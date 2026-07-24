@@ -4,12 +4,12 @@ import { url } from '../../lib/url';
 
 const abs = (p: string) => new URL(url(p), Astro.site).href;
 
-const guides = [
+const spectateur = [
   {
     href: '/guides/festival-in-et-off-avignon',
     k: 'Comprendre le festival',
     titre: "Festival IN et OFF d'Avignon : quelle différence ?",
-    desc: "Deux festivals, une même ville. On vous explique tout : programmation sélective contre accès libre, histoire, lieux, billetterie.",
+    desc: "Deux festivals, une même ville. Programmation sélective contre accès libre, histoire, lieux, billetterie.",
   },
   {
     href: '/guides/chiffres-cles-festival-avignon',
@@ -21,13 +21,34 @@ const guides = [
     href: '/guides/off-avignon-mode-demploi',
     k: 'Guide pratique',
     titre: "Le OFF d'Avignon, mode d'emploi",
-    desc: "Comment choisir ses spectacles, décrypter le tractage, utiliser la carte OFF et survivre à trois semaines de théâtre non-stop.",
+    desc: "Choisir ses spectacles, décrypter le tractage, utiliser la carte OFF et survivre à trois semaines de théâtre.",
   },
   {
     href: '/guides/lexique-du-theatre',
     k: 'Vocabulaire',
     titre: 'Lexique du théâtre : les mots à connaître',
-    desc: "Côté cour, côté jardin, la générale, le lever de rideau, la servante : le vocabulaire des plateaux, expliqué simplement.",
+    desc: "Côté cour, côté jardin, la générale, la servante : le vocabulaire des plateaux, expliqué simplement.",
+  },
+];
+
+const metier = [
+  {
+    href: '/guides/intermittence-spectacle',
+    k: 'Côté métier',
+    titre: "L'intermittence du spectacle, expliquée simplement",
+    desc: "Les annexes 8 et 10, le seuil de 507 heures, le cachet, la date anniversaire et les organismes à connaître.",
+  },
+  {
+    href: '/guides/comment-se-faire-produire',
+    k: 'Côté métier',
+    titre: 'Comment se faire produire et programmer',
+    desc: "Produire, diffuser, tourner : qui fait quoi ? Le modèle autofinancé du OFF et les aides à la création.",
+  },
+  {
+    href: '/guides/creer-sa-compagnie-de-theatre',
+    k: 'Côté métier',
+    titre: 'Créer sa compagnie de théâtre',
+    desc: "Association loi 1901, déclaration d'entrepreneur de spectacles, GUSO : les démarches de base pour se lancer.",
   },
 ];
 
@@ -37,7 +58,7 @@ const jsonld = [
     '@type': 'CollectionPage',
     name: 'Guides du théâtre et du Festival d’Avignon',
     url: abs('/guides'),
-    description: "Nos guides pour comprendre le théâtre et le Festival d'Avignon : différence IN et OFF, chiffres de fréquentation, mode d'emploi du OFF, lexique.",
+    description: "Nos guides pour comprendre le théâtre et le Festival d'Avignon, côté spectateur comme côté métier.",
   },
   {
     '@context': 'https://schema.org',
@@ -51,7 +72,7 @@ const jsonld = [
 ---
 <Base
   title="Guides du théâtre et du Festival d'Avignon — La Claque"
-  description="Nos guides pour comprendre le théâtre et le Festival d'Avignon : différence entre le IN et le OFF, chiffres de fréquentation, mode d'emploi du OFF, lexique des plateaux."
+  description="Nos guides pour comprendre le théâtre et le Festival d'Avignon : différence IN et OFF, chiffres, mode d'emploi, lexique, et côté métier l'intermittence, la production et la création de compagnie."
   active="guides"
   jsonld={jsonld}
 >
@@ -60,13 +81,33 @@ const jsonld = [
     <div class="guide-head">
       <p class="kicker">Guides</p>
       <h1>Comprendre le théâtre et le Festival d'Avignon</h1>
-      <p class="stand">On ne fait pas que noter des spectacles : on partage aussi ce qu'on a appris à force d'arpenter les salles. Voici nos guides pour s'y retrouver.</p>
+      <p class="stand">On ne fait pas que noter des spectacles : on partage aussi ce qu'on a appris à force d'arpenter les salles, côté fauteuil comme côté coulisses.</p>
     </div>
   </div>
 
   <div class="wrap">
+    <div class="rubric">
+      <h2>Côté spectateur</h2>
+      <span class="line"></span>
+      <span class="note">Profiter du festival</span>
+    </div>
     <div class="guide-cards">
-      {guides.map((g) => (
+      {spectateur.map((g) => (
+        <a class="guide-card" href={url(g.href)}>
+          <span class="k">{g.k}</span>
+          <h3>{g.titre}</h3>
+          <p>{g.desc}</p>
+        </a>
+      ))}
+    </div>
+
+    <div class="rubric">
+      <h2>Côté métier</h2>
+      <span class="line"></span>
+      <span class="note">Pour les artistes et les compagnies</span>
+    </div>
+    <div class="guide-cards">
+      {metier.map((g) => (
         <a class="guide-card" href={url(g.href)}>
           <span class="k">{g.k}</span>
           <h3>{g.titre}</h3>

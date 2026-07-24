@@ -1,0 +1,115 @@
+---
+import Base from '../../layouts/Base.astro';
+import { url } from '../../lib/url';
+
+const abs = (p: string) => new URL(url(p), Astro.site).href;
+
+const faqs = [
+  {
+    q: "Quelle structure juridique pour une compagnie de théâtre ?",
+    r: "Le plus souvent une association loi 1901 : à but non lucratif, simple à créer, et éligible aux subventions publiques. D'autres formes existent (société, coopérative), mais l'association reste la voie la plus courante pour une jeune compagnie.",
+  },
+  {
+    q: "Faut-il une licence pour donner des représentations ?",
+    r: "Depuis 2019, la licence est devenue une déclaration d'activité, qui donne un récépissé valant licence, valable cinq ans. Une structure dont le spectacle n'est pas l'activité principale doit la déclarer dès qu'elle organise plus de 6 représentations par an avec au moins un artiste rémunéré.",
+  },
+  {
+    q: "Où déclarer son activité d'entrepreneur de spectacles ?",
+    r: "Depuis avril 2025, la déclaration se fait sur la plateforme « Démarche Numérique » du ministère de la Culture. L'ancienne adresse mesdemarches.culture.gouv.fr n'accepte plus les nouveaux dépôts, même si beaucoup de pages la citent encore.",
+  },
+  {
+    q: "C'est quoi le GUSO ?",
+    r: "Le Guichet unique du spectacle occasionnel permet à un employeur occasionnel (association, entreprise, collectivité dont le spectacle n'est pas l'activité principale) de déclarer et payer en une seule fois toutes les cotisations liées à l'emploi d'un artiste ou d'un technicien. Il est obligatoire pour ces structures.",
+  },
+];
+
+const jsonld = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: "Créer sa compagnie de théâtre",
+    description: "Les bases pour lancer sa compagnie : l'association loi 1901, la déclaration d'entrepreneur de spectacles (ex-licence) et le GUSO pour employer des artistes.",
+    author: { '@type': 'Organization', name: 'La Claque' },
+    publisher: { '@type': 'Organization', name: 'La Claque' },
+    mainEntityOfPage: abs('/guides/creer-sa-compagnie-de-theatre'),
+    inLanguage: 'fr',
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqs.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.r } })),
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Accueil', item: abs('/') },
+      { '@type': 'ListItem', position: 2, name: 'Guides', item: abs('/guides') },
+      { '@type': 'ListItem', position: 3, name: "Créer sa compagnie", item: abs('/guides/creer-sa-compagnie-de-theatre') },
+    ],
+  },
+];
+---
+<Base
+  title="Créer sa compagnie de théâtre : le guide de départ — La Claque"
+  description="Association loi 1901, déclaration d'entrepreneur de spectacles (ex-licence), GUSO : les démarches de base pour lancer sa compagnie de théâtre, expliquées simplement."
+  active="guides"
+  jsonld={jsonld}
+>
+  <article class="wrap-narrow guide">
+    <p class="breadcrumb"><a href={url('/')}>Accueil</a> › <a href={url('/guides')}>Guides</a> › Créer sa compagnie</p>
+    <div class="guide-head">
+      <p class="kicker">Côté métier</p>
+      <h1>Créer sa compagnie de théâtre</h1>
+      <p class="stand">Une troupe, un projet, l'envie de jouer. Avant de monter sur les planches, quelques démarches balisent le chemin. Voici les grandes lignes.</p>
+    </div>
+
+    <div class="prose">
+      <p>
+        On ne crée pas une compagnie pour remplir des formulaires, mais quelques cadres simples évitent bien des ennuis, surtout dès qu'on rémunère des artistes ou qu'on demande des subventions.
+      </p>
+
+      <h2>Le cadre : l'association loi 1901</h2>
+      <p>
+        La très grande majorité des compagnies naissent sous la forme d'une <strong>association loi 1901</strong>. C'est une structure à but non lucratif, rapide et peu coûteuse à créer, qui peut employer des salariés, recevoir des subventions et vendre des places. Deux personnes suffisent pour la fonder, avec des statuts et un bureau. D'autres formes juridiques sont possibles, mais l'association reste le réflexe de départ.
+      </p>
+
+      <h2>La licence, devenue une déclaration</h2>
+      <p>
+        Ce qu'on appelait la « licence d'entrepreneur de spectacles » est, depuis une réforme de 2019, une simple <strong>déclaration d'activité</strong> : on la dépose, on reçoit un récépissé qui vaut licence, valable <strong>cinq ans</strong>. Elle se décline en trois catégories, selon qu'on exploite un lieu, qu'on produit ou qu'on diffuse, et une même structure peut en cumuler plusieurs.
+      </p>
+      <p>
+        Le seuil à connaître : une structure dont le spectacle n'est pas l'activité principale doit se déclarer dès qu'elle donne <strong>plus de six représentations par an</strong> avec au moins un artiste rémunéré. En deçà, on relève du régime occasionnel. Point important et souvent mal indiqué en ligne : depuis avril 2025, la déclaration se fait sur la plateforme <strong>« Démarche Numérique »</strong> du ministère de la Culture, et non plus sur l'ancien site.
+      </p>
+
+      <h2>Employer des artistes : le GUSO</h2>
+      <p>
+        Quand un employeur occasionnel (une association, une entreprise, une collectivité dont le métier n'est pas le spectacle) engage un·e artiste ou un·e technicien·ne, il passe obligatoirement par le <strong>GUSO</strong>, le Guichet unique du spectacle occasionnel. En une seule déclaration, il règle l'ensemble des cotisations sociales, à verser dans les quinze jours suivant la fin du contrat.
+      </p>
+      <p>
+        À l'inverse, une compagnie dont le spectacle <em>est</em> l'activité principale, une fois déclarée, ne relève pas du GUSO : elle paie ses cotisations par les circuits classiques de l'URSSAF. Le GUSO reste le guichet des employeurs occasionnels.
+      </p>
+
+      <h2>Questions fréquentes</h2>
+      <div class="faq">
+        {faqs.map((f) => (
+          <details>
+            <summary>{f.q}</summary>
+            <p>{f.r}</p>
+          </details>
+        ))}
+      </div>
+
+      <p class="sources" style="font-size:0.86rem; margin-top:26px">
+        Déclaration d'entrepreneur de spectacles d'après le <a href="https://www.culture.gouv.fr/catalogue-des-demarches-et-subventions/declaration-renouvellement/licence-d-entrepreneur-de-spectacles-vivants-premiere-demande-renouvellement" rel="noopener nofollow">ministère de la Culture</a> ; GUSO d'après <a href="https://www.service-public.gouv.fr/particuliers/vosdroits/F1928" rel="noopener nofollow">service-public.fr</a> et <a href="https://www.guso.fr/" rel="noopener nofollow">guso.fr</a>. Ce guide donne les grands principes et ne remplace pas les démarches officielles. Vérifié en juillet 2026.
+      </p>
+    </div>
+
+    <div class="related">
+      <h2>À lire aussi</h2>
+      <a href={url('/guides/comment-se-faire-produire')}>Se faire produire et programmer</a>
+      <a href={url('/guides/intermittence-spectacle')}>L'intermittence, expliquée</a>
+      <a href={url('/guides/off-avignon-mode-demploi')}>Le OFF, mode d'emploi</a>
+    </div>
+  </article>
+</Base>

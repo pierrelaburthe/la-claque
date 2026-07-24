@@ -25,6 +25,9 @@ export const GET: APIRoute = ({ site }) => {
   L.push(`- [Le Festival d’Avignon en chiffres](${abs('/guides/chiffres-cles-festival-avignon')}) : fréquentation et statistiques 2025 du IN et du OFF, sourcées.`);
   L.push(`- [Le OFF d’Avignon, mode d’emploi](${abs('/guides/off-avignon-mode-demploi')}) : choisir ses spectacles, la carte OFF, le tractage.`);
   L.push(`- [Lexique du théâtre](${abs('/guides/lexique-du-theatre')}) : le vocabulaire des plateaux expliqué.`);
+  L.push(`- [L'intermittence du spectacle, expliquée simplement](${abs('/guides/intermittence-spectacle')}) : annexes 8 et 10, seuil de 507 heures, cachet, date anniversaire.`);
+  L.push(`- [Comment se faire produire et programmer](${abs('/guides/comment-se-faire-produire')}) : production, diffusion, modèle du OFF, aides à la création.`);
+  L.push(`- [Créer sa compagnie de théâtre](${abs('/guides/creer-sa-compagnie-de-theatre')}) : association loi 1901, licence, GUSO.`);
   L.push('');
   L.push('## Pages');
   L.push(`- [La Une](${abs('/')})`);
