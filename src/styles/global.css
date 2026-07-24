@@ -146,6 +146,8 @@ img { max-width: 100%; display: block; }
 .lead-story .lead-foot { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
 .lead-story .lead-foot .stars { font-size: 1.2rem; }
 .lead-story .lead-foot .byl { font-family: var(--sans); font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--ink-3); display: flex; align-items: center; gap: 8px; }
+.lead-body .byl { display: flex; align-items: center; gap: 9px; font-family: var(--sans); font-size: 0.8rem; letter-spacing: 0.02em; color: var(--ink-2); }
+.lead-body .byl svg { flex: none; }
 
 .front-side { border-left: 1px solid var(--rule); padding-left: 30px; }
 .front-side .side-title { font-family: var(--display); font-weight: 700; font-size: 1.3rem; padding-bottom: 8px; border-bottom: 2px solid var(--ink); margin-bottom: 4px; }

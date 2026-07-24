@@ -25,10 +25,14 @@ export function nbVus(p: Piece): number {
   return Object.keys(p.notes).length;
 }
 
-// Score de consensus : met en avant ce que le PLUS GRAND NOMBRE a aimé.
-// Une pièce adorée par sept d'entre nous pèse plus lourd qu'un 9 solitaire.
+// Score de classement : la note reste le juge de paix, mais à note
+// comparable on fait remonter ce que le PLUS GRAND NOMBRE a vu et aimé.
+// Chaque paire d'yeux supplémentaire ajoute un petit bonus (+0,07 de note),
+// assez pour départager deux pièces proches sans jamais faire passer une
+// pièce moyenne devant une grande. Une pièce vue par huit gagne +0,49 :
+// elle double une voisine notée jusqu'à un demi-point au-dessus, pas plus.
 export function consensusScore(p: Piece): number {
-  return p.noteMoy * (1 + 0.08 * (nbVus(p) - 1));
+  return p.noteMoy + 0.07 * (nbVus(p) - 1);
 }
 
 // Une pièce est « plébiscitée » quand la bande y est allée en nombre ET l'a aimée.

@@ -1,0 +1,361 @@
+---
+import Base from '../layouts/Base.astro';
+import { url } from '../lib/url';
+
+const abs = (p: string) => new URL(url(p), Astro.site).href;
+
+const jsonld = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'VideoGame',
+    name: 'Un mois au OFF',
+    url: abs('/jouer'),
+    genre: ['Jeu de décision', 'Gestion'],
+    gamePlatform: 'Navigateur web',
+    applicationCategory: 'Game',
+    inLanguage: 'fr',
+    author: { '@type': 'Organization', name: 'La Claque' },
+    description:
+      "Un jeu de cartes à la Reigns : vous dirigez une compagnie au Festival OFF d'Avignon et devez tenir tout le mois en gardant l'équilibre entre trésorerie, public, moral de la troupe et presse.",
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Accueil', item: abs('/') },
+      { '@type': 'ListItem', position: 2, name: 'Un mois au OFF', item: abs('/jouer') },
+    ],
+  },
+];
+---
+<Base
+  title="Un mois au OFF, le jeu — La Claque"
+  description="Dirigez une compagnie au Festival OFF d'Avignon dans ce jeu de cartes à la Reigns : chaque décision fait pencher votre trésorerie, votre public, le moral de la troupe et la presse. Tiendrez-vous tout le mois ?"
+  active="jouer"
+  jsonld={jsonld}
+>
+  <div class="wrap-narrow">
+    <p class="breadcrumb"><a href={url('/')}>Accueil</a> › Le jeu</p>
+    <div class="guide-head">
+      <p class="kicker">Le jeu de La Claque</p>
+      <h1>Un mois au OFF</h1>
+      <p class="stand">Vous débarquez à Avignon avec votre compagnie et trois semaines devant vous. Chaque jour, une décision. Gardez la troupe à flot jusqu'à la dernière représentation, sans vider la caisse, vider la salle, épuiser les comédien·nes ni disparaître des radars de la presse.</p>
+    </div>
+  </div>
+
+  <div class="wrap-narrow">
+    <div class="game" id="game">
+      <div class="gauges" id="gauges" aria-hidden="true"></div>
+
+      <div class="stage">
+        <div class="screen" id="screen">
+          <!-- écran de départ -->
+          <div class="panel intro" id="intro">
+            <p class="day-badge">Prêt·e ?</p>
+            <p class="intro-txt">Balayez la carte ou utilisez les deux boutons. Chaque choix a un prix. Quatre jauges à surveiller : <b>Trésorerie</b>, <b>Public</b>, <b>Moral</b>, <b>Presse</b>. Si l'une se vide ou déborde, le rideau tombe.</p>
+            <button class="btn play" id="start">Lever le rideau</button>
+          </div>
+
+          <!-- carte de jeu -->
+          <article class="panel card" id="card" hidden>
+            <div class="portrait" id="portrait"><span id="portraitGlyph">?</span></div>
+            <p class="perso" id="perso"></p>
+            <p class="ctext" id="ctext"></p>
+            <div class="hint left" id="hintL"></div>
+            <div class="hint right" id="hintR"></div>
+          </article>
+
+          <!-- fin de partie -->
+          <div class="panel end" id="end" hidden>
+            <p class="day-badge" id="endKicker"></p>
+            <h2 id="endTitle"></h2>
+            <p class="end-txt" id="endTxt"></p>
+            <p class="end-score" id="endScore"></p>
+            <button class="btn play" id="again">Rejouer</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="choices" id="choices" hidden>
+        <button class="choice cL" id="btnL"><span class="arr">←</span><span class="lab" id="labL"></span></button>
+        <button class="choice cR" id="btnR"><span class="lab" id="labR"></span><span class="arr">→</span></button>
+      </div>
+
+      <p class="game-foot">Envie de vrais chiffres ? Passez au <a href={url('/guides/budget-festival-off-avignon')}>simulateur de budget</a>, ou lisez <a href={url('/guides/comment-se-faire-produire')}>comment se faire produire</a>.</p>
+    </div>
+  </div>
+</Base>
+
+<script>
+  // ---- Les quatre jauges ----
+  const GAUGES = [
+    { key: 'treso', label: 'Trésorerie', bas: 'La caisse est vide. Vous remballez les décors avant la fin du mois.', haut: "Tant d'argent d'un coup que le fisc s'invite en coulisses. Contrôle fatal." },
+    { key: 'public', label: 'Public', bas: 'Trois personnes dans la salle, dont votre mère. Le bouche à oreille vous a oublié·es.', haut: "Salle bondée jusque dans les escaliers : les pompiers ferment le théâtre pour surbooking." },
+    { key: 'moral', label: 'Moral', bas: 'Épuisée et démoralisée, la troupe rend son tablier avant la fin.', haut: "L'euphorie tourne à la fête permanente : plus personne ne monte sur scène à l'heure." },
+    { key: 'presse', label: 'Presse', bas: 'Aucun média ne parle de vous. Vous jouez dans l\'indifférence totale.', haut: 'Starisé·es trop vite, vous récoltez un retour de bâton médiatique qui vous enterre.' },
+  ];
+  const START = { treso: 45, public: 30, moral: 68, presse: 22 };
+  const MAX_JOUR = 24;
+
+  // ---- Le paquet de cartes ----
+  const DECK = [
+    { perso: 'La régie du théâtre', g: 'T', c: '#7a2018', t: "Le lieu vous propose un meilleur créneau, à 19 h, mais 300 € de plus pour le mois.",
+      L: { lab: 'On prend le créneau', fx: { treso: -12, public: +14 } },
+      R: { lab: 'On garde 14 h', fx: { treso: +4, public: -8 } } },
+    { perso: 'Un programmateur', g: 'P', c: '#2d4a3e', t: "Il glisse qu'il passera peut-être ce soir. La troupe le sait et commence à trembler.",
+      L: { lab: 'On soigne tout', fx: { moral: -10, presse: +16 } },
+      R: { lab: 'On joue normal', fx: { moral: +6, presse: -6 } } },
+    { perso: 'La canicule', g: 'C', c: '#b5651d', t: "38 °C sur le tractage. Distribuer des flyers sous ce soleil, c'est un sport de combat.",
+      L: { lab: 'On tracte quand même', fx: { public: +12, moral: -12 } },
+      R: { lab: 'Pause à l\'ombre', fx: { public: -8, moral: +8 } } },
+    { perso: 'Billetreduc', g: 'B', c: '#444', t: "Un spectateur laisse un avis tiède. Il traîne en haut de votre fiche.",
+      L: { lab: 'On répond, courtois', fx: { presse: +6, moral: -6 } },
+      R: { lab: 'On ignore', fx: { moral: +4, public: -6 } } },
+    { perso: 'La compagnie d\'à côté', g: 'D', c: '#5a3e7a', t: "Leur salle affiche complet chaque soir. La comparaison plombe le moral des troupes.",
+      L: { lab: 'On va les voir', fx: { moral: +8, presse: +4, treso: -4 } },
+      R: { lab: 'On se concentre', fx: { moral: -6, public: +8 } } },
+    { perso: 'Un comédien enroué', g: 'V', c: '#7a2018', t: "Sa voix lâche. Jouer ce soir, c'est risquer une extinction totale pour trois jours.",
+      L: { lab: 'Il joue en force', fx: { public: +6, moral: -14 } },
+      R: { lab: 'Doublure improvisée', fx: { public: -6, presse: -4, moral: +6 } } },
+    { perso: 'Le mistral', g: 'M', c: '#2d4a3e', t: "Le vent arrache vos affiches dans toute la ville pendant la nuit.",
+      L: { lab: 'On recolle partout', fx: { treso: -8, public: +10, moral: -6 } },
+      R: { lab: 'Tant pis', fx: { public: -10 } } },
+    { perso: 'Une attachée de presse', g: 'A', c: '#b5651d', t: "Elle propose de vous décrocher deux papiers. Son forfait : 600 € pour le festival.",
+      L: { lab: 'On investit', fx: { treso: -16, presse: +20 } },
+      R: { lab: 'On fait nous-mêmes', fx: { presse: -4, moral: -4 } } },
+    { perso: 'La caisse du soir', g: 'E', c: '#444', t: "Salle à moitié pleine. Un groupe demande un tarif de dernière minute cassé.",
+      L: { lab: 'On brade les places', fx: { treso: -6, public: +12 } },
+      R: { lab: 'Plein tarif', fx: { treso: +8, public: -6 } } },
+    { perso: 'Un after de festivaliers', g: 'F', c: '#5a3e7a', t: "La troupe est invitée à faire la fête jusqu'au bout de la nuit avec d'autres compagnies.",
+      L: { lab: 'On y va', fx: { moral: +14, presse: +6, public: -4 } },
+      R: { lab: 'Au lit', fx: { moral: -8, public: +6 } } },
+    { perso: 'La Provence', g: 'J', c: '#7a2018', t: "Un journaliste veut une interview, mais demain à 8 h, en pleine grasse matinée méritée.",
+      L: { lab: 'On se lève', fx: { moral: -10, presse: +16 } },
+      R: { lab: 'On décline', fx: { moral: +6, presse: -10 } } },
+    { perso: 'Le proprio du logement', g: 'L', c: '#2d4a3e', t: "Il augmente le loyer en cours de séjour. C'est Avignon, c'est comme ça, dit-il.",
+      L: { lab: 'On paie', fx: { treso: -14, moral: +2 } },
+      R: { lab: 'On négocie fort', fx: { treso: -4, moral: -8 } } },
+    { perso: 'Le bouche à oreille', g: 'O', c: '#b5651d', t: "Deux spectatrices conquises reviennent avec dix amis. La rumeur monte.",
+      L: { lab: 'On les chouchoute', fx: { public: +14, treso: -4 } },
+      R: { lab: 'On reste discret', fx: { public: +6, moral: +4 } } },
+    { perso: 'Une panne technique', g: 'T', c: '#444', t: "Le projecteur principal grille dix minutes avant l'ouverture des portes.",
+      L: { lab: 'Réparation express', fx: { treso: -10, public: +4 } },
+      R: { lab: 'On joue sans', fx: { presse: -6, moral: -4, public: -4 } } },
+    { perso: 'Un producteur intéressé', g: 'P', c: '#2d4a3e', t: "Il évoque une tournée l'an prochain, si le spectacle tient ses promesses ce mois-ci.",
+      L: { lab: 'On lui promet tout', fx: { presse: +12, moral: -6 } },
+      R: { lab: 'On reste prudent', fx: { presse: +4, moral: +6 } } },
+    { perso: 'La fatigue', g: 'Z', c: '#5a3e7a', t: "Mi-parcours. Les corps tirent, les répliques flottent, la lassitude s'installe.",
+      L: { lab: 'Journée de repos', fx: { public: -8, moral: +14, treso: -4 } },
+      R: { lab: 'On serre les dents', fx: { moral: -10, public: +6 } } },
+    { perso: 'Un critique influent', g: 'K', c: '#7a2018', t: "Une plume redoutée est dans la salle. Son papier peut vous lancer ou vous briser.",
+      L: { lab: 'On donne tout', fx: { moral: -8, presse: +18, public: +4 } },
+      R: { lab: 'On reste soi-même', fx: { presse: +6, moral: +4 } } },
+    { perso: 'Le tractage', g: 'H', c: '#b5651d', t: "Vous pouvez tracter deux heures de plus sur la place de l'Horloge, bondée à midi.",
+      L: { lab: 'On y retourne', fx: { public: +12, moral: -10 } },
+      R: { lab: 'On économise nos forces', fx: { public: -4, moral: +8 } } },
+    { perso: 'Les réseaux sociaux', g: 'R', c: '#444', t: "Une vidéo des coulisses pourrait tourner, mais dévoile la meilleure scène du spectacle.",
+      L: { lab: 'On la poste', fx: { presse: +12, public: +6, moral: -4 } },
+      R: { lab: 'On garde le mystère', fx: { presse: -4, public: -2 } } },
+    { perso: 'La coprod de dernière minute', g: 'S', c: '#2d4a3e', t: "Une compagnie amie propose d'échanger vos publics contre une part de recette.",
+      L: { lab: 'On s\'allie', fx: { treso: +10, public: +8, presse: -2 } },
+      R: { lab: 'On reste indépendant', fx: { moral: +6, public: -6 } } },
+    { perso: 'Un rappel qui n\'en finit pas', g: 'W', c: '#5a3e7a', t: "Le public en redemande. Rester dix minutes de plus, c'est rater la navette du dernier bus.",
+      L: { lab: 'On savoure le rappel', fx: { public: +10, moral: +8, treso: -6 } },
+      R: { lab: 'On file', fx: { moral: -4 } } },
+    { perso: 'L\'AF&C', g: 'G', c: '#b5651d', t: "L'association du OFF propose de figurer dans une sélection thématique, moyennant un dossier à boucler ce soir.",
+      L: { lab: 'On monte le dossier', fx: { moral: -6, presse: +12, public: +4 } },
+      R: { lab: 'Trop tard, on dort', fx: { moral: +6, presse: -6 } } },
+  ];
+
+  // ---- État ----
+  let g = { ...START };
+  let jour = 1;
+  let last = [];
+  let current = null;
+
+  const $ = (id) => document.getElementById(id);
+  const clamp = (n) => Math.max(0, Math.min(100, n));
+
+  function renderGauges() {
+    const box = $('gauges');
+    box.innerHTML = GAUGES.map((G) => {
+      const v = g[G.key];
+      const danger = v <= 22 || v >= 78 ? ' danger' : '';
+      return `<div class="gauge${danger}"><span class="gl">${G.label}</span>
+        <span class="gbar"><span class="gfill" style="width:${clamp(v)}%"></span></span></div>`;
+    }).join('');
+  }
+
+  function pick() {
+    let pool = DECK.filter((c) => !last.includes(c));
+    if (pool.length === 0) pool = DECK;
+    // rotation pseudo-aléatoire sans Math.random (déterministe mais variée selon l'état)
+    const idx = (jour * 7 + g.treso + g.public * 3 + g.moral + g.presse * 2) % pool.length;
+    const chosen = pool[idx];
+    last.push(chosen);
+    if (last.length > 5) last.shift();
+    return chosen;
+  }
+
+  function showCard() {
+    current = pick();
+    $('portrait').style.background = current.c;
+    $('portraitGlyph').textContent = current.g;
+    $('perso').textContent = current.perso;
+    $('ctext').textContent = current.t;
+    $('labL').textContent = current.L.lab;
+    $('labR').textContent = current.R.lab;
+    $('card').hidden = false;
+    $('choices').hidden = false;
+    $('intro').hidden = true;
+    $('end').hidden = true;
+    resetCardPos();
+  }
+
+  function affected(fx) {
+    return GAUGES.filter((G) => fx[G.key]).map((G) => G.label).join(', ');
+  }
+
+  function apply(side) {
+    const choice = current[side];
+    const fx = choice.fx;
+    for (const k in fx) g[k] = g[k] + fx[k];
+    // mort si une jauge se vide ou déborde
+    for (const G of GAUGES) {
+      if (g[G.key] <= 0) return end(false, G.bas);
+      if (g[G.key] >= 100) return end(false, G.haut);
+    }
+    for (const k in g) g[k] = clamp(g[k]);
+    renderGauges();
+    jour++;
+    if (jour > MAX_JOUR) return end(true);
+    showCard();
+  }
+
+  function end(win, cause) {
+    $('card').hidden = true;
+    $('choices').hidden = true;
+    $('intro').hidden = true;
+    const end = $('end');
+    end.hidden = false;
+    if (win) {
+      $('endKicker').textContent = 'Rideau final';
+      const p = g.presse, pub = g.public;
+      let titre, txt;
+      if (p >= 68) { titre = 'Révélation du OFF'; txt = "Vous avez tenu le mois entier et la presse ne parle que de vous. Un producteur vous embarque en tournée : le pari est gagné."; }
+      else if (p >= 42 || pub >= 60) { titre = 'Le mois est sauvé'; txt = "Vous êtes allé·es au bout, avec quelques belles salles et deux ou trois dates décrochées pour la suite. Honorable, et déjà beaucoup."; }
+      else { titre = 'Vous avez survécu'; txt = "Trois semaines de théâtre, la troupe debout et la caisse à l'équilibre. Personne ne vous a repéré·es, mais vous êtes encore là. À refaire."; }
+      $('endTitle').textContent = titre;
+      $('endTxt').textContent = txt;
+      $('endScore').innerHTML = `Trésorerie <b>${g.treso}</b> · Public <b>${g.public}</b> · Moral <b>${g.moral}</b> · Presse <b>${g.presse}</b>`;
+    } else {
+      $('endKicker').textContent = `Jour ${jour} sur ${MAX_JOUR}`;
+      $('endTitle').textContent = 'Le rideau tombe trop tôt';
+      $('endTxt').textContent = cause;
+      $('endScore').innerHTML = `Vous avez tenu <b>${jour - 1}</b> représentation${jour - 1 > 1 ? 's' : ''}.`;
+    }
+  }
+
+  function reset() {
+    g = { ...START };
+    jour = 1;
+    last = [];
+    renderGauges();
+    showCard();
+  }
+
+  // ---- Interaction : boutons ----
+  $('start').addEventListener('click', () => { renderGauges(); showCard(); });
+  $('again').addEventListener('click', reset);
+  $('btnL').addEventListener('click', () => apply('L'));
+  $('btnR').addEventListener('click', () => apply('R'));
+  $('btnL').addEventListener('mouseenter', () => showHint('L'));
+  $('btnR').addEventListener('mouseenter', () => showHint('R'));
+  $('btnL').addEventListener('mouseleave', hideHints);
+  $('btnR').addEventListener('mouseleave', hideHints);
+
+  function showHint(side) {
+    if (!current) return;
+    const el = side === 'L' ? $('hintL') : $('hintR');
+    el.textContent = 'Influence : ' + affected(current[side].fx);
+    el.style.opacity = '1';
+  }
+  function hideHints() { $('hintL').style.opacity = '0'; $('hintR').style.opacity = '0'; }
+
+  // ---- Interaction : glisser la carte ----
+  const card = $('card');
+  let dragging = false, startX = 0, dx = 0;
+  function resetCardPos() { card.style.transition = 'transform .25s ease'; card.style.transform = ''; hideHints(); }
+  card.addEventListener('pointerdown', (e) => { dragging = true; startX = e.clientX; card.style.transition = 'none'; card.setPointerCapture(e.pointerId); });
+  card.addEventListener('pointermove', (e) => {
+    if (!dragging) return;
+    dx = e.clientX - startX;
+    card.style.transform = `translateX(${dx}px) rotate(${dx / 22}deg)`;
+    if (dx < -24) showHint('L'); else if (dx > 24) showHint('R'); else hideHints();
+  });
+  card.addEventListener('pointerup', () => {
+    if (!dragging) return; dragging = false;
+    if (dx < -80) { card.style.transition = 'transform .2s ease'; card.style.transform = 'translateX(-140%) rotate(-16deg)'; setTimeout(() => apply('L'), 150); }
+    else if (dx > 80) { card.style.transition = 'transform .2s ease'; card.style.transform = 'translateX(140%) rotate(16deg)'; setTimeout(() => apply('R'), 150); }
+    else resetCardPos();
+    dx = 0;
+  });
+
+  // ---- Clavier ----
+  document.addEventListener('keydown', (e) => {
+    if ($('choices').hidden) return;
+    if (e.key === 'ArrowLeft') apply('L');
+    if (e.key === 'ArrowRight') apply('R');
+  });
+
+  renderGauges();
+</script>
+
+<style>
+  .game { margin: 8px 0 20px; }
+  /* .panel/.choices posent display:flex|grid, ce qui écrase [hidden]. On rétablit. */
+  .game [hidden] { display: none !important; }
+  .gauges { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 20px; }
+  /* .gauge est injecté en JS : selecteurs :global sinon le scope Astro ne l'atteint pas. */
+  .gauges :global(.gauge) { text-align: center; }
+  .gauges :global(.gl) { display: block; font-family: var(--sans); font-size: 0.62rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--ink-2); margin-bottom: 6px; }
+  .gauges :global(.gbar) { display: block; height: 10px; background: rgba(0,0,0,0.12); border-radius: 999px; overflow: hidden; }
+  .gauges :global(.gfill) { display: block; height: 100%; background: var(--ink); border-radius: 999px; transition: width .3s ease, background .3s ease; }
+  .gauges :global(.gauge.danger .gl) { color: var(--red); }
+  .gauges :global(.gauge.danger .gfill) { background: var(--red); }
+
+  .stage { position: relative; }
+  .screen { position: relative; min-height: 380px; display: flex; align-items: stretch; }
+  .panel { flex: 1; border: 1px solid var(--rule-2); background: var(--card); padding: 30px 26px; display: flex; flex-direction: column; align-items: center; text-align: center; justify-content: center; }
+
+  .intro-txt, .end-txt { font-family: var(--serif); font-size: 1.05rem; line-height: 1.55; color: var(--ink-2); max-width: 46ch; margin: 10px 0 20px; }
+  .day-badge { font-family: var(--sans); font-size: 0.68rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em; color: var(--red); margin: 0 0 6px; }
+
+  .card { cursor: grab; touch-action: pan-y; user-select: none; }
+  .card:active { cursor: grabbing; }
+  .portrait { width: 92px; height: 92px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff; font-family: var(--display); font-weight: 900; font-size: 2.4rem; margin-bottom: 14px; box-shadow: 0 6px 22px rgba(0,0,0,0.18); }
+  .perso { font-family: var(--sans); font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--ink-3); margin: 0 0 12px; }
+  .ctext { font-family: var(--display); font-weight: 500; font-size: 1.5rem; line-height: 1.28; color: var(--ink); max-width: 24ch; margin: 0; letter-spacing: -0.01em; }
+  .hint { position: absolute; top: 14px; font-family: var(--sans); font-size: 0.62rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--ink-3); opacity: 0; transition: opacity .15s; max-width: 40%; }
+  .hint.left { left: 16px; text-align: left; }
+  .hint.right { right: 16px; text-align: right; }
+
+  .choices { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 16px; }
+  .choice { display: flex; align-items: center; gap: 10px; justify-content: center; padding: 16px 18px; border: 1px solid var(--ink); background: var(--paper); font-family: var(--serif); font-size: 1.02rem; color: var(--ink); cursor: pointer; transition: all .12s ease; min-height: 58px; }
+  .choice:hover { background: var(--ink); color: var(--paper); }
+  .choice .arr { font-family: var(--sans); font-weight: 700; font-size: 1.1rem; opacity: 0.6; }
+  .cL { text-align: left; } .cR { text-align: right; }
+
+  .btn.play { font-family: var(--sans); font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; background: var(--red); color: #fff; border: 0; padding: 13px 26px; border-radius: 2px; cursor: pointer; }
+  .btn.play:hover { filter: brightness(1.08); }
+  .end h2 { font-family: var(--display); font-size: 2rem; margin: 0 0 10px; }
+  .end-score { font-family: var(--sans); font-size: 0.82rem; color: var(--ink-3); margin: 0 0 22px; }
+  .end-score b { color: var(--ink); }
+  .game-foot { font-family: var(--sans); font-size: 0.82rem; color: var(--ink-3); text-align: center; margin-top: 22px; }
+
+  @media (max-width: 520px) {
+    .gauge .gl { font-size: 0.52rem; }
+    .ctext { font-size: 1.28rem; }
+    .choice { font-size: 0.92rem; padding: 14px 12px; }
+  }
+</style>
