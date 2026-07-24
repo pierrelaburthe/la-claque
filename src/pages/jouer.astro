@@ -48,7 +48,7 @@ const jsonld = [
       <button class="sound-toggle" id="mute" type="button" aria-pressed="false" title="Activer ou couper le son">Son</button>
       <p class="daycount" id="daycount" hidden></p>
       <div class="gauges" id="gauges" aria-hidden="true"></div>
-      <p class="usure-note" id="usureNote" hidden><span class="tag">Usure du jour</span> Chaque jour, sans rien faire : <b>−3</b> trésorerie, <b>−2</b> moral, <b>−1</b> presse.</p>
+      <p class="usure-note" id="usureNote" hidden><span class="tag">Usure du jour</span> Chaque jour, sans rien faire : <b>−2</b> trésorerie, <b>−3</b> moral, <b>−1</b> presse.</p>
 
       <div class="stage">
         <div class="screen" id="screen">
@@ -64,8 +64,6 @@ const jsonld = [
             <div class="portrait" id="portrait"><span id="portraitGlyph">?</span></div>
             <p class="perso" id="perso"></p>
             <p class="ctext" id="ctext"></p>
-            <div class="hint left" id="hintL"></div>
-            <div class="hint right" id="hintR"></div>
           </article>
 
           <!-- fin de partie -->
@@ -98,11 +96,11 @@ const jsonld = [
     { key: 'moral', label: 'Moral', bas: 'Épuisée et démoralisée, la troupe rend son tablier avant la fin.', haut: "L'euphorie tourne à la fête permanente : plus personne ne monte sur scène à l'heure." },
     { key: 'presse', label: 'Presse', bas: 'Aucun média ne parle de vous. Vous jouez dans l\'indifférence totale.', haut: 'Starisé·es trop vite, vous récoltez un retour de bâton médiatique qui vous enterre.' },
   ];
-  const START = { treso: 40, public: 26, moral: 56, presse: 22 };
+  const START = { treso: 40, public: 26, moral: 54, presse: 22 };
   const MAX_JOUR = 24;
   // Usure quotidienne : les frais courent, la fatigue s'accumule, et la presse
   // vous oublie un peu chaque jour si vous ne la nourrissez pas. On ne coaste jamais.
-  const DRIFT = { treso: -3, moral: -2, presse: -1 };
+  const DRIFT = { treso: -2, moral: -3, presse: -1 };
 
   // ---- Le paquet de cartes ----
   const DECK = [
@@ -339,10 +337,6 @@ const jsonld = [
     cardEl.classList.remove('enter'); void cardEl.offsetWidth; cardEl.classList.add('enter');
   }
 
-  function affected(fx) {
-    return GAUGES.filter((G) => fx[G.key]).map((G) => G.label).join(', ');
-  }
-
   // Mort si une jauge se vide ou déborde (lecture avant clamp).
   function checkDeath() {
     for (const G of GAUGES) {
@@ -432,29 +426,16 @@ const jsonld = [
   setMute(muted);
   $('btnL').addEventListener('click', () => apply('L'));
   $('btnR').addEventListener('click', () => apply('R'));
-  $('btnL').addEventListener('mouseenter', () => showHint('L'));
-  $('btnR').addEventListener('mouseenter', () => showHint('R'));
-  $('btnL').addEventListener('mouseleave', hideHints);
-  $('btnR').addEventListener('mouseleave', hideHints);
-
-  function showHint(side) {
-    if (!current) return;
-    const el = side === 'L' ? $('hintL') : $('hintR');
-    el.textContent = 'Influence : ' + affected(current[side].fx);
-    el.style.opacity = '1';
-  }
-  function hideHints() { $('hintL').style.opacity = '0'; $('hintR').style.opacity = '0'; }
 
   // ---- Interaction : glisser la carte ----
   const card = $('card');
   let dragging = false, startX = 0, dx = 0;
-  function resetCardPos() { card.style.transition = 'transform .25s ease'; card.style.transform = ''; hideHints(); }
+  function resetCardPos() { card.style.transition = 'transform .25s ease'; card.style.transform = ''; }
   card.addEventListener('pointerdown', (e) => { dragging = true; startX = e.clientX; card.style.transition = 'none'; card.setPointerCapture(e.pointerId); });
   card.addEventListener('pointermove', (e) => {
     if (!dragging) return;
     dx = e.clientX - startX;
     card.style.transform = `translateX(${dx}px) rotate(${dx / 22}deg)`;
-    if (dx < -24) showHint('L'); else if (dx > 24) showHint('R'); else hideHints();
   });
   card.addEventListener('pointerup', () => {
     if (!dragging) return; dragging = false;
@@ -525,9 +506,6 @@ const jsonld = [
   .sound-toggle:hover { border-color: var(--ink-3); color: var(--ink); }
   .perso { font-family: var(--sans); font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--ink-3); margin: 0 0 12px; }
   .ctext { font-family: var(--display); font-weight: 500; font-size: 1.5rem; line-height: 1.28; color: var(--ink); max-width: 24ch; margin: 0; letter-spacing: -0.01em; }
-  .hint { position: absolute; top: 14px; font-family: var(--sans); font-size: 0.62rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--ink-3); opacity: 0; transition: opacity .15s; max-width: 40%; }
-  .hint.left { left: 16px; text-align: left; }
-  .hint.right { right: 16px; text-align: right; }
 
   .choices { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 16px; }
   .choice { display: flex; align-items: center; gap: 10px; justify-content: center; padding: 16px 18px; border: 1px solid var(--ink); background: var(--paper); font-family: var(--serif); font-size: 1.02rem; color: var(--ink); cursor: pointer; transition: all .12s ease; min-height: 58px; }
