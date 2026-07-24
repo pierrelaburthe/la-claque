@@ -2,6 +2,7 @@ import rss from '@astrojs/rss';
 import { PIECES } from '../data/pieces';
 
 const BASE = import.meta.env.BASE_URL;
+const path = (p) => BASE.replace(/\/$/, '') + '/' + p.replace(/^\//, '');
 
 export function GET(context) {
   const items = [...PIECES]
@@ -9,7 +10,7 @@ export function GET(context) {
     .map((p) => ({
       title: p.titre,
       description: p.chapo,
-      link: `critiques/${p.slug}`,
+      link: path(`critiques/${p.slug}`),
       pubDate: new Date('2026-07-24T10:00:00Z'),
       categories: p.festival ? [p.festival] : undefined,
     }));
