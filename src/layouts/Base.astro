@@ -60,6 +60,7 @@ const nav = [
     {image && <meta name="twitter:image" content={image} />}
     <meta name="robots" content="index, follow, max-image-preview:large" />
     <link rel="icon" href={url('/favicon.svg')} type="image/svg+xml" />
+    <link rel="stylesheet" href={url('/fonts/fonts.css')} />
     {allJsonld.map((data) => (
       <script type="application/ld+json" set:html={JSON.stringify(data)} />
     ))}
