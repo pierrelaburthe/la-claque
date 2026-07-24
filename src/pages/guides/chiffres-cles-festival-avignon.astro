@@ -1,0 +1,148 @@
+---
+import Base from '../../layouts/Base.astro';
+import { url } from '../../lib/url';
+
+const abs = (p: string) => new URL(url(p), Astro.site).href;
+
+const faqs = [
+  {
+    q: "Quel festival attire le plus de monde à Avignon, le IN ou le OFF ?",
+    r: "En volume, c'est le OFF : environ 1,6 million de billets vendus et près de 300 000 festivaliers en 2025, contre environ 118 000 billets vendus pour le IN la même année. Le IN affiche en revanche un taux de remplissage record de 96,7 %.",
+  },
+  {
+    q: "Combien de spectacles y a-t-il au Festival OFF d'Avignon ?",
+    r: "En 2025, le OFF a présenté 1 731 spectacles, portés par 1 405 compagnies dans 139 théâtres, pour plus de 27 000 représentations, d'après les chiffres clés officiels d'AF&C.",
+  },
+  {
+    q: "Quel est le taux de remplissage du Festival d'Avignon ?",
+    r: "Le IN a atteint 96,7 % de fréquentation en 2025, un record, avec 118 554 billets vendus sur 122 806 mis en vente. Le OFF, du fait de son offre pléthorique, tourne plutôt autour de 50 à 60 % de remplissage moyen selon les salles.",
+  },
+];
+
+const jsonld = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: "Le Festival d'Avignon en chiffres : fréquentation et statistiques",
+    description: "Fréquentation, nombre de spectacles, compagnies, taux de remplissage : les statistiques 2025 du Festival IN et du Festival OFF d'Avignon, sourcées.",
+    author: { '@type': 'Organization', name: 'La Claque' },
+    publisher: { '@type': 'Organization', name: 'La Claque' },
+    mainEntityOfPage: abs('/guides/chiffres-cles-festival-avignon'),
+    inLanguage: 'fr',
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqs.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.r } })),
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Accueil', item: abs('/') },
+      { '@type': 'ListItem', position: 2, name: 'Guides', item: abs('/guides') },
+      { '@type': 'ListItem', position: 3, name: "Chiffres clés", item: abs('/guides/chiffres-cles-festival-avignon') },
+    ],
+  },
+];
+
+const offStats = [
+  { num: '1 731', lab: 'spectacles', src: 'AF&C, 2025' },
+  { num: '1 405', lab: 'compagnies', src: 'AF&C, 2025' },
+  { num: '139', lab: 'théâtres', src: 'AF&C, 2025' },
+  { num: '27 000+', lab: 'levers de rideau', src: 'AF&C, 2025' },
+  { num: '≈ 300 000', lab: 'festivalier·es', src: 'AF&C, 2025' },
+  { num: '79 400', lab: 'cartes OFF vendues', src: "L'Écho du Mardi, 2025" },
+];
+const inStats = [
+  { num: '43', lab: 'spectacles (dont 32 créations)', src: 'ARTCENA, 2025' },
+  { num: '291', lab: 'représentations payantes', src: 'ARTCENA, 2025' },
+  { num: '118 554', lab: 'billets vendus', src: 'ARTCENA, 2025' },
+  { num: '96,7 %', lab: 'taux de fréquentation (record)', src: 'ARTCENA, 2025' },
+  { num: '≈ 2 000', lab: 'places dans la Cour d\'honneur', src: 'festival-avignon.com' },
+  { num: '40', lab: 'lieux (dont 20 hors les murs)', src: 'ARTCENA, 2025' },
+];
+---
+<Base
+  title="Le Festival d'Avignon en chiffres : fréquentation et statistiques — La Claque"
+  description="Les statistiques 2025 du Festival IN et du Festival OFF d'Avignon : fréquentation, nombre de spectacles, compagnies, taux de remplissage, impact économique. Chiffres officiels et sourcés."
+  active="guides"
+  jsonld={jsonld}
+>
+  <article class="wrap-narrow guide">
+    <p class="breadcrumb"><a href={url('/')}>Accueil</a> › <a href={url('/guides')}>Guides</a> › Chiffres clés</p>
+    <div class="guide-head">
+      <p class="kicker">Chiffres et fréquentation</p>
+      <h1>Le Festival d'Avignon en chiffres</h1>
+      <p class="stand">Combien de spectacles, combien de spectateurs, quel taux de remplissage ? Les statistiques du IN et du OFF, édition 2025, avec leurs sources officielles.</p>
+    </div>
+
+    <div class="prose">
+      <p>
+        Le Festival d'Avignon, c'est en réalité deux festivals aux dimensions très différentes (on vous explique tout dans notre guide sur <a href={url('/guides/festival-in-et-off-avignon')}>la différence entre le IN et le OFF</a>). Voici les chiffres de la dernière édition complète, celle de 2025, tels que publiés par les organisateurs et la presse.
+      </p>
+
+      <h2>Le Festival OFF en chiffres (2025)</h2>
+      <div class="stat-grid">
+        {offStats.map((s) => (
+          <div class="cell"><div class="num">{s.num}</div><div class="lab">{s.lab}</div><div class="src">{s.src}</div></div>
+        ))}
+      </div>
+      <p>
+        Avec plus de 1 700 spectacles et près de 1,6 million de billets vendus en 2025, le OFF est l'un des plus grands rassemblements de spectacle vivant au monde. Son modèle repose sur l'accès libre : chaque compagnie finance sa venue et loue son créneau, ce qui explique cette profusion. Le remplissage moyen, forcément, se dilue autour de 50 à 60 % selon les salles.
+      </p>
+
+      <h2>Le Festival IN en chiffres (2025)</h2>
+      <div class="stat-grid">
+        {inStats.map((s) => (
+          <div class="cell"><div class="num">{s.num}</div><div class="lab">{s.lab}</div><div class="src">{s.src}</div></div>
+        ))}
+      </div>
+      <p>
+        À l'inverse, le IN mise sur la rareté et la sélection. Sa 79e édition, en 2025, a battu son record de fréquentation avec <strong>96,7 %</strong> de billets vendus, preuve qu'une programmation resserrée et prestigieuse continue de faire le plein.
+      </p>
+
+      <h2>Et l'économie ?</h2>
+      <p>
+        Deux chiffres circulent, et il ne faut pas les confondre. AF&C, l'association qui organise le OFF, revendique un <strong>impact économique de 400,2 millions d'euros</strong> en 2025, une estimation des retombées touristiques et territoriales générées par le festival. C'est très différent du <strong>chiffre d'affaires billetterie</strong>, c'est-à-dire les recettes de billets des compagnies, estimé lui autour de <strong>22 millions d'euros</strong>. Le premier mesure ce que le festival rapporte à tout un territoire, le second ce que touchent les artistes.
+      </p>
+
+      <h2>Un peu d'histoire</h2>
+      <div class="gtable-wrap">
+        <table class="gtable">
+          <caption>Dates clés des deux festivals</caption>
+          <tbody>
+            <tr><th>1947</th><td>Jean Vilar fonde le Festival d'Avignon (le IN), avec une première édition dans la Cour d'honneur du Palais des Papes.</td></tr>
+            <tr><th>1966</th><td>André Benedetto ouvre le Théâtre des Carmes pour jouer sa pièce en marge du festival officiel : c'est l'acte de naissance du OFF.</td></tr>
+            <tr><th>1982</th><td>Création de la carte OFF, l'abonnement à réduction qui structure la fréquentation du festival.</td></tr>
+            <tr><th>2006</th><td>L'association Avignon Festival &amp; Compagnies (AF&C) prend la coordination du OFF.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h2>Questions fréquentes</h2>
+      <div class="faq">
+        {faqs.map((f) => (
+          <details>
+            <summary>{f.q}</summary>
+            <p>{f.r}</p>
+          </details>
+        ))}
+      </div>
+
+      <h2>Sources</h2>
+      <p class="sources" style="font-size:0.86rem">
+        Chiffres du IN (édition 2025) : <a href="https://www.artcena.fr/fil-vie-pro/affluence-record-pour-la-79e-edition-du-festival-davignon" rel="noopener nofollow">ARTCENA</a> et <a href="https://festival-avignon.com/fr/le-festival-d-avignon-609" rel="noopener nofollow">festival-avignon.com</a>.
+        Chiffres du OFF (édition 2025) : <a href="https://www.festivaloffavignon.com/page/chiffres-cles" rel="noopener nofollow">chiffres clés officiels d'AF&C</a> et <a href="https://www.echodumardi.com/actualite/pre-bilan-du-festival-off-davignon-un-locomotive-a-22me-de-chiffre-daffaires/" rel="noopener nofollow">L'Écho du Mardi</a>.
+        Histoire du OFF : <a href="https://fr.wikipedia.org/wiki/Festival_Off_d'Avignon" rel="noopener nofollow">Wikipédia</a>. Chiffres vérifiés en juillet 2026.
+      </p>
+    </div>
+
+    <div class="related">
+      <h2>À lire aussi</h2>
+      <a href={url('/guides/festival-in-et-off-avignon')}>IN et OFF : quelle différence ?</a>
+      <a href={url('/guides/off-avignon-mode-demploi')}>Le OFF, mode d'emploi</a>
+      <a href={url('/palmares')}>Notre palmarès 2026</a>
+    </div>
+  </article>
+</Base>

@@ -5,7 +5,7 @@ import Avatar from '../../components/Avatar.astro';
 import PieceCard from '../../components/PieceCard.astro';
 import { PIECES } from '../../data/pieces';
 import { CRITICS } from '../../data/critics';
-import { verdictFor, nbVus, estPlebiscite, consensusScore } from '../../lib/rating';
+import { verdictFor, nbVus, estPlebiscite, consensusScore, starsFor } from '../../lib/rating';
 import { url } from '../../lib/url';
 
 export function getStaticPaths() {
@@ -26,8 +26,45 @@ const suggestions = PIECES
 const hostname = (u: string) => {
   try { return new URL(u).hostname.replace(/^www\./, ''); } catch { return u; }
 };
+
+const abs = (p: string) => new URL(url(p), Astro.site).href;
+const ogImage = piece.image ? abs(piece.image) : undefined;
+
+const jsonld = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Review',
+    name: `Critique : ${piece.titre}`,
+    reviewBody: piece.chapo,
+    datePublished: '2026-07-24',
+    itemReviewed: {
+      '@type': 'CreativeWork',
+      name: piece.titre,
+      genre: piece.style,
+      ...(piece.origine ? { description: piece.origine } : {}),
+    },
+    reviewRating: {
+      '@type': 'Rating',
+      ratingValue: starsFor(piece.noteMoy),
+      bestRating: 5,
+      worstRating: 1,
+    },
+    author: { '@type': 'Person', name: c.plume },
+    publisher: { '@type': 'Organization', name: 'La Claque' },
+    inLanguage: 'fr',
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Accueil', item: abs('/') },
+      { '@type': 'ListItem', position: 2, name: 'Critiques', item: abs('/critiques') },
+      { '@type': 'ListItem', position: 3, name: piece.titre, item: abs(`/critiques/${piece.slug}`) },
+    ],
+  },
+];
 ---
-<Base title={`${piece.titre} — La Claque`} active="critiques" description={piece.chapo}>
+<Base title={`${piece.titre} — La Claque`} active="critiques" description={piece.chapo} jsonld={jsonld} image={ogImage}>
   <div class="art-hero">
     <div class="cover">
       {piece.image

@@ -1,0 +1,78 @@
+---
+import Base from '../../layouts/Base.astro';
+import { url } from '../../lib/url';
+
+const abs = (p: string) => new URL(url(p), Astro.site).href;
+
+const guides = [
+  {
+    href: '/guides/festival-in-et-off-avignon',
+    k: 'Comprendre le festival',
+    titre: "Festival IN et OFF d'Avignon : quelle différence ?",
+    desc: "Deux festivals, une même ville. On vous explique tout : programmation sélective contre accès libre, histoire, lieux, billetterie.",
+  },
+  {
+    href: '/guides/chiffres-cles-festival-avignon',
+    k: 'Chiffres et fréquentation',
+    titre: "Le Festival d'Avignon en chiffres",
+    desc: "Fréquentation, nombre de spectacles, de compagnies, taux de remplissage : les statistiques du IN et du OFF, sourcées.",
+  },
+  {
+    href: '/guides/off-avignon-mode-demploi',
+    k: 'Guide pratique',
+    titre: "Le OFF d'Avignon, mode d'emploi",
+    desc: "Comment choisir ses spectacles, décrypter le tractage, utiliser la carte OFF et survivre à trois semaines de théâtre non-stop.",
+  },
+  {
+    href: '/guides/lexique-du-theatre',
+    k: 'Vocabulaire',
+    titre: 'Lexique du théâtre : les mots à connaître',
+    desc: "Côté cour, côté jardin, la générale, le lever de rideau, la servante : le vocabulaire des plateaux, expliqué simplement.",
+  },
+];
+
+const jsonld = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'CollectionPage',
+    name: 'Guides du théâtre et du Festival d’Avignon',
+    url: abs('/guides'),
+    description: "Nos guides pour comprendre le théâtre et le Festival d'Avignon : différence IN et OFF, chiffres de fréquentation, mode d'emploi du OFF, lexique.",
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Accueil', item: abs('/') },
+      { '@type': 'ListItem', position: 2, name: 'Guides', item: abs('/guides') },
+    ],
+  },
+];
+---
+<Base
+  title="Guides du théâtre et du Festival d'Avignon — La Claque"
+  description="Nos guides pour comprendre le théâtre et le Festival d'Avignon : différence entre le IN et le OFF, chiffres de fréquentation, mode d'emploi du OFF, lexique des plateaux."
+  active="guides"
+  jsonld={jsonld}
+>
+  <div class="wrap-narrow">
+    <p class="breadcrumb"><a href={url('/')}>Accueil</a> › Guides</p>
+    <div class="guide-head">
+      <p class="kicker">Guides</p>
+      <h1>Comprendre le théâtre et le Festival d'Avignon</h1>
+      <p class="stand">On ne fait pas que noter des spectacles : on partage aussi ce qu'on a appris à force d'arpenter les salles. Voici nos guides pour s'y retrouver.</p>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <div class="guide-cards">
+      {guides.map((g) => (
+        <a class="guide-card" href={url(g.href)}>
+          <span class="k">{g.k}</span>
+          <h3>{g.titre}</h3>
+          <p>{g.desc}</p>
+        </a>
+      ))}
+    </div>
+  </div>
+</Base>

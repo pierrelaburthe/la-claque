@@ -1,0 +1,115 @@
+---
+import Base from '../../layouts/Base.astro';
+import { url } from '../../lib/url';
+
+const abs = (p: string) => new URL(url(p), Astro.site).href;
+
+const faqs = [
+  {
+    q: "Comment choisir ses spectacles au OFF d'Avignon ?",
+    r: "Croisez plusieurs sources : le bouche-à-oreille sur place, les critiques en ligne, les avis Billetreduc et les recommandations de festivaliers. Repérez deux ou trois spectacles sûrs par jour, et laissez de la place à l'imprévu pour tenter une salle au hasard.",
+  },
+  {
+    q: "Qu'est-ce que la carte OFF et est-elle rentable ?",
+    r: "La carte OFF est un abonnement à acheter une fois, qui donne droit à une réduction sur la plupart des spectacles du festival. Dès trois ou quatre spectacles, elle est généralement amortie. C'est le premier réflexe à avoir en arrivant.",
+  },
+  {
+    q: "C'est quoi le tractage à Avignon ?",
+    r: "Le tractage, c'est la tradition des comédiens qui distribuent des tracts dans la rue pour présenter leur spectacle, parfois en costume ou en jouant une courte scène. C'est une part du charme du OFF, et un bon moyen de sentir l'énergie d'une compagnie avant de réserver.",
+  },
+  {
+    q: "Combien de spectacles peut-on voir par jour au OFF ?",
+    r: "Techniquement, quatre à six spectacles par jour sont possibles vu la densité de la programmation. Mais pour vraiment profiter, trois par jour est un rythme plus tenable, qui laisse le temps de manger, de discuter et de digérer ce qu'on a vu.",
+  },
+];
+
+const jsonld = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: "Le OFF d'Avignon, mode d'emploi",
+    description: "Comment choisir ses spectacles, comprendre la carte OFF et le tractage, et bien préparer son Festival OFF d'Avignon.",
+    author: { '@type': 'Organization', name: 'La Claque' },
+    publisher: { '@type': 'Organization', name: 'La Claque' },
+    mainEntityOfPage: abs('/guides/off-avignon-mode-demploi'),
+    inLanguage: 'fr',
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqs.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.r } })),
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Accueil', item: abs('/') },
+      { '@type': 'ListItem', position: 2, name: 'Guides', item: abs('/guides') },
+      { '@type': 'ListItem', position: 3, name: "Mode d'emploi du OFF", item: abs('/guides/off-avignon-mode-demploi') },
+    ],
+  },
+];
+---
+<Base
+  title="Le OFF d'Avignon, mode d'emploi : bien préparer son festival — La Claque"
+  description="Comment choisir ses spectacles, comprendre la carte OFF et le tractage, gérer son énergie : notre guide pratique pour réussir son Festival OFF d'Avignon."
+  active="guides"
+  jsonld={jsonld}
+>
+  <article class="wrap-narrow guide">
+    <p class="breadcrumb"><a href={url('/')}>Accueil</a> › <a href={url('/guides')}>Guides</a> › Mode d'emploi du OFF</p>
+    <div class="guide-head">
+      <p class="kicker">Guide pratique</p>
+      <h1>Le OFF d'Avignon, mode d'emploi</h1>
+      <p class="stand">Plus d'un millier de spectacles, trois semaines, une seule paire de jambes. Voici comment on s'organise pour profiter du OFF sans se noyer.</p>
+    </div>
+
+    <div class="prose">
+      <p>
+        Débarquer au OFF d'Avignon sans préparation, c'est se retrouver submergé dès la sortie de la gare, tracts à la main et programme de plusieurs centaines de pages sous le bras. Voici la méthode qu'on a rodée à force d'y retourner.
+      </p>
+
+      <h2>1. Prendre la carte OFF en arrivant</h2>
+      <p>
+        Premier réflexe : la <strong>carte OFF</strong>. Cet abonnement, acheté une fois, donne droit à une réduction sur la grande majorité des spectacles. Au bout de trois ou quatre représentations, elle est déjà rentabilisée. Autant dire qu'elle se prend sans hésiter.
+      </p>
+
+      <h2>2. Bâtir un programme, mais pas trop</h2>
+      <p>
+        Repérez à l'avance <strong>deux ou trois spectacles sûrs par jour</strong>, ceux dont tout le monde parle ou qui ont de bonnes critiques. Puis laissez volontairement des trous. C'est dans ces créneaux libres, en suivant un tract ou un conseil de terrasse, qu'on fait souvent ses plus belles découvertes. Notre <a href={url('/palmares')}>palmarès</a> et nos <a href={url('/critiques')}>critiques</a> sont faits pour ça : vous aider à remplir les cases sûres.
+      </p>
+
+      <h2>3. Apprendre à lire le tractage</h2>
+      <p>
+        Dans les rues, les comédiens distribuent des tracts, parfois costumés, parfois en jouant une scène. Le <strong>tractage</strong> fait partie de l'âme du OFF. Un tract enthousiaste ne garantit pas un bon spectacle, mais l'énergie d'une équipe qui défend son travail en dit déjà long. Discutez, posez des questions : les compagnies adorent ça.
+      </p>
+
+      <h2>4. Gérer son énergie</h2>
+      <p>
+        La tentation est d'enchaîner cinq ou six spectacles par jour. C'est possible, mais épuisant. Trois par jour est un rythme plus sain, qui laisse le temps de manger correctement, de s'hydrater sous la chaleur de juillet et de laisser infuser ce qu'on vient de voir. Un festival réussi, ce n'est pas le plus de spectacles vus, c'est le plus de spectacles savourés.
+      </p>
+
+      <h2>5. Noter à chaud</h2>
+      <p>
+        Gardez un carnet, ou une note sur votre téléphone, et notez à la sortie de chaque salle. Une phrase, une image marquante, une note sur dix. C'est exactement comme ça qu'est née La Claque : un tableur partagé, rempli entre deux représentations, devenu ce journal. Vous trouverez notre façon de faire sur la page <a href={url('/a-propos')}>À propos</a>.
+      </p>
+
+      <h2>Questions fréquentes</h2>
+      <div class="faq">
+        {faqs.map((f) => (
+          <details>
+            <summary>{f.q}</summary>
+            <p>{f.r}</p>
+          </details>
+        ))}
+      </div>
+    </div>
+
+    <div class="related">
+      <h2>À lire aussi</h2>
+      <a href={url('/guides/festival-in-et-off-avignon')}>IN et OFF : quelle différence ?</a>
+      <a href={url('/guides/lexique-du-theatre')}>Lexique du théâtre</a>
+      <a href={url('/critiques')}>Toutes nos critiques</a>
+    </div>
+  </article>
+</Base>

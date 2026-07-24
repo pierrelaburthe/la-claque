@@ -201,6 +201,54 @@ img { max-width: 100%; display: block; }
 .foot-site a:hover { color: var(--red); }
 .foot-site p { font-family: var(--sans); font-size: 0.86rem; color: var(--ink-2); max-width: 32ch; }
 
+/* ---------- Guides (pages SEO) ---------- */
+.breadcrumb { font-family: var(--sans); font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--ink-3); margin: 30px 0 10px; }
+.breadcrumb a { color: var(--ink-3); text-decoration: none; }
+.breadcrumb a:hover { color: var(--red); }
+
+.guide-head { padding: 6px 0 10px; border-bottom: 1px solid var(--rule); margin-bottom: 26px; }
+.guide-head h1 { font-size: clamp(2rem, 5vw, 3rem); max-width: 20ch; }
+.guide-head .stand { font-size: 1.24rem; font-style: italic; color: var(--ink-2); margin: 10px 0 0; max-width: 60ch; }
+
+.guide .prose h2 { font-size: 1.6rem; margin: 40px 0 12px; padding-top: 14px; border-top: 2px solid var(--ink); }
+.guide .prose h3 { font-size: 1.2rem; margin: 26px 0 8px; }
+
+.gtable { width: 100%; border-collapse: collapse; margin: 22px 0; font-size: 1rem; }
+.gtable caption { text-align: left; font-family: var(--sans); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--ink-3); margin-bottom: 8px; }
+.gtable th, .gtable td { text-align: left; padding: 11px 14px; border-bottom: 1px solid var(--rule); vertical-align: top; }
+.gtable thead th { font-family: var(--sans); font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--ink-3); border-bottom: 2px solid var(--ink); }
+.gtable tbody th { font-family: var(--serif); font-weight: 700; width: 30%; }
+.gtable-wrap { overflow-x: auto; }
+
+.faq { margin: 20px 0; }
+.faq details { border-bottom: 1px solid var(--rule); padding: 4px 0; }
+.faq summary { cursor: pointer; font-family: var(--serif); font-weight: 700; font-size: 1.12rem; padding: 12px 0; list-style: none; }
+.faq summary::-webkit-details-marker { display: none; }
+.faq summary::before { content: '+'; color: var(--red); font-weight: 700; margin-right: 12px; }
+.faq details[open] summary::before { content: '–'; }
+.faq details p { margin: 0 0 14px; color: var(--ink-2); }
+
+.stat-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 2px; background: var(--rule); border: 1px solid var(--rule); margin: 24px 0; }
+.stat-grid .cell { background: var(--card); padding: 20px; }
+.stat-grid .num { font-family: var(--serif); font-weight: 700; font-size: 2rem; line-height: 1; color: var(--red); }
+.stat-grid .lab { font-family: var(--sans); font-size: 0.78rem; color: var(--ink-2); margin-top: 8px; }
+.stat-grid .src { font-family: var(--sans); font-size: 0.64rem; color: var(--ink-3); margin-top: 6px; }
+
+.lexique { margin: 20px 0; }
+.lexique dt { font-family: var(--serif); font-weight: 700; font-size: 1.15rem; margin-top: 20px; color: var(--ink); }
+.lexique dd { margin: 4px 0 0; color: var(--ink-2); }
+
+.guide-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
+.guide-card { display: block; background: var(--card); border: 1px solid var(--rule-2); border-left: 4px solid var(--red); padding: 22px; text-decoration: none; color: var(--ink); }
+.guide-card:hover { background: var(--paper); }
+.guide-card .k { font-family: var(--sans); font-size: 0.66rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--red); font-weight: 700; }
+.guide-card h3 { font-size: 1.3rem; margin: 8px 0 6px; }
+.guide-card p { margin: 0; color: var(--ink-2); font-size: 0.95rem; }
+
+.related { border-top: 1px solid var(--rule); margin-top: 40px; padding-top: 20px; }
+.related h2 { font-size: 1.2rem; border: 0; padding: 0; margin: 0 0 12px; }
+.related a { display: inline-block; margin: 0 14px 8px 0; font-family: var(--sans); font-size: 0.88rem; }
+
 /* ---------- Utilitaires ---------- */
 .center { text-align: center; }
 .muted { color: var(--ink-2); }

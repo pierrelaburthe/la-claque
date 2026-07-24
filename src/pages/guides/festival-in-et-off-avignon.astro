@@ -1,0 +1,138 @@
+---
+import Base from '../../layouts/Base.astro';
+import { url } from '../../lib/url';
+
+const abs = (p: string) => new URL(url(p), Astro.site).href;
+
+const faqs = [
+  {
+    q: "Quelle est la différence entre le Festival IN et le Festival OFF d'Avignon ?",
+    r: "Le IN, c'est le Festival d'Avignon officiel : une programmation resserrée et sélective, choisie par une direction artistique, dans des lieux emblématiques comme la Cour d'honneur du Palais des Papes. Le OFF est un festival ouvert et non sélectif : n'importe quelle compagnie peut y jouer si elle trouve une salle, ce qui donne plusieurs centaines de spectacles chaque jour.",
+  },
+  {
+    q: "Le OFF d'Avignon est-il gratuit ?",
+    r: "Non, les spectacles du OFF sont payants, mais souvent à des tarifs modérés. La carte OFF, achetée une fois, donne droit à une réduction sur la plupart des représentations pendant toute la durée du festival. De nombreux spectacles gratuits ou à prix libre existent aussi en marge.",
+  },
+  {
+    q: "Faut-il réserver ses places pour le OFF ?",
+    r: "Pour les spectacles très demandés, mieux vaut réserver, en ligne ou à la salle. Mais l'esprit du OFF permet aussi de se laisser porter : on croise des comédiens qui distribuent des tracts dans la rue, on tente une salle au hasard, et c'est souvent là qu'on fait ses plus belles découvertes.",
+  },
+  {
+    q: "Qui a créé le Festival d'Avignon et le OFF ?",
+    r: "Le Festival d'Avignon (le IN) a été fondé en 1947 par Jean Vilar. Le OFF est né dans les années 1960 en marge du festival officiel, sous l'impulsion notamment d'André Benedetto au Théâtre des Carmes, qui choisit de jouer hors de la programmation officielle.",
+  },
+  {
+    q: "Combien de spectacles y a-t-il au Festival d'Avignon ?",
+    r: "Le IN propose quelques dizaines de spectacles chaque été. Le OFF, lui, en aligne plus d'un millier, portés par plus de mille compagnies dans des centaines de lieux. Les chiffres précis et sourcés sont détaillés dans notre page dédiée aux statistiques du festival.",
+  },
+];
+
+const jsonld = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: "Festival IN et OFF d'Avignon : quelle différence ?",
+    description: "Programmation sélective contre accès libre, histoire, lieux, billetterie : tout comprendre à la différence entre le Festival IN et le Festival OFF d'Avignon.",
+    author: { '@type': 'Organization', name: 'La Claque' },
+    publisher: { '@type': 'Organization', name: 'La Claque' },
+    mainEntityOfPage: abs('/guides/festival-in-et-off-avignon'),
+    inLanguage: 'fr',
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqs.map((f) => ({
+      '@type': 'Question',
+      name: f.q,
+      acceptedAnswer: { '@type': 'Answer', text: f.r },
+    })),
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Accueil', item: abs('/') },
+      { '@type': 'ListItem', position: 2, name: 'Guides', item: abs('/guides') },
+      { '@type': 'ListItem', position: 3, name: "Festival IN et OFF", item: abs('/guides/festival-in-et-off-avignon') },
+    ],
+  },
+];
+---
+<Base
+  title="Festival IN et OFF d'Avignon : quelle différence ? — La Claque"
+  description="Programmation sélective contre accès libre, histoire, lieux, billetterie : tout comprendre à la différence entre le Festival IN et le Festival OFF d'Avignon."
+  active="guides"
+  jsonld={jsonld}
+>
+  <article class="wrap-narrow guide">
+    <p class="breadcrumb"><a href={url('/')}>Accueil</a> › <a href={url('/guides')}>Guides</a> › Festival IN et OFF</p>
+    <div class="guide-head">
+      <p class="kicker">Comprendre le festival</p>
+      <h1>Festival IN et OFF d'Avignon : quelle différence ?</h1>
+      <p class="stand">Chaque été, Avignon vit au rythme de deux festivals qui portent presque le même nom mais ne fonctionnent pas du tout de la même façon. Voici comment les distinguer, sans se tromper.</p>
+    </div>
+
+    <div class="prose">
+      <p>
+        Quand on parle du « Festival d'Avignon », on désigne en réalité deux événements distincts qui se déroulent en même temps, dans la même ville, en juillet. D'un côté le <strong>IN</strong>, le festival officiel. De l'autre le <strong>OFF</strong>, sa foisonnante contre-programmation. Les deux se complètent, mais leur logique est opposée.
+      </p>
+
+      <h2>Le IN : un festival sélectif et prestigieux</h2>
+      <p>
+        Le Festival d'Avignon, dit le IN, a été fondé en <strong>1947 par Jean Vilar</strong>, d'abord sous la forme d'une « semaine d'art ». C'est un festival à la <strong>programmation sélective</strong> : une direction artistique choisit chaque année une poignée de spectacles, souvent des créations d'envergure, de grands noms de la mise en scène et des artistes internationaux.
+      </p>
+      <p>
+        On y joue dans des lieux emblématiques, à commencer par la <strong>Cour d'honneur du Palais des Papes</strong>, dont le décor de pierre et la jauge impressionnante font partie de la légende. Les places sont plus chères et plus recherchées que dans le OFF, et se réservent souvent longtemps à l'avance.
+      </p>
+
+      <h2>Le OFF : un festival ouvert à tous</h2>
+      <p>
+        Le OFF est né dans les années 1960, en marge du festival officiel. On en attribue l'impulsion à des artistes comme <strong>André Benedetto</strong>, qui choisit dès 1966 de jouer ses propres pièces au Théâtre des Carmes, hors de la sélection officielle. Petit clin d'œil : Benedetto est aussi l'auteur d'<a href={url('/critiques/emballage')}>Emballage</a>, l'une des pièces que nous avons vues cette année.
+      </p>
+      <p>
+        Le principe du OFF est radicalement différent : c'est un festival <strong>non sélectif et autofinancé</strong>. N'importe quelle compagnie qui loue un créneau dans une salle peut y présenter son spectacle. Résultat, ce ne sont pas quelques dizaines mais <strong>plus d'un millier de spectacles</strong> qui se jouent chaque jour, du théâtre classique au clown, du seul-en-scène à la comédie musicale. Le OFF est aujourd'hui coordonné par l'association <strong>AF&C (Avignon Festival &amp; Compagnies)</strong>, qui édite le programme et la fameuse carte d'abonnement.
+      </p>
+
+      <h2>IN et OFF : le tableau comparatif</h2>
+      <div class="gtable-wrap">
+        <table class="gtable">
+          <caption>Les grandes différences entre le IN et le OFF</caption>
+          <thead>
+            <tr><th></th><th>Festival IN</th><th>Festival OFF</th></tr>
+          </thead>
+          <tbody>
+            <tr><th>Création</th><td>1947, par Jean Vilar</td><td>Années 1960, en marge du IN</td></tr>
+            <tr><th>Programmation</th><td>Sélective, choisie par une direction artistique</td><td>Ouverte, non sélective</td></tr>
+            <tr><th>Nombre de spectacles</th><td>Quelques dizaines</td><td>Plus d'un millier</td></tr>
+            <tr><th>Lieux</th><td>Cour d'honneur du Palais des Papes et grandes salles</td><td>Des centaines de théâtres et de salles, souvent petites</td></tr>
+            <tr><th>Financement</th><td>Subventions publiques et billetterie</td><td>Principalement autofinancé par les compagnies</td></tr>
+            <tr><th>Billetterie</th><td>Places à l'unité, souvent à réserver tôt</td><td>Carte OFF donnant droit à des réductions</td></tr>
+            <tr><th>Esprit</th><td>Rendez-vous prestigieux de la création</td><td>Effervescence, tractage, découvertes</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h2>Alors, IN ou OFF ?</h2>
+      <p>
+        Il n'y a pas à choisir : les deux font la magie d'Avignon en juillet. Le IN pour les grands rendez-vous de la création, le OFF pour l'aventure, le hasard des salles et le plaisir de dénicher une pépite dont personne n'a encore parlé. À La Claque, c'est le OFF qu'on arpente, carnet en main, et c'est de là que viennent toutes <a href={url('/critiques')}>nos critiques</a>.
+      </p>
+
+      <h2>Questions fréquentes</h2>
+      <div class="faq">
+        {faqs.map((f) => (
+          <details>
+            <summary>{f.q}</summary>
+            <p>{f.r}</p>
+          </details>
+        ))}
+      </div>
+    </div>
+
+    <div class="related">
+      <h2>À lire aussi</h2>
+      <a href={url('/guides/chiffres-cles-festival-avignon')}>Le Festival d'Avignon en chiffres</a>
+      <a href={url('/guides/off-avignon-mode-demploi')}>Le OFF, mode d'emploi</a>
+      <a href={url('/critiques')}>Toutes nos critiques</a>
+    </div>
+  </article>
+</Base>

@@ -1,4 +1,5 @@
 import { defineConfig } from 'astro/config';
+import sitemap from '@astrojs/sitemap';
 
 // « La Claque » — site statique.
 // En local, servi à la racine (base '/'). En CI (GitHub Actions), servi sous
@@ -11,4 +12,5 @@ export default defineConfig({
   base: onPages ? '/la-claque' : '/',
   trailingSlash: 'ignore',
   build: { format: 'directory' },
+  integrations: [sitemap()],
 });

@@ -6,12 +6,37 @@ interface Props {
   title: string;
   description?: string;
   active?: string;
+  jsonld?: unknown[];
+  image?: string;
 }
-const { title, description = "Critiques de théâtre par une bande d'ami·es qui applaudit fort. Étoiles, coups de cœur et découvertes, à Avignon et toute l'année.", active } = Astro.props;
+const { title, description = "Critiques de théâtre par une bande d'ami·es qui applaudit fort. Étoiles, coups de cœur et découvertes, à Avignon et toute l'année.", active, jsonld = [], image } = Astro.props;
+const canonical = new URL(Astro.url.pathname, Astro.site).href;
+const siteRoot = new URL(url('/'), Astro.site).href;
+
+// Données structurées présentes sur toutes les pages (identité du site).
+const baseJsonld = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Organization',
+    name: 'La Claque',
+    url: siteRoot,
+    description: 'Média de critique théâtrale tenu par une bande d’ami·es. Critiques de spectacles, étoiles, coups de cœur et guides sur le théâtre et le Festival d’Avignon.',
+    sameAs: ['https://github.com/pierrelaburthe/la-claque'],
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    name: 'La Claque',
+    url: siteRoot,
+    inLanguage: 'fr',
+  },
+];
+const allJsonld = [...baseJsonld, ...jsonld];
 const nav = [
   { href: url('/'), label: 'La Une', key: 'accueil' },
   { href: url('/critiques'), label: 'Critiques', key: 'critiques' },
   { href: url('/palmares'), label: 'Palmarès', key: 'palmares' },
+  { href: url('/guides'), label: 'Guides', key: 'guides' },
   { href: url('/equipe'), label: 'La rédaction', key: 'equipe' },
   { href: url('/a-propos'), label: 'À propos', key: 'apropos' },
 ];
@@ -23,10 +48,21 @@ const nav = [
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{title}</title>
     <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:site_name" content="La Claque" />
+    <meta property="og:locale" content="fr_FR" />
+    {image && <meta property="og:image" content={image} />}
+    <meta name="twitter:card" content={image ? 'summary_large_image' : 'summary'} />
+    {image && <meta name="twitter:image" content={image} />}
+    <meta name="robots" content="index, follow, max-image-preview:large" />
     <link rel="icon" href={url('/favicon.svg')} type="image/svg+xml" />
+    {allJsonld.map((data) => (
+      <script type="application/ld+json" set:html={JSON.stringify(data)} />
+    ))}
   </head>
   <body>
     <header class="masthead">
