@@ -1,8 +1,8 @@
 // Les huit plumes de La Claque.
-// Noms de scène 100% anonymes : un personnage de la comédie (Colombine, Scapin,
-// Arlequin, Crispin, Léandre, Sganarelle, Isabelle, Rosine) marié à un terme du
-// jargon des plateaux (côté cour / côté jardin, le strapontin, la servante...).
-// Aucun vrai prénom n'apparaît nulle part sur le site.
+// Noms de scène empruntés à la comédie (Juliette, Pierrot, Arlequin, Éraste,
+// Horace, Crispin, Lisette, Silvia), mariés à un terme du jargon des plateaux.
+// Chaque nom de scène commence par la même lettre que le vrai prénom, pour que
+// la bande se reconnaisse, tout en restant anonyme pour le public.
 
 export type CriticKey =
   | 'julie'
@@ -17,31 +17,31 @@ export type CriticKey =
 export interface Critic {
   key: CriticKey;
   plume: string;      // nom de scène complet
-  prenomScene: string; // le prénom de personnage seul (pour les mentions courtes)
+  prenomScene: string; // le prénom de personnage seul
   initiales: string;
   couleur: string;
   role: string;       // spécialité éditoriale
-  bio: string;
+  bio: string;        // court et direct
 }
 
 export const CRITICS: Record<CriticKey, Critic> = {
   julie: {
     key: 'julie',
-    plume: 'Colombine Courjardin',
-    prenomScene: 'Colombine',
-    initiales: 'CC',
+    plume: 'Juliette Courjardin',
+    prenomScene: 'Juliette',
+    initiales: 'JC',
     couleur: '#b23a48',
     role: 'Rédactrice en chef',
-    bio: "Côté cour, côté jardin : Colombine connaît toutes les entrées et toutes les sorties du festival. C'est la boussole de la bande, celle qui trace les parcours d'une salle à l'autre. Elle a un faible pour le théâtre d'acteur, l'émotion qui déborde et les jeunes troupes qui n'ont rien à perdre.",
+    bio: "La boussole de la bande : c'est elle qui trace les parcours et remplit le tableur. Faible pour le théâtre d'acteur et l'émotion qui déborde.",
   },
   pierre: {
     key: 'pierre',
-    plume: 'Scapin Strapontin',
-    prenomScene: 'Scapin',
-    initiales: 'SS',
+    plume: 'Pierrot Strapontin',
+    prenomScene: 'Pierrot',
+    initiales: 'PS',
     couleur: '#1f6f6b',
     role: 'Boulimique de salles',
-    bio: "Toujours sur un strapontin, jamais rassasié : Scapin enchaîne cinq spectacles par jour sans broncher. Il carbure au rythme, à l'énergie qui déborde du plateau et aux textes qui partent joyeusement dans tous les sens.",
+    bio: "Cinq spectacles par jour, minimum. Carbure au rythme et à l'énergie qui déborde du plateau.",
   },
   alexandre: {
     key: 'alexandre',
@@ -50,52 +50,52 @@ export const CRITICS: Record<CriticKey, Critic> = {
     initiales: 'AL',
     couleur: '#7a4fb0',
     role: "L'œil scénographe",
-    bio: "Toujours à l'avant-scène pour ne rien rater de la lumière et des décors. Arlequin juge d'abord avec les yeux : une belle image, une scénographie qui respire, un masque qui capte la lumière, et il est déjà conquis.",
+    bio: "Juge d'abord avec les yeux : décor, lumière, belle image de plateau. La scénographie avant tout.",
   },
   etienne: {
     key: 'etienne',
-    plume: 'Crispin Praticable',
-    prenomScene: 'Crispin',
-    initiales: 'CP',
+    plume: 'Éraste Praticable',
+    prenomScene: 'Éraste',
+    initiales: 'EP',
     couleur: '#c07a1e',
     role: 'Technicien du regard',
-    bio: "Un praticable, au théâtre, c'est l'élément de décor sur lequel on peut vraiment monter. Crispin aime quand ça tient debout : la construction, la dramaturgie, la mécanique d'une mise en scène bien huilée.",
+    bio: "Aime quand la mise en scène tient debout : construction, dramaturgie, mécanique bien huilée.",
   },
   henry: {
     key: 'henry',
-    plume: 'Léandre Delarampe',
-    prenomScene: 'Léandre',
-    initiales: 'LD',
+    plume: 'Horace Delarampe',
+    prenomScene: 'Horace',
+    initiales: 'HD',
     couleur: '#0e7a9c',
     role: 'Le cœur sur la main',
-    bio: "Les feux de la rampe, il ne s'en méfie jamais : Léandre se laisse emporter sans résistance. Un grand show, une émotion sincère, et il applaudit debout avant tout le monde.",
+    bio: "Se laisse emporter sans résistance. Un grand show, une émotion sincère, et il applaudit debout avant tout le monde.",
   },
   cedric: {
     key: 'cedric',
-    plume: 'Sganarelle Troiscoups',
-    prenomScene: 'Sganarelle',
-    initiales: 'ST',
+    plume: 'Crispin Troiscoups',
+    prenomScene: 'Crispin',
+    initiales: 'CT',
     couleur: '#8a6d1f',
     role: 'Gardien du répertoire',
-    bio: "Les trois coups avant le lever de rideau, c'est sa musique préférée. Sganarelle défend le texte, la langue et la tradition, avec un faible avoué pour le théâtre de tréteaux et les grands classiques revisités.",
+    bio: "Défend le texte, la langue et les classiques, avec un faible pour le théâtre de tréteaux.",
   },
   lucie: {
     key: 'lucie',
-    plume: 'Isabelle Servante',
-    prenomScene: 'Isabelle',
-    initiales: 'IS',
+    plume: 'Lisette Servante',
+    prenomScene: 'Lisette',
+    initiales: 'LS',
     couleur: '#4a7a3a',
-    role: 'Programmatrice et éclaireuse',
-    bio: "La servante, c'est la petite lampe qu'on laisse allumée sur les plateaux vides. Isabelle repère les pépites intimes, les seuls-en-scène et les salles de cinquante places, et distribue ses bonnes adresses à toute la bande.",
+    role: 'Éclaireuse et programmatrice',
+    bio: "Repère les pépites intimes et les petites salles, et distribue les bonnes adresses à toute la bande.",
   },
   sana: {
     key: 'sana',
-    plume: 'Rosine Générale',
-    prenomScene: 'Rosine',
-    initiales: 'RG',
+    plume: 'Silvia Générale',
+    prenomScene: 'Silvia',
+    initiales: 'SG',
     couleur: '#b0416f',
     role: 'Flair pour les créations',
-    bio: "La générale, c'est l'ultime répétition avant la première. Rosine a le nez pour repérer les créations qui vont marcher et les compagnies dont on reparlera. Elle aime prendre des risques et découvrir avant les autres.",
+    bio: "Découvre avant les autres les jeunes compagnies dont on reparlera. Aime prendre des risques.",
   },
 };
 
