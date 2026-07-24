@@ -48,6 +48,7 @@ const jsonld = [
       <button class="sound-toggle" id="mute" type="button" aria-pressed="false" title="Activer ou couper le son">Son</button>
       <p class="daycount" id="daycount" hidden></p>
       <div class="gauges" id="gauges" aria-hidden="true"></div>
+      <p class="usure-note" id="usureNote" hidden><span class="tag">Usure du jour</span> Chaque jour, sans rien faire : <b>−3</b> trésorerie, <b>−2</b> moral, <b>−1</b> presse.</p>
 
       <div class="stage">
         <div class="screen" id="screen">
@@ -314,6 +315,7 @@ const jsonld = [
   }
 
   function updateDayCount() { $('daycount').textContent = `Représentation ${Math.min(jour, MAX_JOUR)} sur ${MAX_JOUR}`; }
+  function flashUsure() { const n = $('usureNote'); if (!n) return; n.classList.remove('flash'); void n.offsetWidth; n.classList.add('flash'); }
 
   function showCard() {
     current = pick();
@@ -325,6 +327,7 @@ const jsonld = [
     $('labR').textContent = current.R.lab;
     updateDayCount();
     $('daycount').hidden = false;
+    $('usureNote').hidden = false;
     $('card').hidden = false;
     $('choices').hidden = false;
     $('intro').hidden = true;
@@ -340,28 +343,44 @@ const jsonld = [
     return GAUGES.filter((G) => fx[G.key]).map((G) => G.label).join(', ');
   }
 
+  // Mort si une jauge se vide ou déborde (lecture avant clamp).
+  function checkDeath() {
+    for (const G of GAUGES) {
+      if (g[G.key] <= 0) return { msg: G.bas, key: G.key };
+      if (g[G.key] >= 100) return { msg: G.haut, key: G.key };
+    }
+    return null;
+  }
+  const clampAll = () => { for (const k in g) g[k] = clamp(g[k]); };
+
   function apply(side) {
     if (busy || !current) return;
     busy = true;
     sClick();
-    const fx = current[side].fx;
-    // Le choix, plus l'usure quotidienne (frais + fatigue + presse).
-    const delta = {};
-    for (const G of GAUGES) delta[G.key] = (fx[G.key] || 0) + (DRIFT[G.key] || 0);
-    for (const k in g) g[k] = g[k] + delta[k];
-    // mort si une jauge se vide ou déborde (avant clamp)
-    let death = null, deathKey = null;
-    for (const G of GAUGES) {
-      if (g[G.key] <= 0) { death = G.bas; deathKey = G.key; break; }
-      if (g[G.key] >= 100) { death = G.haut; deathKey = G.key; break; }
-    }
-    for (const k in g) g[k] = clamp(g[k]);
-    updateGauges(delta);
-    $('choices').hidden = true; // on laisse l'animation des jauges jouer
-    if (death) { setTimeout(() => end(false, death, deathKey), 640); return; }
-    jour++;
-    if (jour > MAX_JOUR) { setTimeout(() => end(true), 640); return; }
-    setTimeout(showCard, 360);
+    // --- Vague 1 : l'effet de VOTRE choix, seul ---
+    const choice = {};
+    for (const G of GAUGES) choice[G.key] = current[side].fx[G.key] || 0;
+    for (const k in g) g[k] += choice[k];
+    let death = checkDeath();
+    clampAll();
+    updateGauges(choice);
+    $('choices').hidden = true;
+    if (death) { setTimeout(() => end(false, death.msg, death.key), 700); return; }
+
+    // --- Vague 2 : l'usure quotidienne, affichée à part pour qu'on la voie ---
+    setTimeout(() => {
+      const drift = {};
+      for (const G of GAUGES) drift[G.key] = DRIFT[G.key] || 0;
+      for (const k in g) g[k] += drift[k];
+      const d2 = checkDeath();
+      clampAll();
+      updateGauges(drift);
+      flashUsure();
+      if (d2) { setTimeout(() => end(false, d2.msg, d2.key), 700); return; }
+      jour++;
+      if (jour > MAX_JOUR) { setTimeout(() => end(true), 700); return; }
+      setTimeout(showCard, 460);
+    }, 560);
   }
 
   const OUTCOME_IC = { treso: 'euro', public: 'public', moral: 'fatigue', presse: 'presse' };
@@ -460,7 +479,13 @@ const jsonld = [
   /* .panel/.choices posent display:flex|grid, ce qui écrase [hidden]. On rétablit. */
   .game [hidden] { display: none !important; }
   .daycount { font-family: var(--sans); font-size: 0.68rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.13em; color: var(--ink-3); text-align: center; margin: 0 0 14px; }
-  .gauges { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 20px; }
+  .gauges { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 12px; }
+  .usure-note { font-family: var(--sans); font-size: 0.68rem; color: var(--ink-3); text-align: center; margin: 0 auto 18px; padding: 5px 12px; border-radius: 6px; display: inline-block; width: 100%; box-sizing: border-box; }
+  .usure-note .tag { font-weight: 800; text-transform: uppercase; letter-spacing: 0.07em; color: var(--red); font-size: 0.62rem; margin-right: 4px; }
+  .usure-note b { color: var(--red); font-weight: 800; }
+  .usure-note.flash { animation: usurePulse 1s ease; }
+  @keyframes usurePulse { 0% { background: transparent; } 25% { background: rgba(192,57,43,0.14); } 100% { background: transparent; } }
+  @media (prefers-reduced-motion: reduce) { .usure-note.flash { animation: none; } }
   /* .gauge est injecté en JS : selecteurs :global sinon le scope Astro ne l'atteint pas. */
   .gauges :global(.gauge) { text-align: center; position: relative; }
   .gauges :global(.gl) { display: block; font-family: var(--sans); font-size: 0.62rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--ink-2); margin-bottom: 6px; }
