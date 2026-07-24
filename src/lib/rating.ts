@@ -12,11 +12,12 @@ export function starsFor(note: number): number {
   return 3;
 }
 
-// Verdicts toujours positifs : jamais un mot qui trahirait une déception.
+// Verdicts « maison », sur le thème de la claque (applaudissements).
+// Toujours positifs : même le plancher reste une claque.
 export function verdictFor(note: number): string {
-  if (note >= 8) return "Chef-d'œuvre";
-  if (note > 5) return 'Coup de cœur';
-  return 'Belle découverte';
+  if (note >= 8) return 'Grosse claque';
+  if (note > 5) return 'Belle claque';
+  return 'Petite claque';
 }
 
 // Nombre d'ami·es de la bande qui ont vu et noté la pièce.

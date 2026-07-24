@@ -1,6 +1,7 @@
 ---
 import '../styles/global.css';
 import { url } from '../lib/url';
+import Mark from '../components/Mark.astro';
 
 interface Props {
   title: string;
@@ -66,11 +67,18 @@ const nav = [
     ))}
   </head>
   <body>
+    <div class="brandbar"></div>
     <header class="masthead">
       <div class="top">
-        <a class="logo" href={url('/')}>La <b>Claque</b></a>
+        <a class="logo" href={url('/')}>
+          <Mark size={32} />
+          <span class="wm">
+            <span class="word">La <b>Claque</b></span>
+            <small>Critiques de théâtre, à plusieurs paires d'yeux</small>
+          </span>
+        </a>
         <div class="edition">
-          Critiques de théâtre<br />Dossier en cours : Avignon OFF 2026
+          Le journal de la bande<br />Dossier en cours : Avignon OFF 2026
         </div>
       </div>
       <nav>
@@ -89,8 +97,8 @@ const nav = [
     <footer class="foot-site">
       <div class="inner">
         <div>
-          <div class="logo">La <b>Claque</b></div>
-          <p style="margin-top:10px">Huit ami·es qui vont au théâtre et en parlent sans jamais bouder leur plaisir. On applaudit pour de vrai, à Avignon et toute l'année.</p>
+          <div class="logo" style="display:flex; align-items:center; gap:10px;"><Mark size={26} /> <span>La <b>Claque</b></span></div>
+          <p style="margin-top:10px">Une dizaine de comédien·nes qui vont au théâtre et en parlent à plusieurs paires d'yeux, sans jamais bouder leur plaisir. On applaudit pour de vrai, à Avignon et toute l'année.</p>
         </div>
         <div>
           <h4>Le journal</h4>

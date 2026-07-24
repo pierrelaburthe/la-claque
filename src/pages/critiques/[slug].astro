@@ -66,26 +66,28 @@ const jsonld = [
 ---
 <Base title={`${piece.titre} — La Claque`} active="critiques" description={piece.chapo} jsonld={jsonld} image={ogImage}>
   <div class="art-hero">
-    <div class="cover">
-      {piece.image
-        ? <img src={url(piece.image)} alt={`Affiche de ${piece.titre}`} />
-        : <div style={`position:absolute;inset:0;background:${c.couleur}`}></div>}
-    </div>
-    <div class="cap">
-      <div class="cap-inner">
-        <a href={url('/critiques')} class="back">← Toutes les critiques</a>
-        <p class="sub">{piece.style}{piece.salle ? ` · ${piece.salle}` : ''}</p>
-        <h1>{piece.titre}</h1>
-        <div class="rating">
-          <Stars note={piece.noteMoy} />
-          <span class="flag">{verdictFor(piece.noteMoy)}</span>
-          {pleb && <span class="flag"><span class="dot"></span> Plébiscite · vu par {seen}</span>}
+    <div class="art-bg" style={piece.image ? `background-image:url(${url(piece.image)})` : `background:${c.couleur}`}></div>
+    <div class="wrap art-hero-in">
+      <a href={url('/critiques')} class="back">← Toutes les critiques</a>
+      <div class="art-head">
+        {piece.image && (
+          <div class="art-poster"><img src={url(piece.image)} alt={`Affiche de ${piece.titre}`} /></div>
+        )}
+        <div class="art-title">
+          <p class="sub">{piece.style}{piece.salle ? ` · ${piece.salle}` : ''}</p>
+          <h1>{piece.titre}</h1>
+          <div class="rating">
+            <Stars note={piece.noteMoy} />
+            <span class="flag">{verdictFor(piece.noteMoy)}</span>
+            {pleb && <span class="flag"><span class="dot"></span> Plébiscite · vu par {seen}</span>}
+          </div>
         </div>
       </div>
     </div>
   </div>
 
-  <article class="wrap-narrow art-body">
+  <div class="wrap">
+  <article class="art-body">
     <div class="byline-row">
       <Avatar critic={piece.signataire} size={48} />
       <div class="who">
@@ -128,6 +130,7 @@ const jsonld = [
       </p>
     )}
   </article>
+  </div>
 
   <div class="wrap">
     <div class="rubric">

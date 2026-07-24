@@ -19,7 +19,7 @@ const chef = piece.noteMoy >= 8;
       ? <img src={url(piece.image)} alt={`Affiche de ${piece.titre}`} loading="lazy" />
       : <div class="fallback" style={`background:${c.couleur}`}>{piece.titre}</div>}
     {chef
-      ? <span class="corner">Chef-d'œuvre</span>
+      ? <span class="corner">Grosse claque</span>
       : pleb
         ? <span class="corner">Plébiscite</span>
         : null}
