@@ -5,77 +5,75 @@ import Stars from '../components/Stars.astro';
 import Avatar from '../components/Avatar.astro';
 import { PIECES } from '../data/pieces';
 import { CRITICS } from '../data/critics';
-import { consensusScore, estPlebiscite, estDecouverteSolo, nbVus, verdictFor } from '../lib/rating';
+import { consensusScore, estDecouverteSolo, nbVus, verdictFor } from '../lib/rating';
 import { url } from '../lib/url';
 
-const plebiscite = PIECES.filter(estPlebiscite).sort((a, b) => consensusScore(b) - consensusScore(a));
-const une = plebiscite[0];
-const restePleb = plebiscite.slice(1);
-const coupsDeCoeur = PIECES.filter((p) => p.noteMoy >= 8 && !estPlebiscite(p)).sort((a, b) => b.noteMoy - a.noteMoy);
+const parConsensus = [...PIECES].sort((a, b) => consensusScore(b) - consensusScore(a));
+const une = parConsensus[0];
+const side = parConsensus.slice(1, 6);
+const featured = new Set([une, ...side].map((p) => p.slug));
+
+const chefs = PIECES.filter((p) => p.noteMoy >= 8 && !featured.has(p.slug)).sort((a, b) => b.noteMoy - a.noteMoy);
 const solos = PIECES.filter(estDecouverteSolo).sort((a, b) => b.noteMoy - a.noteMoy);
 
-const nbChefs = PIECES.filter((p) => p.noteMoy >= 8).length;
 const totalVues = PIECES.reduce((s, p) => s + nbVus(p), 0);
-const uneCritic = une ? CRITICS[une.signataire] : null;
+const c = CRITICS[une.signataire];
+const ogImage = une.image ? new URL(url(une.image), Astro.site).href : undefined;
 ---
-<Base title="La Claque — critiques de théâtre" active="accueil">
-  <section class="intro">
-    <div class="wrap">
-      <p class="kicker">Critiques de théâtre · Dossier en cours : Avignon OFF 2026</p>
-      <h1>On va voir du théâtre. Et on a décidé d'applaudir.</h1>
-      <p class="lede">
-        La Claque, c'est une dizaine de comédien·nes qui courent les salles à plusieurs paires d'yeux, un carnet de notes rempli entre deux représentations, et une règle du jeu assumée : chercher la lumière dans chaque spectacle. On commence par le Festival OFF d'Avignon 2026, et on continue toute l'année. Voici nos {PIECES.length} premières critiques, en étoiles et en enthousiasme.
-      </p>
-      <div class="actions">
-        <a class="btn" href={url('/critiques')}>Lire les {PIECES.length} critiques</a>
-        <a class="btn btn-ghost" href={url('/a-propos')}>Notre manière de noter</a>
-      </div>
-      <div class="ours">
-        <div><strong>{PIECES.length}</strong><span>spectacles vus</span></div>
-        <div><strong>8</strong><span>plumes dans la bande</span></div>
-        <div><strong>{totalVues}</strong><span>billets tamponnés</span></div>
-        <div><strong>{nbChefs}</strong><span>grosses claques</span></div>
-      </div>
+<Base title="La Claque — critiques de théâtre" active="accueil" image={ogImage}>
+  <div class="frontline">
+    <div class="inner">
+      <span>Festival OFF d'Avignon 2026 · Dossier nº1</span>
+      <span><b>{PIECES.length} critiques</b> · une dizaine de plumes · {totalVues} paires d'yeux</span>
     </div>
-  </section>
+  </div>
 
-  {une && uneCritic && (
-    <div class="wrap">
-      <div class="rubric">
-        <h2>La Une</h2>
-        <span class="line"></span>
-        <span class="note">Le plébiscite absolu de la bande</span>
-      </div>
-      <article class="lead">
-        <a class="frame" href={url(`/critiques/${une.slug}`)}>
+  <div class="wrap">
+    <section class="frontpage">
+      <article class="lead-story">
+        <a class="lead-frame" href={url(`/critiques/${une.slug}`)}>
           {une.image && <img src={url(une.image)} alt={`Affiche de ${une.titre}`} />}
-          <span class="corner">Vu par {nbVus(une)} d'entre nous</span>
+          <span class="corner">La Une</span>
         </a>
-        <div>
-          <span class="kicker">{une.style}{une.salle ? ` · ${une.salle}` : ''}</span>
-          <h2><a class="title" href={url(`/critiques/${une.slug}`)}>{une.titre}</a></h2>
-          <p class="stand">{une.chapo}</p>
-          <div class="foot">
+        <div class="lead-body">
+          <span class="lead-kicker">{une.style}{une.salle ? ` · ${une.salle}` : ''}</span>
+          <h1><a href={url(`/critiques/${une.slug}`)}>{une.titre}</a></h1>
+          <p class="lead-stand">{une.chapo}</p>
+          <div class="lead-foot">
             <Stars note={une.noteMoy} />
-            <span class="metaline">{verdictFor(une.noteMoy)} · vu par {nbVus(une)} d'entre nous</span>
+            <span class="metaline">{verdictFor(une.noteMoy)} · {nbVus(une)} paires d'yeux</span>
           </div>
-          <div class="byline" style="margin-top:14px; display:flex; align-items:center; gap:9px; font-family:var(--sans); font-size:0.72rem; text-transform:uppercase; letter-spacing:0.06em; color:var(--ink-3)">
-            <Avatar critic={une.signataire} size={26} ring={false} /> Par {uneCritic.plume}
+          <div class="byl" style="margin-top:12px">
+            <Avatar critic={une.signataire} size={24} ring={false} /> Par {c.plume}
           </div>
         </div>
       </article>
-    </div>
-  )}
 
-  <div class="wrap">
-    <div class="rubric">
-      <h2>Le plébiscite de la bande</h2>
-      <span class="line"></span>
-      <span class="note">Vus et aimés par le plus grand nombre</span>
-    </div>
-    <p class="rubric-intro">Quand six ou sept avis différents tombent d'accord, on vous le signale : c'est là qu'il faut courir en priorité.</p>
-    <div class="cards">
-      {restePleb.map((p) => <PieceCard piece={p} />)}
+      <aside class="front-side">
+        <h2 class="side-title">À l'affiche</h2>
+        <ol class="side-list">
+          {side.map((p, i) => (
+            <li>
+              <a href={url(`/critiques/${p.slug}`)}>
+                <span class="rk">{i + 2}</span>
+                <span class="th">{p.image && <img src={url(p.image)} alt={`Affiche de ${p.titre}`} loading="lazy" />}</span>
+                <span>
+                  <span class="st">{p.titre}</span>
+                  <span class="sm">{verdictFor(p.noteMoy)} · vu par {nbVus(p)}</span>
+                </span>
+              </a>
+            </li>
+          ))}
+        </ol>
+      </aside>
+    </section>
+
+    <div class="manifesto">
+      <p>La Claque, c'est une dizaine de comédien·nes qui courent les salles à plusieurs paires d'yeux et ne bouderont jamais leur plaisir. On note généreusement, on raconte, on partage nos coups de cœur.</p>
+      <div class="actions">
+        <a class="btn" href={url('/critiques')}>Les {PIECES.length} critiques</a>
+        <a class="btn btn-ghost" href={url('/a-propos')}>Notre méthode</a>
+      </div>
     </div>
 
     <div class="rubric">
@@ -83,9 +81,9 @@ const uneCritic = une ? CRITICS[une.signataire] : null;
       <span class="line"></span>
       <span class="note">Cinq étoiles</span>
     </div>
-    <p class="rubric-intro">Moins de monde dans la salle, mais un niveau qui crève le plafond. À rattraper d'urgence.</p>
+    <p class="rubric-intro">Le haut du panier, au-delà de la une. À rattraper d'urgence.</p>
     <div class="cards">
-      {coupsDeCoeur.map((p) => <PieceCard piece={p} />)}
+      {chefs.map((p) => <PieceCard piece={p} />)}
     </div>
 
     <div class="rubric">
@@ -93,13 +91,14 @@ const uneCritic = une ? CRITICS[une.signataire] : null;
       <span class="line"></span>
       <span class="note">Vues par un·e seul·e d'entre nous</span>
     </div>
-    <p class="rubric-intro">Un membre de la bande s'est aventuré seul dans une salle et en est ressorti conquis. On vous les offre comme des paris.</p>
+    <p class="rubric-intro">Un membre de la bande s'est aventuré seul dans une salle et en est ressorti conquis. Des paris qu'on vous propose.</p>
     <div class="cards">
       {solos.map((p) => <PieceCard piece={p} />)}
     </div>
 
-    <div class="center" style="margin:56px 0 10px;">
-      <a class="btn" href={url('/palmares')}>Le palmarès complet des {PIECES.length} spectacles</a>
+    <div class="center" style="margin:54px 0 10px; display:flex; gap:12px; justify-content:center; flex-wrap:wrap;">
+      <a class="btn" href={url('/palmares')}>Le palmarès complet</a>
+      <a class="btn btn-ghost" href={url('/guides')}>Nos guides du théâtre</a>
     </div>
   </div>
 </Base>
