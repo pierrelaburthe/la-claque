@@ -40,6 +40,12 @@ export function estDecouverteSolo(p: Piece): boolean {
   return nbVus(p) === 1;
 }
 
+// Combien de la bande ont vu la pièce, dit de façon parlante et raccord
+// avec la signature « à plusieurs paires d'yeux ».
+export function seenLabel(n: number): string {
+  return `${n} paire${n > 1 ? 's' : ''} d'yeux`;
+}
+
 export function formatNote(note: number): string {
   return note.toFixed(note % 1 === 0 ? 0 : 1).replace('.', ',');
 }

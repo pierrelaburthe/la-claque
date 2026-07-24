@@ -42,7 +42,7 @@ export const PIECES: Piece[] = [
     corps: [
       "Réveillon du Nouvel An, treizième étage d'une tour de La Défense. Jean, Luc et leur voisine Daphnée, défoncée à l'acide, se retrouvent enfermés à clé pour une soirée qui tourne au carnage : un boa dans les toilettes, un hélicoptère qui s'écrase sur l'immeuble d'en face, une montée continue de l'horreur et du rire. Écrite par Copi en 1978, longtemps trop sulfureuse pour être montée, la pièce tient de la comédie cruelle et de la mélancolie pure.",
       "La compagnie Sixième Mur, dans la mise en scène de Lewis Janier-Dubry, la joue masquée, visages blancs et nez pointus, dans un décor qui semble surgir de l'énergie des corps plutôt que de les précéder. La troupe se jette sur le plateau avec une précision comique totale, et fait monter l'ivresse et l'asphyxie sans jamais relâcher la pression.",
-      "La critique salue un collectif qui frappe très fort, une relecture inventive et tonique d'un texte jadis censuré, distinguée aux Lauriers 2025. On en ressort essoré et hilare, un peu sonné aussi. Du théâtre à vif comme le OFF en offre rarement.",
+      "Ce collectif frappe très fort : une relecture inventive et tonique d'un texte jadis censuré, distinguée aux Lauriers 2025. On en ressort essoré et hilare, un peu sonné aussi. Du théâtre à vif comme le OFF en offre rarement.",
     ],
     momentGarde: "L'accélération finale, quand le chaos s'emballe et que la salle retient son souffle sans plus savoir si elle doit rire ou avoir peur.",
     sources: [
@@ -65,7 +65,7 @@ export const PIECES: Piece[] = [
     corps: [
       "Adoré de tous, Hercule est retrouvé amnésique près du corps de sa femme Mégara. Aussitôt accusé de féminicide, le demi-dieu comparaît devant un tribunal populaire filmé en direct par une journaliste et son cadreur, condamné à accomplir ses douze travaux pour se racheter. Le mythe grec vient cogner de plein fouet contre notre époque de lynchages médiatiques.",
       "Le Collectif Nox déploie une machine de plateau spectaculaire : des structures grises et réfléchissantes, manipulées à vue, s'assemblent en un grand masque d'acier, tandis que des colonnes de tulle et des cascades de fils rouges figurent la surveillance du destin. La partition live de Kevin Abgrall, entre baroque et rock, fait passer les interprètes du jeu au chant et à la danse, portée par la voix poignante de la Nymphe.",
-      "La presse parle d'une épopée théâtrale et musicale d'une générosité folle, et estime qu'après Mercutio, le collectif transforme l'essai. Sous le show affleure un vrai propos sur la culpabilité, la meute et la rédemption. L'un des grands spectacles populaires de ce festival.",
+      "C'est une épopée théâtrale et musicale d'une générosité folle : après Mercutio, le collectif transforme brillamment l'essai. Sous le show affleure un vrai propos sur la culpabilité, la meute et la rédemption. L'un des grands spectacles populaires de ce festival.",
     ],
     sources: [
       'https://www.rmtnewsinternational.com/2026/07/avignon-off-2026-hercule/',
@@ -87,7 +87,7 @@ export const PIECES: Piece[] = [
     corps: [
       "Accusée de sorcellerie, Résine fuit avec Claudin et tente de recommencer sa vie au village de Floriboule, où l'accueil vire vite au procès et à la chasse aux sorcières. D'après la bande dessinée d'Élodie Shanta, cette comédie musicale jeune public assume un féminisme joyeux, sans jamais alourdir son propos.",
       "La mise en scène de Mathilde Caillavet repose sur des cubes modulaires qui deviennent tour à tour escaliers, étal de boulangerie, château ou bûcher, dans un dispositif fluide qui entretient l'émerveillement. Les compositions de Martin Pauvert, vives et colorées, révèlent chez les comédiens un vrai talent de musiciens, et des harmonies vocales qui envoûtent la salle.",
-      "La critique y voit une très belle découverte, à la direction intelligente et à l'exécution soignée, avec pour seule réserve un léger manque de péripéties. On croit assister à un spectacle pour enfants, on découvre une fable qui parle à tous les âges de l'art de désigner des coupables. Une réussite lumineuse.",
+      "On tient là une très belle découverte, à la direction intelligente et à l'exécution soignée, avec pour seule réserve un léger manque de péripéties. On croit assister à un spectacle pour enfants, on découvre une fable qui parle à tous les âges de l'art de désigner des coupables. Une réussite lumineuse.",
     ],
     momentGarde: "Le jeu de décor qui se déplie sous nos yeux et transforme le plateau en village entier, une trouvaille qu'on a tous notée à la sortie.",
     sources: [
@@ -133,7 +133,7 @@ export const PIECES: Piece[] = [
     corps: [
       "Le spectacle retrace la carrière de Jacques Chirac, en s'attardant sur ses années d'avant l'Élysée, jusqu'à un débat imaginaire face à Georges Marchais. Inscrit dans le cycle « Huit Rois, nos présidents », il dresse le portrait d'un homme du compromis et du vide, virtuose de l'art de parler pour ne rien dire.",
       "Au centre du plateau, un miroir fait office de révélateur, motif du masque et de l'hypocrisie que Julien Campani endosse tour à tour dépouillé et costumé, en roi-bouffon. Le mimétisme est confondant, jusque dans des séquences improvisées avec la salle, ponctuées par l'apparition onirique de Louis XVI ou le surgissement tonitruant d'un militant déçu.",
-      "La critique salue un jeu impeccable et un travail de mise en scène ciselé, résumé par une belle formule : bas le masque, mais chapeau bas. Rares sont les incarnations aussi patientes et précises. On ressort bluffés.",
+      "Le jeu est impeccable, la mise en scène ciselée, et l'on ressort avec une formule en tête : bas le masque, mais chapeau bas. Rares sont les incarnations aussi patientes et précises. On ressort bluffés.",
     ],
     momentGarde: "L'image finale, dos au public, où on ne le voit plus que dans un miroir, comme s'il avait honte de se montrer en face.",
     sources: [
@@ -156,7 +156,7 @@ export const PIECES: Piece[] = [
     corps: [
       "Simon Falguières et la compagnie Le K racontent la vie et la mort de Molière comme on jouait autrefois sur les places : sur des tréteaux de bois, un vieux rideau, un théâtre inventé à vue où maquillages et costumes apparaissent à chaque changement. Six comédiens y traversent une vingtaine de rôles, de la rencontre avec Madeleine Béjart aux fastes de la cour de Louis XIV.",
       "Le parti pris fait mouche : autour d'un jeu de bateleur outrancier, guitare, emphase et masques, une comédienne incarne Molière en femme, en jean et polo, dans un registre naturaliste qui fait soudain surgir l'émotion pure. Ça court, ça change de masque à vue, et le dispositif volontairement pauvre remet le jeu au centre.",
-      "La presse salue une création qui honore la liberté joyeuse de l'artisanat théâtral, et voit en Falguières un surdoué capable de tout dire sans effets. On sort de là avec l'envie de remercier tous ceux qui montent sur des planches, ce qui reste le plus beau compliment pour un spectacle sur Molière.",
+      "Voilà une création qui honore la liberté joyeuse de l'artisanat théâtral, et confirme en Falguières un surdoué capable de tout dire sans effets. On sort de là avec l'envie de remercier tous ceux qui montent sur des planches, ce qui reste le plus beau compliment pour un spectacle sur Molière.",
     ],
     momentGarde: "Le talent pur, tout simplement : la vitesse à laquelle chaque comédien passe d'un personnage à l'autre sans jamais qu'on décroche.",
     sources: [
@@ -180,7 +180,7 @@ export const PIECES: Piece[] = [
     corps: [
       "D'après Fabrice Melquiot, un personnage nommé « Moi » rend visite à son père mourant, le baron de Münchhausen, puis part sur les routes à la recherche de sa mère. Sous le conte se cache la plus vertigineuse des aventures, celle de devenir adulte. La compagnie MIJOTE, tout juste sortie du Cours Florent de Montpellier et primée par l'école, s'en empare à sept sur le petit plateau de Présence Pasteur.",
       "Ce qui frappe, c'est l'inventivité de chaque instant et l'énergie d'une troupe qui n'a peur de rien. En cinquante minutes, la mise en scène d'Anne-Solène Marchand passe du rire à l'émotion sans le moindre temps mort, portée par des comédiens d'une maturité étonnante.",
-      "Le spectacle a conquis les spectateurs, et nous les premiers : c'est la pièce que le plus grand nombre d'entre nous a vue, et l'enthousiasme fut unanime. On tient là des noms à suivre de près.",
+      "Le spectacle nous a tous conquis : c'est la pièce que le plus grand nombre d'entre nous a vue, et l'enthousiasme fut unanime. On tient là des noms à suivre de près.",
     ],
     momentGarde: "Le narrateur qui annonce la réplique juste avant qu'elle soit dite, les visages qui se transforment à toute allure pour figurer un dragon, et cet inconnu au bataillon qui ne sait ni pourquoi il est là ni qui il est.",
     sources: [
@@ -203,7 +203,7 @@ export const PIECES: Piece[] = [
     corps: [
       "Perdican et Camille, cousins promis l'un à l'autre, s'aiment et refusent de se le dire ; par dépit, Perdican courtise la jeune Rosette, et le jeu de l'orgueil tourne au drame. La compagnie Cafarnaüm relit le proverbe de Musset, écrit en 1834, à la lumière de nos amours contemporaines.",
       "La mise en scène de Manon Giraudon-Nicolaï fait basculer la pièce d'un premier univers grotesque, où les personnages frôlent la caricature et font rire par l'excès, vers un second plus dépouillé où les masques tombent et la vérité des sentiments surgit brutalement. La vidéo et la chorégraphie intensifient les moments intimes, et des combats physiques viennent scander le conflit.",
-      "La critique parle d'un théâtre ébouriffé et ébouriffant, où le badinage disparaît sous la fureur à cœur nu, et juge le spectacle immanquable. La modernité de la forme ne trahit jamais le texte : elle le rend plus proche, plus urgent. Un classique qui cogne encore fort.",
+      "C'est un théâtre ébouriffé et ébouriffant, où le badinage disparaît sous la fureur à cœur nu, et le spectacle en devient immanquable. La modernité de la forme ne trahit jamais le texte : elle le rend plus proche, plus urgent. Un classique qui cogne encore fort.",
     ],
     sources: [
       'https://www.spectatif.com/2026/07/on-ne-badine-pas-avec-l-amour-au-theatre-les-3t-10eme-avenue.html',
@@ -225,7 +225,7 @@ export const PIECES: Piece[] = [
     corps: [
       "Inspiré du témoignage « Tu m'as laissée en vie », le spectacle raconte Augustin, éleveur de porcs dans la Somme, et Camille, sa femme, qui l'a vu perdre pied à mesure que le métier cessait de le faire vivre, jusqu'au geste irréparable. Derrière ce destin se profile le drame silencieux des centaines de paysans qui se donnent la mort chaque année en France, écrasés par la volatilité des prix et la pression agro-industrielle.",
       "Ils sont cinq sur le plateau, deux pour porter le couple, trois pour tout le reste, et quelques bottes de foin réagencées suffisent à composer les lieux et à faire circuler le récit. La mise en scène de Marie Benati et Rémi Couturier relève le pari le plus difficile : faire rire d'un sujet qui déchire, pour mieux nous cueillir à la fin.",
-      "La critique parle d'un spectacle bouleversant, porté par un jeu d'une belle sensibilité, et conclut par un simple Bravo. On rit beaucoup, on pleure franchement, et l'on sort transformé. C'est du grand théâtre populaire, de ceux dont on se souvient longtemps.",
+      "Le spectacle est bouleversant, porté par un jeu d'une belle sensibilité, et l'on n'a qu'un mot à la sortie : bravo. On rit beaucoup, on pleure franchement, et l'on sort transformé. C'est du grand théâtre populaire, de ceux dont on se souvient longtemps.",
     ],
     sources: [
       'https://www.la-factory.org/tout-contre-la-terre/',
@@ -247,7 +247,7 @@ export const PIECES: Piece[] = [
     corps: [
       "Richard, metteur en scène sur le déclin, vient donner son premier cours de théâtre en prison. Seuls deux détenus se présentent, Kevin la tête brûlée et Ange le taciturne, épaulés par une ancienne comédienne et une assistante sociale débutante. Alexis Michalik y déploie sa signature, des récits qui s'emboîtent à travers le temps et l'espace pour célébrer le pouvoir libérateur de la parole.",
       "L'esthétique est minimale et mobile : quelques perruques, des costumes de fortune, un pan de mur sur roulettes qui dessine l'espace carcéral, et des acteurs qui se changent à vue avant de s'asseoir en fond de scène. Au bord du plateau, Killian Rebreyend bâtit en direct les bruits de portes qui font les murs, le piano de l'enfance, la nappe sourde de la ville.",
-      "La critique loue un spectacle intelligent et humaniste, où Michalik obtient son effet non pas avec le plus de moyens mais avec le plus de théâtre. La mécanique narrative ne connaît pas de temps mort, et l'émotion surgit toujours là où on ne l'attend pas. Une valeur sûre du festival.",
+      "C'est un spectacle intelligent et humaniste, où Michalik obtient son effet non pas avec le plus de moyens, mais avec le plus de théâtre. La mécanique narrative ne connaît pas de temps mort, et l'émotion surgit toujours là où on ne l'attend pas. Une valeur sûre du festival.",
     ],
     sources: [
       'https://www.chenenoir.fr/event/intra-muros-dalexis-michalik/',
@@ -269,7 +269,7 @@ export const PIECES: Piece[] = [
     corps: [
       "En 1932, l'Australie a réellement lancé son armée contre les émeus qui ravageaient ses cultures, et perdit la guerre. Le Théâtre 100 Noms transforme cet épisode véridique en comédie documentaire, où deux comédiens campent tour à tour le simple soldat, le général grandiloquent et le politicien opportuniste.",
       "À deux, avec quatre gros cubes pour tout décor, Antoine Le Frère et Florent Oulkaïd cavalent d'un personnage à l'autre avec une précision d'horloger, un geste, un regard, une inflexion suffisant à tout changer. Le texte est ciselé, et c'est le sérieux avec lequel le duo défend les situations les plus loufoques qui rend la satire imparable.",
-      "Derrière les uniformes des années trente, la presse reconnaît nos propres dirigeants et notre penchant à répondre à tout par la force : la bêtise n'a ni nationalité ni époque. Bourré de trouvailles et souvent joué à guichets fermés, le spectacle fait rire fort tout en plaçant quelques coups de bec bien sentis.",
+      "Derrière les uniformes des années trente, on reconnaît nos propres dirigeants et notre penchant à répondre à tout par la force : la bêtise n'a ni nationalité ni époque. Bourré de trouvailles et souvent joué à guichets fermés, le spectacle fait rire fort tout en plaçant quelques coups de bec bien sentis.",
     ],
     sources: [
       'https://lebruitduoff.com/2026/07/09/la-guerre-des-emeus-une-fable-pas-si-absurde-et-un-rire-qui-gratte/',
@@ -292,7 +292,7 @@ export const PIECES: Piece[] = [
     corps: [
       "En 2029, à quelques semaines d'une catastrophe écologique, dans une ville côtière coincée entre la pinède et un volcan, quatre lointains descendants de héros grecs vivent seuls avec Erinye, leur intelligence artificielle omnisciente, qui les pousse à s'inscrire sur un site de rencontres fondé sur leur généalogie. L'approche d'une comète transforme peu à peu ces rendez-vous en malédiction.",
       "Écrit, mis en scène et joué par Lucile Seguin, le texte a raflé la bourse Beaumarchais-SACD et les Lauriers 2025, et cela s'entend : une écriture dense et raffinée, une esthétique proche de Blade Runner, une intensité qui monte crescendo. La maîtrise de plateau fait oublier l'exiguïté de la petite salle du Tremplin.",
-      "Les spectateurs saluent une immersion immédiate et une œuvre franchement inclassable, qui ose la vraie science-fiction là où les plateaux la boudent d'ordinaire. Exigeant, âpre par instants, mais c'est précisément ce cran qu'on vient chercher à Avignon.",
+      "L'immersion est immédiate, l'œuvre franchement inclassable, et elle ose la vraie science-fiction là où les plateaux la boudent d'ordinaire. Exigeant, âpre par instants, mais c'est précisément ce cran qu'on vient chercher à Avignon.",
     ],
     sources: [
       'https://www.festivaloffavignon.com/spectacles/8743-tunkuska2029',
@@ -314,7 +314,7 @@ export const PIECES: Piece[] = [
     corps: [
       "Kairós, en grec, c'est l'instant opportun, ce moment où le temps semble suspendu. La compagnie Fika en fait une courte pièce pour deux danseuses aux vocabulaires opposés, le hip-hop et le krump de Maria Pinho, la danse contemporaine et la contorsion de Charline Nolin, qui cherchent leurs repères dans un espace à apprivoiser.",
       "Un canapé, seul élément de décor, devient partenaire de jeu, et l'écriture chorégraphique, géométrique et angulaire, s'inspire ouvertement du Tetris et du Rubik's Cube : les corps se décomposent, se recomposent, cherchent sans cesse la bonne place. En trente-cinq minutes, la pièce installe un état et suspend le temps.",
-      "La critique salue un duo réjouissant et original, une belle rencontre entre deux danseuses talentueuses, pleine d'énergie et de complicité. Il n'y a rien à décoder, seulement à se laisser porter par la beauté du geste. Un joyau bref, à ne pas laisser passer.",
+      "C'est un duo réjouissant et original, une belle rencontre entre deux danseuses talentueuses, pleine d'énergie et de complicité. Il n'y a rien à décoder, seulement à se laisser porter par la beauté du geste. Un joyau bref, à ne pas laisser passer.",
     ],
     sources: [
       'https://www.critiquetheatreclau.com/2026/05/kairos-choregraphie-maria-pinho-charline-nolin.html',
@@ -357,7 +357,7 @@ export const PIECES: Piece[] = [
     corps: [
       "Dans une boulangerie française, trois boulangers s'échinent au milieu de la pâte et de la farine, et tout part inévitablement en désastre. Le trio international The Latebloomers, formé à l'école Jacques Lecoq, signe une comédie physique entièrement muette, héritière assumée du grand burlesque du cinéma muet.",
       "Sam Dugmore, Oliver Nilsson et Jonathan Tilley carburent au gag millimétré et au bruitage, embarquant la salle du début à la fin. Après le succès international de leur Scotland!, avec lequel ils alternent à Avignon, ils confirment une signature clownesque où personne ne reste spectateur.",
-      "La presse britannique résume l'esprit du spectacle d'une formule reprise partout : charmant, absurde et réconfortant comme une baguette chaude. On ressort la joue farineuse et le rire encore accroché, avec le sentiment d'avoir assisté à une belle mécanique de précision.",
+      "L'esprit du spectacle tient dans une formule : charmant, absurde et réconfortant comme une baguette chaude. On ressort la joue farineuse et le rire encore accroché, avec le sentiment d'avoir assisté à une belle mécanique de précision.",
     ],
     momentGarde: "La scène mimée en accéléré, le personnage qui meurt puis réapparaît dans un cadre, et l'acteur trempé à force de nettoyer ce cadre à grande eau.",
     sources: [
@@ -380,7 +380,7 @@ export const PIECES: Piece[] = [
     corps: [
       "Créé par Cédric Chapuis et nommé aux Molières, Une vie sur mesure raconte Adrien, un garçon en décalage avec le monde pour qui la batterie devient le plus sûr des langages. Mis en scène par Stéphane Batlle, le seul-en-scène avance entre humour, tendresse et virtuosité rythmique.",
       "Sur scène, l'interprète saute, court, explose littéralement l'espace, et la batterie devient une extension de son corps, un personnage à part entière. La salle se surprend vite à battre la mesure et à vibrer à l'unisson, sans que le spectacle ne tombe jamais dans le pathos.",
-      "Vu par des centaines de milliers de spectateurs et repris saison après saison, il fait l'unanimité chez les festivaliers, qui en ressortent avec l'envie de faire swinguer la vie. Une valeur sûre, dont le ressort tient à la sincérité et à la virtuosité plus qu'à la surprise. On applaudit debout.",
+      "Vu par des centaines de milliers de spectateurs et repris saison après saison, il fait mouche à tous les coups, et l'on en ressort avec l'envie de faire swinguer la vie. Une valeur sûre, dont le ressort tient à la sincérité et à la virtuosité plus qu'à la surprise. On applaudit debout.",
     ],
     sources: [
       'https://lascala-provence.fr/programmation/une-vie-sur-mesure/',
@@ -424,7 +424,7 @@ export const PIECES: Piece[] = [
     corps: [
       "Visage blanc, nez rouge, smoking noir, elles sont quatre à répondre au désordre du monde par l'absurde et la poésie. Dès l'ouverture, une longue séquence de lutte contre des bourrasques soufflées par les enceintes installe un comique tout physique, sous la direction du maître clown Alexandre Pavlata.",
       "Le quatuor ne s'exprime qu'en onomatopées et borborygmes, et pourtant on comprend tout, tant le mime et le geste sont précis. Entre une séquence désopilante de boîtes de conserve projetées à travers le plateau et des numéros de music-hall, le spectacle décolle pour ne plus retomber.",
-      "La critique parle d'un chef-d'œuvre clownesque, d'un talent fou et d'une maîtrise absolue de l'art, en conseillant de prévoir des mouchoirs pour les larmes de rire. Frondeuses et généreuses, ces clownes font un bien fou, et l'on ressort conquis par leur culot.",
+      "C'est un petit chef-d'œuvre clownesque, d'un talent fou et d'une maîtrise absolue, et l'on ferait bien de prévoir des mouchoirs pour les larmes de rire. Frondeuses et généreuses, ces clownes font un bien fou, et l'on ressort conquis par leur culot.",
     ],
     momentGarde: "La scène finale où les quatre comédiennes descendent draguer le public, et ce fameux lancer de boîtes bruyant qui s'arrête et repart de plus belle, un moment de trois minutes qui semble en durer soixante.",
     sources: [
@@ -447,7 +447,7 @@ export const PIECES: Piece[] = [
     corps: [
       "Rosalie, petite Bretonne de huit ans, traverse les turbulences de l'enfance jusqu'au jour où une moustache magique lui fait voir la vie autrement : « Jean, ça te va bien. » Le texte d'Adèle Fugère aborde ainsi, par la fantaisie, un sujet que la scène ose rarement, l'angoisse de l'enfance, quelque part entre le Petit Nicolas et une Zazie bretonne.",
       "Seul en scène, Thomas Drelon incarne la fillette avec une aisance et une grâce désarmantes, malgré tout ce qui l'en sépare, confirmant qu'il est un grand interprète. La mise en scène de Morgan Perez, la musique de Théo Glaas et les lumières accompagnent merveilleusement ce petit monde dans l'intimité de la salle des Béliers.",
-      "L'écriture de Fugère, rapide et ciselée, donne son tempo au monologue et le pousse vers la libération. La critique conclut par un Bravo, saluant un spectacle qui garde le charme du Petit Nicolas tout en parlant aux adultes. On en ressort attendri.",
+      "L'écriture de Fugère, rapide et ciselée, donne son tempo au monologue et le pousse vers la libération. Le spectacle garde le charme du Petit Nicolas tout en parlant aux adultes, et l'on n'a qu'une envie à la fin : applaudir. On en ressort attendri.",
     ],
     sources: [
       'https://coupsdoeil.fr/2025/07/jai-8-ans-et-je-mappelle-jean-rochefort-fugere-drelon-critique/',
@@ -492,7 +492,7 @@ export const PIECES: Piece[] = [
     corps: [
       "Un meurtre bouleverse un hameau de Lozère, la vallée des Trois Mongettes, et voilà l'inspecteur Hervé Ronzier, son adjoint et sa secrétaire lancés dans une enquête aussi savoureuse qu'improbable. Léo Deschamps signe une parodie de polar où chaque personnage pousse à fond son archétype.",
       "La troupe des Praisques mène l'affaire tambour battant, sans le moindre temps mort, en détournant systématiquement les codes du genre. L'abattage des comédiens, Tobias Quéau en tête, fait passer l'écriture par-dessus la jambe et emporte l'adhésion par la seule générosité du jeu.",
-      "La critique salue des interprètes excellents et un vrai entrain, tout en reconnaissant que les dialogues ne font pas toujours mouche : l'énergie compense une écriture inégale. On ne cherche pas ici la grande dramaturgie, mais un plaisir de jeu communicatif, et de ce côté-là, le contrat est rempli.",
+      "Les interprètes sont excellents et l'entrain communicatif, même si les dialogues ne font pas toujours mouche : l'énergie compense une écriture inégale. On ne cherche pas ici la grande dramaturgie, mais un plaisir de jeu communicatif, et de ce côté-là, le contrat est rempli.",
     ],
     momentGarde: "Le ping-pong entre deux scènes dans une même voiture, poussé si loin que même les figurants finissent par changer de position, et le running gag des cracottes vues comme des lipides trop gras par tout le village.",
     sources: [
@@ -515,7 +515,7 @@ export const PIECES: Piece[] = [
     corps: [
       "Youma, jeune femme sourde, vit dans un village du Grand Nord dont le seul trésor est la langue. Lorsqu'un marchand se met à vendre des objets « indispensables » payables en mots, cent quatre-vingt-dix-neuf pour un radiateur, le vocabulaire s'épuise, et avec lui la parole et la pensée. Léonore Confino signe une fable glaçante d'actualité.",
       "Dans un décor arctique arrondi et minimaliste qui joue le chaud et le froid, le vide et le plein, la mise en scène de Catherine Schaub fait dialoguer le français et la langue des signes, seule langue de résistance que Youma préserve. Le dispositif bilingue, accessible aux publics sourds, devient le cœur battant du spectacle.",
-      "La critique parle d'un conte humaniste et d'un bijou à la narration limpide, qui articule matérialisme, totalitarisme et identité, et loue une langue des signes d'une expressivité subjuguante. Quand les gens n'ont plus les mots, résume l'autrice, ils recourent à la violence. Un théâtre ambitieux qui ouvre grand ses portes.",
+      "C'est un conte humaniste et un bijou à la narration limpide, qui articule matérialisme, totalitarisme et identité, porté par une langue des signes d'une expressivité subjuguante. Quand les gens n'ont plus les mots, dit la pièce, ils recourent à la violence. Un théâtre ambitieux qui ouvre grand ses portes.",
     ],
     sources: [
       'https://www.theatredubalcon.org/festival/le-village-des-sourds/',
@@ -537,7 +537,7 @@ export const PIECES: Piece[] = [
     corps: [
       "Elles se rêvent co-présidentes en 2027 et tiennent meeting pour leur parti, « Anti-Cocon ». Leur cible : le repli confortable de l'époque, le scroll infini, l'accumulation de plaids et le réflexe Netflix. Faustine Astruc et Esther Coudreau croisent théâtre et stand-up dans un faux discours de campagne mené au pas de charge.",
       "Toujours en mouvement, le duo tient le plateau avec une énergie qui emporte l'adhésion et un humour d'actualité qui vise juste sur nos renoncements. Le programme est absurde et nécessaire à la fois : réhabiliter le collectif et le goût de l'inconnu contre l'individualisme du canapé.",
-      "Rodé devant le public parisien avant Avignon, le spectacle avance porté par un bouche-à-oreille enthousiaste, qui salue une écriture au scalpel et une belle complicité. Deux tempéraments comiques qu'on aura plaisir à recroiser.",
+      "Rodé devant le public parisien avant Avignon, le spectacle séduit par son écriture au scalpel et la belle complicité du duo. Deux tempéraments comiques qu'on aura plaisir à recroiser.",
     ],
     sources: [
       'https://www.billetreduc.com/spectacle/anti-cocon-404993',
@@ -582,7 +582,7 @@ export const PIECES: Piece[] = [
     corps: [
       "Sous les toits de Paris, sur un même palier, trois voisins que tout sépare, un costaud, un grand maigre et une blonde plantureuse, enchaînent quiproquos et catastrophes sans jamais renoncer à l'amour ni à l'espoir. Récompensé du Molière de la comédie, le mélo burlesque de Pierre Guillois se joue quasiment sans une parole intelligible.",
       "Le dispositif oppose deux logements, l'un blanc et d'une propreté clinique, l'autre surchargé d'objets, reflets des personnalités. Incendies, tempêtes, murs mitoyens trop poreux, problèmes d'évacuation : chaque gag est un mécanisme d'horlogerie, et la mise en scène est superbe.",
-      "La critique salue un burlesque réjouissant qui garde toute la poésie d'un Tati, mêlant élégance comique et humour graveleux sans jamais verser dans le vulgaire gratuit. Le sans-parole révèle l'essentiel, le corps, le rythme, la présence : un artisanat comique de haute volée qui, passé sa six-centième représentation, n'a rien perdu de sa mécanique.",
+      "C'est un burlesque réjouissant qui garde toute la poésie d'un Tati, mêlant élégance comique et humour graveleux sans jamais verser dans le vulgaire gratuit. Le sans-parole révèle l'essentiel, le corps, le rythme, la présence : un artisanat comique de haute volée qui, passé sa six-centième représentation, n'a rien perdu de sa mécanique.",
     ],
     sources: [
       'https://cult.news/scenes/theatre/off-davignon-bigre-a-la-scala-provence-un-burlesque-rejouissant/',
@@ -629,7 +629,7 @@ export const PIECES: Piece[] = [
     corps: [
       "Adélie et Eliott confient chaque décision de leur vie au hasard d'un pile ou face tenu par un spectateur. Selon le résultat, le récit bifurque et se réinvente, si bien qu'aucune représentation ne ressemble à la précédente. La compagnie Quartier Luna en tire un jeu théâtral aussi ludique que vertigineux.",
       "La mise en scène de Peter Dervillez lorgne du côté de Jeunet et de Dupontel, rythmée par des projections pleines d'engrenages et d'horloges mystérieuses. Sur le plateau, la fraîcheur pêchue d'Élisa Birsel répond à la pétillance malicieuse de son partenaire, et leur réactivité face au hasard devient le moteur du spectacle.",
-      "La critique parle d'une expérience jubilatoire et surprenante, à consommer sans modération, et d'un vrai sentiment d'appartenance ludique offert au public. On assiste à une pièce éphémère, unique, dont l'inventivité suffit à emporter l'adhésion. Malin, généreux, joliment mené.",
+      "L'expérience est jubilatoire et surprenante, à consommer sans modération, et offre au public un vrai sentiment d'appartenance ludique. On assiste à une pièce éphémère, unique, dont l'inventivité suffit à emporter l'adhésion. Malin, généreux, joliment mené.",
     ],
     momentGarde: "Un échange qui nous a marqués : « ma mère a disparu, tu ne peux pas comprendre », « je n'ai jamais connu ma mère », « ah, si, alors tu comprends ».",
     sources: [
@@ -652,7 +652,7 @@ export const PIECES: Piece[] = [
     corps: [
       "Dans l'Amérique des années 1930, à Saint-Louis, Amanda élève seule ses deux enfants : Tom, qui étouffe et rêve d'évasion, et Laura, trop fragile pour le monde, réfugiée dans sa collection d'animaux de verre. L'arrivée d'un prétendant, Jim, viendra précipiter la désagrégation du foyer. Philippe Person met en scène ce grand classique de Tennessee Williams.",
       "Le parti pris est expressionniste, tout en clair-obscur, alternant l'obscurité et d'aveuglants instants de beauté, pour tenir la famille au plus près de la chair des personnages. Florence Le Corre en Amanda, sans cris ni démonstration inutile, mène une distribution juste face à un matériau redoutable.",
-      "La presse salue une mise en scène très habile, osant les accents sombres et comiques, une farce terrible portée avec talent et malice. Williams écrit la fêlure comme personne, et le spectacle en préserve toute l'émotion feutrée. Un rendez-vous avec un grand texte, de ceux qu'on ne regrette jamais d'avoir honorés.",
+      "La mise en scène est très habile, osant les accents sombres comme comiques, une farce terrible portée avec talent et malice. Williams écrit la fêlure comme personne, et le spectacle en préserve toute l'émotion feutrée. Un rendez-vous avec un grand texte, de ceux qu'on ne regrette jamais d'avoir honorés.",
     ],
     sources: [
       'https://www.theatredubalcon.org/festival/la-menagerie-de-verre/',
@@ -673,7 +673,7 @@ export const PIECES: Piece[] = [
     chapo: "Quatre comédiennes renversent le patriarcat dans une fable féministe aussi ambitieuse que foisonnante.",
     corps: [
       "Quatre comédiennes imaginent un monde d'après, une utopie matriarcale où les femmes, affamées par des siècles de privation, ont pris le pouvoir et « mangent » leurs anciens oppresseurs. La pièce navigue entre passé, présent et futur, et convoque les grandes voix de la pensée féministe.",
-      "Loin de se contenter de renverser les rôles, le spectacle interroge sa propre utopie : peut-on bâtir un monde post-patriarcal sans reproduire la violence qu'on dénonce ? Une société féministe peut-elle à son tour verser dans l'injustice ? La presse y voit un récit collectif intelligent sur le trauma des violences faites aux femmes.",
+      "Loin de se contenter de renverser les rôles, le spectacle interroge sa propre utopie : peut-on bâtir un monde post-patriarcal sans reproduire la violence qu'on dénonce ? Une société féministe peut-elle à son tour verser dans l'injustice ? C'est un récit collectif intelligent sur le trauma des violences faites aux femmes.",
       "L'intention est belle, le sujet passionnant, et l'on sent une compagnie animée par une vraie nécessité, riche de beaux moments. Il ne manque qu'un dernier tour de vis à l'écriture pour que l'idée devienne grand spectacle, et l'on attend cette suite avec curiosité.",
     ],
     sources: [
@@ -695,7 +695,7 @@ export const PIECES: Piece[] = [
     corps: [
       "Pour rompre leur solitude, Eddy et Max, deux hommes que tout sépare, ont eu la même idée saugrenue : se faire volontairement incarcérer pour se trouver des amis. Les voilà partageant une cellule de six mètres carrés, l'un jouant les durs, l'autre serrant son doudou. Récompensée du Prix Cyrano de la meilleure comédie, la pièce enchaîne mensonges et situations absurdes.",
       "Écrit et joué par Thomas Giraud et Valérian Moutawe, le spectacle carbure à un rythme effréné, entre querelles, chansons et danses, porté par la complicité et l'abattage des deux comédiens. C'est une comédie de festival sans prétention, menée pied au plancher.",
-      "Sous le rire, la critique repère un vrai sujet, la solitude urbaine, et conclut : on rit beaucoup et on est invité à réfléchir, que demander de plus ? Quand des interprètes ont ce niveau d'engagement, on ne boude jamais son plaisir.",
+      "Sous le rire affleure un vrai sujet, la solitude urbaine : on rit beaucoup et l'on ressort en ayant un peu réfléchi, que demander de plus ? Quand des interprètes ont ce niveau d'engagement, on ne boude jamais son plaisir.",
     ],
     momentGarde: "Les mimiques dingues de l'un des détenus qui parle à son doudou, et les quelques moments chantés franchement rigolos qui déboulent quand on ne les attend pas.",
     sources: [
@@ -740,7 +740,7 @@ export const PIECES: Piece[] = [
     corps: [
       "Une avocate défend un homme jugé pour ce qu'il a fait subir à une femme qui, elle, revendique la liberté d'avoir choisi cette relation, vécue sur le mode du BDSM. Inspiré de faits réels et réservé aux adultes, le seul-en-scène de Solène Collin entrelace le procès et des scènes de la relation, l'interprète passant de la soumise à son avocat.",
       "Le dispositif interroge frontalement le consentement, la soumission consentie et un système judiciaire qui, croyant protéger les femmes, les priverait parfois de leur liberté intime. Collin habite le plateau d'une puissance rare, entre justesse et vulnérabilité, sans jamais verser dans le voyeurisme.",
-      "Les spectateurs en ressortent souvent bouleversés, et prolongent volontiers la soirée par les débats organisés à l'issue de la représentation. C'est un spectacle courageux, qui empoigne un sujet clivant sans donner de leçon. On préfère mille fois une œuvre qui prend ce risque à une autre qui ne dérange personne.",
+      "On en ressort souvent bouleversé, et l'on prolonge volontiers la soirée par les débats organisés à l'issue de la représentation. C'est un spectacle courageux, qui empoigne un sujet clivant sans donner de leçon. On préfère mille fois une œuvre qui prend ce risque à une autre qui ne dérange personne.",
     ],
     sources: [
       'https://ultrazonetv.fr/2025/07/01/plaidoirie-dune-soumise-paradoxes-de-la-passion/',
@@ -783,8 +783,8 @@ export const PIECES: Piece[] = [
     chapo: "Hugo transposé en 2093 par une jeune compagnie intrépide. L'adaptation la plus casse-cou de notre sélection.",
     corps: [
       "La compagnie Les Fouillons s'empare du dernier roman de Victor Hugo et le projette au 20 octobre 2093, dans une France en guerre civile sous surveillance totale : une intelligence artificielle règle le quotidien, une police brutale écrase toute dissidence. La technologie et l'idéologie ont remplacé la guillotine sans désarmer les mécanismes de la Terreur.",
-      "Dans une mise en scène que la critique qualifie d'olympienne, froide et inquiétante, aux costumes soignés, les jeunes comédiens se dédoublent, un même interprète passant de Gauvain à Marat, de la mère à Robespierre, pour désamorcer tout manichéisme. L'oppression naît de l'atmosphère plus que des gadgets.",
-      "La presse salue une transposition réussie et des comédiens intenses, à vif et tendus, estimant que le spectacle a tous les arguments pour se faire remarquer. La Révolution n'est pas morte, résume le propos, elle a seulement changé de visage. Adapter un roman réputé intransposable relève de l'audace pure, et on préfère mille fois cette prise de risque à la sagesse convenue.",
+      "Dans une mise en scène olympienne, froide et inquiétante, aux costumes soignés, les jeunes comédiens se dédoublent, un même interprète passant de Gauvain à Marat, de la mère à Robespierre, pour désamorcer tout manichéisme. L'oppression naît de l'atmosphère plus que des gadgets.",
+      "La transposition est réussie, les jeunes comédiens intenses, à vif et tendus, et le spectacle a tous les arguments pour se faire remarquer. La Révolution n'est pas morte, dit la pièce, elle a seulement changé de visage. Adapter un roman réputé intransposable relève de l'audace pure, et on préfère mille fois cette prise de risque à la sagesse convenue.",
     ],
     sources: [
       'https://bullesdeculture.com/93-compagnie-les-fouillons-avis-critique-theatre/',

@@ -2,19 +2,103 @@
 import Base from '../../layouts/Base.astro';
 import PieceCard from '../../components/PieceCard.astro';
 import { PIECES } from '../../data/pieces';
+import { CATEGORIES, categorieFor } from '../../lib/categories';
 
 const pieces = [...PIECES].sort((a, b) => b.noteMoy - a.noteMoy);
+const present = CATEGORIES.filter((cat) => pieces.some((p) => categorieFor(p.style) === cat));
 ---
-<Base title="Toutes les critiques — La Claque" active="critiques" description="Les 34 spectacles du OFF d'Avignon 2026 vus et notés par la bande de La Claque.">
+<Base title="Toutes les critiques — La Claque" active="critiques" description="Les 34 spectacles du OFF d'Avignon 2026 vus et notés par la bande de La Claque. Cherchez par titre, lieu, plume ou catégorie.">
   <div class="wrap">
     <div class="rubric" style="margin-top:40px">
       <h2>Les {pieces.length} critiques</h2>
       <span class="line"></span>
       <span class="note">Édition 2026</span>
     </div>
-    <p class="rubric-intro">Tout ce qu'on a vu cette année, de la claque monumentale au pari qu'on a défendu bec et ongles. Classé de la meilleure note à la plus tendre.</p>
-    <div class="cards">
+    <p class="rubric-intro">Tout ce qu'on a vu cette année, de la grosse claque au pari qu'on a défendu bec et ongles. Cherchez une pièce, un lieu ou une plume, ou filtrez par catégorie.</p>
+
+    <div class="searchbar">
+      <div class="field">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><line x1="21" y1="21" x2="16.5" y2="16.5"></line></svg>
+        <input id="q" type="search" autocomplete="off" placeholder="Rechercher un titre, un lieu, une plume…" aria-label="Rechercher une critique" />
+      </div>
+      <div class="chips" role="group" aria-label="Filtrer par catégorie">
+        <button class="chip active" data-cat="" type="button">Toutes</button>
+        {present.map((cat) => <button class="chip" data-cat={cat} type="button">{cat}</button>)}
+      </div>
+    </div>
+
+    <p id="count" class="searchcount"></p>
+    <p id="noresult" class="noresult" hidden>Aucune pièce ne correspond à votre recherche. <button id="reset" type="button">Tout afficher</button></p>
+
+    <div class="cards" id="grid">
       {pieces.map((p) => <PieceCard piece={p} />)}
     </div>
   </div>
 </Base>
+
+<script>
+  const q = document.getElementById('q');
+  const grid = document.getElementById('grid');
+  const cards = grid ? Array.from(grid.querySelectorAll('.pcard')) : [];
+  const chips = Array.from(document.querySelectorAll('.chip'));
+  const noresult = document.getElementById('noresult');
+  const count = document.getElementById('count');
+  const reset = document.getElementById('reset');
+  let activeCat = '';
+
+  const norm = (s) => (s || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
+
+  function apply() {
+    const query = norm(q && q.value.trim());
+    let shown = 0;
+    for (const c of cards) {
+      const okCat = !activeCat || c.dataset.cat === activeCat;
+      const okQ = !query || norm(c.dataset.text).includes(query);
+      const show = okCat && okQ;
+      c.style.display = show ? '' : 'none';
+      if (show) shown++;
+    }
+    if (noresult) noresult.hidden = shown > 0;
+    if (count) {
+      const total = cards.length;
+      count.textContent = shown === total ? '' : `${shown} spectacle${shown > 1 ? 's' : ''} sur ${total}`;
+    }
+  }
+
+  if (q) q.addEventListener('input', apply);
+  chips.forEach((ch) =>
+    ch.addEventListener('click', () => {
+      chips.forEach((x) => x.classList.remove('active'));
+      ch.classList.add('active');
+      activeCat = ch.dataset.cat || '';
+      apply();
+    })
+  );
+  if (reset)
+    reset.addEventListener('click', () => {
+      if (q) q.value = '';
+      activeCat = '';
+      chips.forEach((x) => x.classList.toggle('active', !x.dataset.cat));
+      apply();
+    });
+</script>
+
+<style>
+  .searchbar { margin: 8px 0 18px; }
+  .field { display: flex; align-items: center; gap: 10px; background: var(--card); border: 1px solid var(--rule-2); border-radius: 2px; padding: 11px 15px; max-width: 520px; }
+  .field:focus-within { border-color: var(--red); }
+  .field svg { width: 20px; height: 20px; flex: none; fill: none; stroke: var(--ink-3); stroke-width: 2; stroke-linecap: round; }
+  .field input { border: 0; background: transparent; outline: none; width: 100%; font-family: var(--serif); font-size: 1.05rem; color: var(--ink); }
+  .field input::placeholder { color: var(--ink-3); }
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
+  .chip {
+    font-family: var(--sans); font-size: 0.74rem; font-weight: 700; letter-spacing: 0.04em;
+    text-transform: uppercase; cursor: pointer; padding: 7px 14px; border-radius: 999px;
+    background: transparent; color: var(--ink-2); border: 1px solid var(--rule-2); transition: all 0.12s ease;
+  }
+  .chip:hover { border-color: var(--ink-3); color: var(--ink); }
+  .chip.active { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+  .searchcount { font-family: var(--sans); font-size: 0.8rem; color: var(--ink-3); margin: 0 0 16px; min-height: 1em; }
+  .noresult { font-family: var(--serif); font-size: 1.1rem; color: var(--ink-2); margin: 20px 0; }
+  .noresult button { font-family: var(--sans); font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; cursor: pointer; background: var(--red); color: #fff; border: 0; padding: 8px 14px; border-radius: 999px; margin-left: 8px; }
+</style>

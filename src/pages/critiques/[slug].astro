@@ -5,7 +5,7 @@ import Avatar from '../../components/Avatar.astro';
 import PieceCard from '../../components/PieceCard.astro';
 import { PIECES } from '../../data/pieces';
 import { CRITICS } from '../../data/critics';
-import { verdictFor, nbVus, estPlebiscite, consensusScore, starsFor } from '../../lib/rating';
+import { verdictFor, nbVus, estPlebiscite, consensusScore, starsFor, seenLabel } from '../../lib/rating';
 import { url } from '../../lib/url';
 
 export function getStaticPaths() {
@@ -79,7 +79,7 @@ const jsonld = [
           <div class="rating">
             <Stars note={piece.noteMoy} />
             <span class="flag">{verdictFor(piece.noteMoy)}</span>
-            {pleb && <span class="flag"><span class="dot"></span> Plébiscite · vu par {seen}</span>}
+            {pleb && <span class="flag"><span class="dot"></span> Plébiscite · {seenLabel(seen)}</span>}
           </div>
         </div>
       </div>

@@ -1,7 +1,8 @@
 ---
 import type { Piece } from '../data/pieces';
 import { CRITICS } from '../data/critics';
-import { verdictFor, nbVus, estPlebiscite } from '../lib/rating';
+import { verdictFor, nbVus, estPlebiscite, seenLabel } from '../lib/rating';
+import { categorieFor } from '../lib/categories';
 import Stars from './Stars.astro';
 import Avatar from './Avatar.astro';
 import { url } from '../lib/url';
@@ -12,8 +13,13 @@ const c = CRITICS[piece.signataire];
 const seen = nbVus(piece);
 const pleb = estPlebiscite(piece);
 const chef = piece.noteMoy >= 8;
+const categorie = categorieFor(piece.style);
+const searchText = [piece.titre, piece.titreExact, piece.style, categorie, c.plume, piece.salle, piece.chapo]
+  .filter(Boolean)
+  .join(' ')
+  .toLowerCase();
 ---
-<a class="pcard" href={url(`/critiques/${piece.slug}`)}>
+<a class="pcard" href={url(`/critiques/${piece.slug}`)} data-cat={categorie} data-text={searchText}>
   <div class="frame">
     {piece.image
       ? <img src={url(piece.image)} alt={`Affiche de ${piece.titre}`} loading="lazy" />
@@ -33,6 +39,6 @@ const chef = piece.noteMoy >= 8;
   <div class="foot">
     <Stars note={piece.noteMoy} />
     <span class="verdict">{verdictFor(piece.noteMoy)}</span>
-    <span class="seen">Vu par {seen}</span>
+    <span class="seen">{seenLabel(seen)}</span>
   </div>
 </a>

@@ -4,7 +4,7 @@ import Stars from '../components/Stars.astro';
 import Avatar from '../components/Avatar.astro';
 import { PIECES } from '../data/pieces';
 import { CRITICS } from '../data/critics';
-import { nbVus, estPlebiscite, verdictFor } from '../lib/rating';
+import { nbVus, estPlebiscite, verdictFor, seenLabel } from '../lib/rating';
 import { url } from '../lib/url';
 
 const classement = [...PIECES].sort((a, b) => b.noteMoy - a.noteMoy);
@@ -39,7 +39,7 @@ const classement = [...PIECES].sort((a, b) => b.noteMoy - a.noteMoy);
                 <Stars note={p.noteMoy} />
                 <span class="verdict">{verdictFor(p.noteMoy)}</span>
               </span>
-              <span class="seen-col">vu par {seen}</span>
+              <span class="seen-col">{seenLabel(seen)}</span>
             </a>
           </li>
         );
