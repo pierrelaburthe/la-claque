@@ -1,0 +1,81 @@
+---
+import { guideBySlug } from '../data/guides';
+import { url } from '../lib/url';
+
+interface Props {
+  slugs: string[];
+  titre?: string;
+}
+const { slugs, titre = 'Pour aller plus loin' } = Astro.props;
+const guides = slugs.map((s) => guideBySlug(s)).filter(Boolean);
+---
+{guides.length > 0 && (
+  <nav class="relguides" aria-label={titre}>
+    <p class="relguides-title">{titre}</p>
+    <ul>
+      {guides.map((g) => (
+        <li>
+          <a href={url(`/guides/${g!.slug}`)}>
+            <span class="k">{g!.k}</span>
+            <span class="t">{g!.titre}</span>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </nav>
+)}
+
+<style>
+  .relguides {
+    margin: 40px 0 8px;
+    border-top: 2px solid var(--ink);
+    padding-top: 16px;
+  }
+  .relguides-title {
+    font-family: var(--sans);
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.09em;
+    color: var(--ink-3);
+    margin: 0 0 14px;
+  }
+  .relguides ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+    gap: 2px;
+  }
+  .relguides a {
+    display: block;
+    padding: 13px 16px 15px;
+    text-decoration: none;
+    background: var(--card);
+    border: 1px solid var(--rule-2);
+    transition: border-color 0.12s ease, background 0.12s ease;
+    height: 100%;
+  }
+  .relguides a:hover {
+    border-color: var(--ink);
+    background: var(--paper);
+  }
+  .relguides .k {
+    display: block;
+    font-family: var(--sans);
+    font-size: 0.64rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    color: var(--red);
+    margin-bottom: 5px;
+  }
+  .relguides .t {
+    display: block;
+    font-family: var(--serif);
+    font-size: 1.02rem;
+    line-height: 1.28;
+    color: var(--ink);
+  }
+</style>

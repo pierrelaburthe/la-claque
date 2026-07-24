@@ -3,9 +3,12 @@ import Base from '../../layouts/Base.astro';
 import Stars from '../../components/Stars.astro';
 import Avatar from '../../components/Avatar.astro';
 import PieceCard from '../../components/PieceCard.astro';
+import RelatedGuides from '../../components/RelatedGuides.astro';
 import { PIECES } from '../../data/pieces';
 import { CRITICS } from '../../data/critics';
-import { verdictFor, nbVus, estPlebiscite, consensusScore, starsFor, seenLabel } from '../../lib/rating';
+import { verdictFor, nbVus, estPlebiscite, starsFor, seenLabel } from '../../lib/rating';
+import { relatedPieces } from '../../lib/related';
+import { categorieFor } from '../../lib/categories';
 import { url } from '../../lib/url';
 
 export function getStaticPaths() {
@@ -17,11 +20,18 @@ const c = CRITICS[piece.signataire];
 const seen = nbVus(piece);
 const pleb = estPlebiscite(piece);
 const chef = piece.noteMoy >= 8;
+const categorie = categorieFor(piece.style);
 
-const suggestions = PIECES
-  .filter((p) => p.slug !== piece.slug)
-  .sort((a, b) => consensusScore(b) - consensusScore(a))
-  .slice(0, 3);
+// Maillage : des critiques vraiment voisines (catégorie, salle, plume),
+// et non les mêmes têtes de gondole sur chaque page.
+const suggestions = relatedPieces(piece, PIECES, 3);
+
+// Guides contextuels : ceux qui aident vraiment à prolonger cette critique.
+const guideSlugs = Array.from(new Set([
+  ...(piece.salle ? ['salles-du-off-avignon'] : []),
+  'off-avignon-mode-demploi',
+  'lexique-du-theatre',
+]));
 
 const hostname = (u: string) => {
   try { return new URL(u).hostname.replace(/^www\./, ''); } catch { return u; }
@@ -88,11 +98,16 @@ const jsonld = [
 
   <div class="wrap">
   <article class="art-body">
+    <p class="breadcrumb"><a href={url('/')}>Accueil</a> › <a href={url('/critiques')}>Critiques</a> › {piece.titre}</p>
     <div class="byline-row">
       <Avatar critic={piece.signataire} size={48} />
       <div class="who">
         <div class="n">Par {c.plume}</div>
         <div class="r">{c.role}</div>
+      </div>
+      <div class="crit-topics">
+        <a href={url(`/critiques?cat=${encodeURIComponent(categorie)}`)}>{categorie}</a>
+        {piece.salle && <a href={url('/guides/salles-du-off-avignon')}>{piece.salle}</a>}
       </div>
     </div>
 
@@ -134,11 +149,30 @@ const jsonld = [
 
   <div class="wrap">
     <div class="rubric">
-      <h2>À voir aussi</h2>
+      <h2>Dans le même esprit</h2>
       <span class="line"></span>
+      <span class="note">Nos critiques voisines</span>
     </div>
     <div class="cards">
       {suggestions.map((p) => <PieceCard piece={p} />)}
     </div>
   </div>
+
+  <div class="wrap-narrow">
+    <RelatedGuides slugs={guideSlugs} />
+  </div>
 </Base>
+
+<style>
+  .crit-topics { margin-left: auto; display: flex; gap: 8px; flex-wrap: wrap; align-self: center; }
+  .crit-topics a {
+    font-family: var(--sans); font-size: 0.7rem; font-weight: 700; letter-spacing: 0.04em;
+    text-transform: uppercase; text-decoration: none; color: var(--ink-2);
+    border: 1px solid var(--rule-2); border-radius: 999px; padding: 5px 12px;
+    transition: all 0.12s ease;
+  }
+  .crit-topics a:hover { border-color: var(--ink); color: var(--ink); background: var(--card); }
+  @media (max-width: 560px) {
+    .crit-topics { margin-left: 0; width: 100%; margin-top: 4px; }
+  }
+</style>

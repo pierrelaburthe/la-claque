@@ -81,6 +81,19 @@ const present = CATEGORIES.filter((cat) => pieces.some((p) => categorieFor(p.sty
       chips.forEach((x) => x.classList.toggle('active', !x.dataset.cat));
       apply();
     });
+
+  // Maillage : arriver depuis une critique avec ?cat=Comédie pré-filtre la liste.
+  const params = new URLSearchParams(window.location.search);
+  const wantCat = params.get('cat');
+  if (wantCat) {
+    const target = chips.find((ch) => (ch.dataset.cat || '') === wantCat);
+    if (target) {
+      chips.forEach((x) => x.classList.remove('active'));
+      target.classList.add('active');
+      activeCat = wantCat;
+      apply();
+    }
+  }
 </script>
 
 <style>

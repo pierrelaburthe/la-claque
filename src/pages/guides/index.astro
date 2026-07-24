@@ -1,80 +1,12 @@
 ---
 import Base from '../../layouts/Base.astro';
 import { url } from '../../lib/url';
+import { guidesForSection } from '../../data/guides';
 
 const abs = (p: string) => new URL(url(p), Astro.site).href;
 
-const spectateur = [
-  {
-    href: '/guides/festival-in-et-off-avignon',
-    k: 'Comprendre le festival',
-    titre: "Festival IN et OFF d'Avignon : quelle différence ?",
-    desc: "Deux festivals, une même ville. Programmation sélective contre accès libre, histoire, lieux, billetterie.",
-  },
-  {
-    href: '/guides/chiffres-cles-festival-avignon',
-    k: 'Chiffres et fréquentation',
-    titre: "Le Festival d'Avignon en chiffres",
-    desc: "Fréquentation, nombre de spectacles, de compagnies, taux de remplissage : les statistiques du IN et du OFF, sourcées.",
-  },
-  {
-    href: '/guides/off-avignon-mode-demploi',
-    k: 'Guide pratique',
-    titre: "Le OFF d'Avignon, mode d'emploi",
-    desc: "Choisir ses spectacles, décrypter le tractage, utiliser la carte OFF et survivre à trois semaines de théâtre.",
-  },
-  {
-    href: '/guides/salles-du-off-avignon',
-    k: 'Les salles',
-    titre: "Les salles du OFF d'Avignon",
-    desc: "Quartier, jauge et ligne artistique des principaux théâtres, avec nos critiques jouées dans chacun.",
-  },
-  {
-    href: '/guides/lexique-du-theatre',
-    k: 'Vocabulaire',
-    titre: 'Lexique du théâtre : les mots à connaître',
-    desc: "Côté cour, côté jardin, la générale, la servante : le vocabulaire des plateaux, expliqué simplement.",
-  },
-];
-
-const metier = [
-  {
-    href: '/guides/intermittence-spectacle',
-    k: 'Statut et droits',
-    titre: "L'intermittence du spectacle, expliquée simplement",
-    desc: "Les annexes 8 et 10, le seuil de 507 heures, le cachet, la date anniversaire et les organismes à connaître.",
-  },
-  {
-    href: '/guides/obtenir-son-intermittence',
-    k: 'Statut et droits',
-    titre: 'Comment obtenir son intermittence, étape par étape',
-    desc: "Réunir ses 507 heures, rassembler ses AEM, s'inscrire à France Travail et s'actualiser chaque mois.",
-  },
-  {
-    href: '/guides/le-cachet-et-le-decompte-des-heures',
-    k: 'Statut et droits',
-    titre: 'Le cachet et le décompte des heures',
-    desc: "La règle des 12 heures, la fin du cachet groupé, les plafonds mensuels et les heures d'enseignement.",
-  },
-  {
-    href: '/guides/budget-festival-off-avignon',
-    k: 'Production et diffusion',
-    titre: "Combien coûte le OFF d'Avignon ?",
-    desc: "Le budget d'une compagnie poste par poste, avec un simulateur : salle, transport, logement, repas, com.",
-  },
-  {
-    href: '/guides/comment-se-faire-produire',
-    k: 'Production et diffusion',
-    titre: 'Comment se faire produire et programmer',
-    desc: "Produire, diffuser, tourner : qui fait quoi ? Le modèle autofinancé du OFF et les aides à la création.",
-  },
-  {
-    href: '/guides/creer-sa-compagnie-de-theatre',
-    k: 'Créer une structure',
-    titre: 'Créer sa compagnie de théâtre',
-    desc: "Association loi 1901, déclaration d'entrepreneur de spectacles, GUSO : les démarches de base pour se lancer.",
-  },
-];
+const spectateur = guidesForSection('spectateur');
+const metier = guidesForSection('metier');
 
 const jsonld = [
   {
@@ -117,7 +49,7 @@ const jsonld = [
     </div>
     <div class="guide-cards">
       {spectateur.map((g) => (
-        <a class="guide-card" href={url(g.href)}>
+        <a class="guide-card" href={url(`/guides/${g.slug}`)}>
           <span class="k">{g.k}</span>
           <h3>{g.titre}</h3>
           <p>{g.desc}</p>
@@ -132,7 +64,7 @@ const jsonld = [
     </div>
     <div class="guide-cards">
       {metier.map((g) => (
-        <a class="guide-card" href={url(g.href)}>
+        <a class="guide-card" href={url(`/guides/${g.slug}`)}>
           <span class="k">{g.k}</span>
           <h3>{g.titre}</h3>
           <p>{g.desc}</p>

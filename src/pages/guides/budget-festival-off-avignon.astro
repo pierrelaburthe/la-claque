@@ -68,6 +68,7 @@ const fields = [
   { group: 'Recettes et financement' },
   { id: 'billet', label: 'Prix moyen réellement encaissé par billet', val: 12, suffix: '€' },
   { id: 'remplissage', label: 'Taux de remplissage réaliste visé', val: 50, suffix: '%' },
+  { id: 'subventions', label: 'Subventions et aides déjà obtenues', val: 0, suffix: '€' },
   { id: 'apport', label: 'Apport moyen par coproducteur ou partenaire', val: 3000, suffix: '€' },
 ];
 ---
@@ -120,8 +121,9 @@ const fields = [
             <span class="sub" id="fillNote"></span>
           </div>
           <div class="calc-break">
-            <p>À <strong id="rempShown">—</strong> de remplissage, vous encaissez <strong id="recettes">—</strong>.</p>
-            <p>Reste à financer : <strong id="reste">—</strong>, soit environ <strong id="coprod">—</strong> (aides ou coproductions).</p>
+            <p>À <strong id="rempShown">—</strong> de remplissage, la billetterie rapporte <strong id="recettes">—</strong>.</p>
+            <p>Subventions déjà obtenues : <strong id="subShown">—</strong>.</p>
+            <p>Reste à financer : <strong id="reste">—</strong>, soit environ <strong id="coprod">—</strong> (coproductions ou aides à décrocher).</p>
           </div>
           <p class="calc-note">Estimations à partir de vos chiffres. La location de salle (~100 €/place) est une règle du pouce, pas un tarif officiel.</p>
         </aside>
@@ -157,7 +159,7 @@ const fields = [
 </Base>
 
 <script>
-  const ids = ['places','parPlace','repr','comediens','cachet','charges','personnes','train','nuits','logement','repas','com','divers','billet','remplissage','apport'];
+  const ids = ['places','parPlace','repr','comediens','cachet','charges','personnes','train','nuits','logement','repas','com','divers','billet','remplissage','subventions','apport'];
   const el = {};
   ids.forEach((i) => (el[i] = document.getElementById(i)));
   const eur = (n) => Math.round(n).toLocaleString('fr-FR') + ' €';
@@ -187,7 +189,7 @@ const fields = [
       ['Adhésion, droits, imprévus', divers],
     ];
     const ul = document.getElementById('lines');
-    if (ul) ul.innerHTML = lines.map(([k, v]) => `<li><span>${k}</span><span>${eur(v)}</span></li>`).join('');
+    if (ul) ul.innerHTML = lines.map(([k, v]) => `<li><span class="k">${k}</span><span class="v">${eur(v)}</span></li>`).join('');
 
     set('total', eur(total));
     set('perPers', personnes > 0 ? eur(total / personnes) + ' par personne' : '');
@@ -203,12 +205,14 @@ const fields = [
     }
 
     const remplissage = num('remplissage');
+    const subventions = num('subventions');
     const recettes = places * repr * billet * remplissage / 100;
-    const reste = Math.max(0, total - recettes);
+    const reste = Math.max(0, total - recettes - subventions);
     const apport = num('apport');
     const nbCoprod = apport > 0 && reste > 0 ? Math.ceil(reste / apport) : 0;
     set('rempShown', remplissage + ' %');
     set('recettes', eur(recettes));
+    set('subShown', eur(subventions));
     set('reste', eur(reste));
     set('coprod', reste <= 0 ? "c'est équilibré !" : (nbCoprod + ' partenaire' + (nbCoprod > 1 ? 's' : '') + ' à ' + eur(apport)));
   }
@@ -235,7 +239,10 @@ const fields = [
   .calc-fill strong { display: block; font-family: var(--display); font-weight: 900; font-size: 1.9rem; line-height: 1.05; color: #f0c74a; }
   .calc-total .sub, .calc-fill .sub { font-family: var(--sans); font-size: 0.74rem; color: rgba(255,255,255,0.7); }
   .calc-lines { list-style: none; padding: 0; margin: 0 0 14px; }
-  .calc-lines li { display: flex; justify-content: space-between; gap: 12px; font-family: var(--sans); font-size: 0.84rem; padding: 4px 0; color: rgba(255,255,255,0.9); border-bottom: 1px solid rgba(255,255,255,0.08); }
+  /* Ces <li> sont injectés en JS : selecteurs :global sinon le scope Astro ne les atteint pas. */
+  .calc-lines :global(li) { display: flex; justify-content: space-between; align-items: baseline; gap: 14px; font-family: var(--sans); font-size: 0.84rem; padding: 5px 0; color: rgba(255,255,255,0.85); border-bottom: 1px solid rgba(255,255,255,0.08); }
+  .calc-lines :global(li .k) { min-width: 0; }
+  .calc-lines :global(li .v) { flex: none; white-space: nowrap; font-weight: 700; color: #fff; font-variant-numeric: tabular-nums; }
   .calc-break { font-family: var(--sans); font-size: 0.88rem; }
   .calc-break p { margin: 0 0 6px; color: rgba(255,255,255,0.9); }
   .calc-break strong { color: #f0c74a; }
