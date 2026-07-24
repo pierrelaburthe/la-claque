@@ -45,6 +45,7 @@ const jsonld = [
 
   <div class="wrap-narrow">
     <div class="game" id="game">
+      <button class="sound-toggle" id="mute" type="button" aria-pressed="false" title="Activer ou couper le son">Son</button>
       <p class="daycount" id="daycount" hidden></p>
       <div class="gauges" id="gauges" aria-hidden="true"></div>
 
@@ -53,7 +54,7 @@ const jsonld = [
           <!-- écran de départ -->
           <div class="panel intro" id="intro">
             <p class="day-badge">Prêt·e ?</p>
-            <p class="intro-txt">Balayez la carte ou utilisez les deux boutons. Chaque choix a un prix. Quatre jauges à surveiller : <b>Trésorerie</b>, <b>Public</b>, <b>Moral</b>, <b>Presse</b>. Attention, chaque jour les <b>frais courent et la fatigue monte</b> tout seuls : impossible de se reposer sur ses lauriers. Si une jauge se vide ou déborde, le rideau tombe.</p>
+            <p class="intro-txt">Balayez la carte ou utilisez les deux boutons. Chaque choix a un prix. Quatre jauges à surveiller : <b>Trésorerie</b>, <b>Public</b>, <b>Moral</b>, <b>Presse</b>. Attention, chaque jour les <b>frais courent, la fatigue monte et la presse vous oublie</b> un peu, tout seuls : impossible de se reposer sur ses lauriers. Si une jauge se vide ou déborde, le rideau tombe.</p>
             <button class="btn play" id="start">Lever le rideau</button>
           </div>
 
@@ -68,6 +69,7 @@ const jsonld = [
 
           <!-- fin de partie -->
           <div class="panel end" id="end" hidden>
+            <div class="portrait endic" id="endIcon"></div>
             <p class="day-badge" id="endKicker"></p>
             <h2 id="endTitle"></h2>
             <p class="end-txt" id="endTxt"></p>
@@ -95,10 +97,11 @@ const jsonld = [
     { key: 'moral', label: 'Moral', bas: 'Épuisée et démoralisée, la troupe rend son tablier avant la fin.', haut: "L'euphorie tourne à la fête permanente : plus personne ne monte sur scène à l'heure." },
     { key: 'presse', label: 'Presse', bas: 'Aucun média ne parle de vous. Vous jouez dans l\'indifférence totale.', haut: 'Starisé·es trop vite, vous récoltez un retour de bâton médiatique qui vous enterre.' },
   ];
-  const START = { treso: 42, public: 28, moral: 60, presse: 20 };
+  const START = { treso: 40, public: 26, moral: 56, presse: 22 };
   const MAX_JOUR = 24;
-  // Usure quotidienne : les frais courent, la fatigue s'accumule. Impossible de coasting.
-  const DRIFT = { treso: -3, moral: -2 };
+  // Usure quotidienne : les frais courent, la fatigue s'accumule, et la presse
+  // vous oublie un peu chaque jour si vous ne la nourrissez pas. On ne coaste jamais.
+  const DRIFT = { treso: -3, moral: -2, presse: -1 };
 
   // ---- Le paquet de cartes ----
   const DECK = [
@@ -206,32 +209,33 @@ const jsonld = [
       R: { lab: 'On joue pour ceux qui sont là', fx: { moral: +6, public: -2 } } },
   ];
 
-  // ---- Icônes dessinées (trait blanc sur la pastille), maison, pas d'emoji ----
+  // ---- Icônes graphiques maison : masses pleines + trait épais, pas d'emoji ----
+  const F = 'fill="#fff" stroke="none"'; // raccourci pour les aplats blancs
   const ICONS = {
-    masques: '<path d="M4 6c4-1.4 12-1.4 16 0 0 8-3 13-8 13S4 14 4 6Z"/><circle cx="9.3" cy="10.5" r=".7"/><circle cx="14.7" cy="10.5" r=".7"/><path d="M9 14c1.4 1.3 4.6 1.3 6 0"/>',
-    programmateur: '<circle cx="12" cy="8" r="3.2"/><path d="M5.5 20a6.5 6.5 0 0 1 13 0"/><path d="M12 11.2l-1.2 2.2L12 17l1.2-3.6Z"/>',
-    soleil: '<circle cx="12" cy="12" r="4"/><path d="M12 3v2.4M12 18.6V21M3 12h2.4M18.6 12H21M5.4 5.4l1.7 1.7M16.9 16.9l1.7 1.7M18.6 5.4l-1.7 1.7M7.1 16.9l-1.7 1.7"/>',
-    avis: '<path d="M4 5h16v10H9l-4 4v-4H4Z"/><path d="M12 7.4l1 2 2.1.3-1.5 1.5.4 2.2-2-1-2 1 .4-2.2L8.9 9.7l2.1-.3Z"/>',
-    public: '<circle cx="8" cy="9" r="2.2"/><circle cx="16" cy="9" r="2.2"/><path d="M4 18a4 4 0 0 1 8 0"/><path d="M12 18a4 4 0 0 1 8 0"/>',
-    blessure: '<circle cx="12" cy="12" r="8.5"/><path d="M12 7.5v9M7.5 12h9"/>',
-    vent: '<path d="M3 8h9.5a2.6 2.6 0 1 0-2.6-2.6"/><path d="M3 12h13.5a2.6 2.6 0 1 1-2.6 2.6"/><path d="M3 16h7.5"/>',
-    presse: '<rect x="3.5" y="5" width="17" height="14" rx="1.5"/><path d="M6.5 8.5h7M6.5 11.5h7M6.5 14.5h5"/><rect x="15.5" y="8.5" width="2.5" height="6"/>',
-    plume: '<path d="M20 4C11 5.5 6.5 11 5 20"/><path d="M20 4c-1.6 8-6.5 11.5-12.5 12.5"/><path d="M4.5 20h4"/>',
-    euro: '<circle cx="12" cy="12" r="8.5"/><path d="M15.5 9.2A3.8 3.8 0 0 0 9 12a3.8 3.8 0 0 0 6.5 2.8"/><path d="M7.5 11h5.5M7.5 13h4.5"/>',
-    verre: '<path d="M5 5h14l-7 7.5Z"/><path d="M12 12.5V19M8.5 19h7"/><path d="M14.5 7.5l3-2.5"/>',
-    micro: '<rect x="9.2" y="3" width="5.6" height="10" rx="2.8"/><path d="M6.2 11a5.8 5.8 0 0 0 11.6 0"/><path d="M12 16.8V20M9 20h6"/>',
-    projecteur: '<path d="M9 18.5h6M10 21h4"/><path d="M12 3a6 6 0 0 1 3.8 10.6c-.7.7-1.1 1.3-1.3 1.9H9.5c-.2-.6-.6-1.2-1.3-1.9A6 6 0 0 1 12 3Z"/>',
-    tract: '<rect x="6" y="4" width="12" height="16" rx="1.2"/><path d="M9 8h6M9 11h6M9 14h4"/>',
-    bouche: '<path d="M4 10v4l10 4.5V5.5Z"/><path d="M14 8.5a4 4 0 0 1 0 7"/><path d="M6.5 14.5V18h2.2"/>',
-    document: '<path d="M6.5 3h6.5l4.5 4.5V21h-11Z"/><path d="M13 3v4.5h4.5"/><path d="M9 13h6M9 16h6"/>',
-    cheque: '<rect x="3" y="7" width="18" height="10" rx="1.5"/><circle cx="12" cy="12" r="2.4"/><path d="M6 12h.5M17.5 12h.5"/>',
-    trophee: '<path d="M8 4h8v4.5a4 4 0 0 1-8 0Z"/><path d="M8 5H5v1.8a3 3 0 0 0 3 3M16 5h3v1.8a3 3 0 0 1-3 3"/><path d="M12 12.5v3.5M9.5 20h5M10.3 20l.5-4h2.4l.5 4"/>',
-    billet: '<path d="M4 8.5a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2 2 2 0 0 0 0 4 2 2 0 0 1-2 2H6a2 2 0 0 1-2-2 2 2 0 0 0 0-4Z"/><path d="M14 7v10"/>',
-    maison: '<path d="M4 11l8-6 8 6"/><path d="M6 10v9h12v-9"/><rect x="10.2" y="13" width="3.6" height="6"/>',
-    telephone: '<rect x="7" y="3" width="10" height="18" rx="2.2"/><path d="M10.5 18h3"/><path d="M12 7.5l1 1.8 2 .3-1.5 1.4.4 2-1.9-1-1.9 1 .4-2L9 9.6l2-.3Z"/>',
-    mains: '<path d="M8 12.5V6.2a1.5 1.5 0 0 1 3 0v5"/><path d="M11 11.2V5a1.5 1.5 0 0 1 3 0v6.2"/><path d="M14 11.2V7.2a1.5 1.5 0 0 1 3 0V14a6 6 0 0 1-6 6c-2.6 0-3.8-1.3-5.6-3.8l-1.2-1.7a1.4 1.4 0 0 1 2.2-1.7L8 13.5"/>',
-    assiette: '<path d="M7 3v18"/><path d="M4.8 3v3.6a2.2 2.2 0 0 0 4.4 0V3"/><path d="M17 3c-1.7 0-2.8 2.3-2.8 5.2s1.1 4.3 2.8 4.3Z"/><path d="M17 12.5V21"/>',
-    fatigue: '<rect x="3" y="8.5" width="15" height="7" rx="1.5"/><path d="M20 11v2"/><path d="M6 10.5h2.5v3H6Z"/>',
+    masques: `<path d="M4 6c4-1.4 12-1.4 16 0 0 8.4-3.1 13.4-8 13.4S4 14.4 4 6Z"/><circle cx="9.3" cy="10.6" r="1.1" ${F}/><circle cx="14.7" cy="10.6" r="1.1" ${F}/><path d="M9 14.1c1.4 1.3 4.6 1.3 6 0"/>`,
+    programmateur: `<circle cx="12" cy="7.8" r="3.4" ${F}/><path d="M5.3 20.2a6.7 6.7 0 0 1 13.4 0Z" ${F}/>`,
+    soleil: `<circle cx="12" cy="12" r="4.4" ${F}/><path d="M12 2.6v2.5M12 18.9v2.5M2.6 12h2.5M18.9 12h2.5M5.1 5.1l1.7 1.7M17.2 17.2l1.7 1.7M18.9 5.1l-1.7 1.7M6.8 17.2l-1.7 1.7"/>`,
+    avis: `<path d="M4 5h16v9.6H9.6L5.5 18v-3.4H4Z"/><path d="M12 7.2l1.06 2.15 2.37.34-1.72 1.67.41 2.36L12 12.97l-2.12 1.12.41-2.36-1.72-1.67 2.37-.34Z" ${F}/>`,
+    public: `<circle cx="8" cy="9" r="2.6" ${F}/><circle cx="16" cy="9" r="2.6" ${F}/><path d="M3.5 18.2a4.5 4.5 0 0 1 9 0Z" ${F}/><path d="M11.5 18.2a4.5 4.5 0 0 1 9 0Z" ${F}/>`,
+    blessure: `<circle cx="12" cy="12" r="8.6"/><path d="M10.6 7.1h2.8v3.5H17v2.8h-3.6v3.5h-2.8v-3.5H7v-2.8h3.6Z" ${F}/>`,
+    vent: `<path d="M3 8h9.5a2.6 2.6 0 1 0-2.6-2.6"/><path d="M3 12h13.5a2.6 2.6 0 1 1-2.6 2.6"/><path d="M3 16h7.5"/>`,
+    presse: `<rect x="3.5" y="5" width="17" height="14" rx="1.6"/><path d="M6.5 8.6h6M6.5 12h6M6.5 15.4h4"/><rect x="14.4" y="8.6" width="3.1" height="6.8" ${F}/>`,
+    plume: `<path d="M20 4C11 5.5 6.5 11 5 20"/><path d="M20 4c-1.6 8-6.5 11.5-12.5 12.5"/><path d="M4.5 20h4"/>`,
+    euro: `<circle cx="12" cy="12" r="8.6"/><path d="M15.6 9.1A3.9 3.9 0 0 0 9 12a3.9 3.9 0 0 0 6.6 2.9"/><path d="M7.4 11h5.6M7.4 13h4.6"/>`,
+    verre: `<path d="M5 5h14l-7 7.6Z" ${F}/><path d="M12 12.6V19M8.5 19h7"/><path d="M14.6 7.4l3-2.4"/>`,
+    micro: `<rect x="9.2" y="3" width="5.6" height="10" rx="2.8" ${F}/><path d="M6.2 11a5.8 5.8 0 0 0 11.6 0"/><path d="M12 16.8V20M9 20h6"/>`,
+    projecteur: `<path d="M12 3a6 6 0 0 1 3.8 10.6c-.7.7-1.1 1.3-1.3 2H9.5c-.2-.7-.6-1.3-1.3-2A6 6 0 0 1 12 3Z" ${F}/><path d="M9.2 18.5h5.6M10.2 21h3.6"/>`,
+    tract: `<rect x="6" y="4" width="12" height="16" rx="1.4"/><path d="M9 8h6M9 11h6M9 14h4"/>`,
+    bouche: `<path d="M4 10v4l10 4.6V5.4Z" ${F}/><path d="M15 8.4a4 4 0 0 1 0 7.2"/><path d="M6.6 14.6V18h2.2"/>`,
+    document: `<path d="M6.5 3h6.5l4.5 4.5V21h-11Z"/><path d="M13 3v4.5h4.5"/><path d="M9 13h6M9 16h6"/>`,
+    cheque: `<rect x="3" y="7" width="18" height="10" rx="1.6"/><circle cx="12" cy="12" r="2.6" ${F}/><path d="M6 12h.4M17.6 12h.4"/>`,
+    trophee: `<path d="M8 4h8v4.6a4 4 0 0 1-8 0Z" ${F}/><path d="M8 5H4.8v1.9a3.1 3.1 0 0 0 3.2 3.1M16 5h3.2v1.9a3.1 3.1 0 0 1-3.2 3.1"/><path d="M12 12.6v3.6M9.4 20h5.2M10.2 20l.5-4h2.6l.5 4"/>`,
+    billet: `<path d="M4 8.5a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2 2 2 0 0 0 0 4 2 2 0 0 1-2 2H6a2 2 0 0 1-2-2 2 2 0 0 0 0-4Z"/><path d="M14 7v10" stroke-dasharray="1.6 2.4"/>`,
+    maison: `<path d="M4 11l8-6 8 6"/><path d="M6 10.4v8.6h12v-8.6"/><rect x="10.1" y="13" width="3.8" height="6" ${F}/>`,
+    telephone: `<rect x="7" y="3" width="10" height="18" rx="2.3"/><path d="M10.4 18.3h3.2"/><path d="M12 7.4l.78 1.55 1.72.25-1.24 1.2.3 1.7L12 12.55l-1.56.8.3-1.7-1.24-1.2 1.72-.25Z" ${F}/>`,
+    mains: `<path d="M8 12.5V6.2a1.5 1.5 0 0 1 3 0v5"/><path d="M11 11.2V5a1.5 1.5 0 0 1 3 0v6.2"/><path d="M14 11.2V7.2a1.5 1.5 0 0 1 3 0V14a6 6 0 0 1-6 6c-2.6 0-3.8-1.3-5.6-3.8l-1.2-1.7a1.4 1.4 0 0 1 2.2-1.7L8 13.5"/>`,
+    assiette: `<path d="M7 3v18"/><path d="M4.8 3v3.6a2.2 2.2 0 0 0 4.4 0V3"/><path d="M17 3c-1.8 0-2.9 2.3-2.9 5.2s1.1 4.3 2.9 4.3Z" ${F}/><path d="M17 12.5V21"/>`,
+    fatigue: `<rect x="3" y="8.5" width="15" height="7" rx="1.6"/><path d="M20 11v2"/><rect x="5.4" y="10.2" width="3.2" height="3.6" ${F}/>`,
   };
   const svgFor = (card) => `<svg viewBox="0 0 24 24">${ICONS[card.ic] || ICONS.masques}</svg>`;
 
@@ -245,6 +249,32 @@ const jsonld = [
 
   const $ = (id) => document.getElementById(id);
   const clamp = (n) => Math.max(0, Math.min(100, n));
+
+  // ---- Son discret (Web Audio synthétisé, aucune ressource externe) ----
+  let actx = null, muted = false;
+  try { muted = localStorage.getItem('laclaque_mute') === '1'; } catch (e) {}
+  function ac() { if (!actx) { try { actx = new (window.AudioContext || window.webkitAudioContext)(); } catch (e) {} } return actx; }
+  function tone(freq, dur, type, vol, when) {
+    const c = ac(); if (!c || muted) return;
+    const t = c.currentTime + (when || 0);
+    const o = c.createOscillator(), gn = c.createGain();
+    o.type = type; o.frequency.value = freq; o.connect(gn); gn.connect(c.destination);
+    gn.gain.setValueAtTime(0.0001, t);
+    gn.gain.exponentialRampToValueAtTime(vol, t + 0.012);
+    gn.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+    o.start(t); o.stop(t + dur + 0.03);
+  }
+  const sClick = () => tone(300, 0.09, 'triangle', 0.05, 0);
+  const sWin = () => [523, 659, 784, 1047].forEach((f, i) => tone(f, 0.55, 'sine', 0.06, i * 0.11));
+  const sLose = () => { tone(196, 0.5, 'sawtooth', 0.05, 0); tone(147, 0.7, 'sine', 0.05, 0.09); };
+  function setMute(m) {
+    muted = m;
+    const btn = $('mute');
+    btn.setAttribute('aria-pressed', String(m));
+    btn.textContent = m ? 'Son coupé' : 'Son';
+    btn.classList.toggle('off', m);
+    try { localStorage.setItem('laclaque_mute', m ? '1' : '0'); } catch (e) {}
+  }
 
   // Paquet mélangé : on voit toutes les cartes avant qu'une seule revienne. Vraie variété.
   function shuffle(a) { for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); const t = a[i]; a[i] = a[j]; a[j] = t; } return a; }
@@ -301,6 +331,9 @@ const jsonld = [
     $('end').hidden = true;
     busy = false;
     resetCardPos();
+    // La pastille et le texte entrent en scène.
+    const cardEl = $('card');
+    cardEl.classList.remove('enter'); void cardEl.offsetWidth; cardEl.classList.add('enter');
   }
 
   function affected(fx) {
@@ -310,39 +343,42 @@ const jsonld = [
   function apply(side) {
     if (busy || !current) return;
     busy = true;
+    sClick();
     const fx = current[side].fx;
-    // Le choix, plus l'usure quotidienne (frais + fatigue).
+    // Le choix, plus l'usure quotidienne (frais + fatigue + presse).
     const delta = {};
     for (const G of GAUGES) delta[G.key] = (fx[G.key] || 0) + (DRIFT[G.key] || 0);
     for (const k in g) g[k] = g[k] + delta[k];
     // mort si une jauge se vide ou déborde (avant clamp)
-    let death = null;
+    let death = null, deathKey = null;
     for (const G of GAUGES) {
-      if (g[G.key] <= 0) { death = G.bas; break; }
-      if (g[G.key] >= 100) { death = G.haut; break; }
+      if (g[G.key] <= 0) { death = G.bas; deathKey = G.key; break; }
+      if (g[G.key] >= 100) { death = G.haut; deathKey = G.key; break; }
     }
     for (const k in g) g[k] = clamp(g[k]);
     updateGauges(delta);
     $('choices').hidden = true; // on laisse l'animation des jauges jouer
-    if (death) { setTimeout(() => end(false, death), 640); return; }
+    if (death) { setTimeout(() => end(false, death, deathKey), 640); return; }
     jour++;
     if (jour > MAX_JOUR) { setTimeout(() => end(true), 640); return; }
     setTimeout(showCard, 360);
   }
 
-  function end(win, cause) {
+  const OUTCOME_IC = { treso: 'euro', public: 'public', moral: 'fatigue', presse: 'presse' };
+  function end(win, cause, deathKey) {
     $('card').hidden = true;
     $('choices').hidden = true;
     $('intro').hidden = true;
     const end = $('end');
     end.hidden = false;
+    let icKey, icColor;
     if (win) {
       $('endKicker').textContent = 'Rideau final';
       const p = g.presse, pub = g.public;
       let titre, txt;
-      if (p >= 68) { titre = 'Révélation du OFF'; txt = "Vous avez tenu le mois entier et la presse ne parle que de vous. Un producteur vous embarque en tournée : le pari est gagné."; }
-      else if (p >= 42 || pub >= 60) { titre = 'Le mois est sauvé'; txt = "Vous êtes allé·es au bout, avec quelques belles salles et deux ou trois dates décrochées pour la suite. Honorable, et déjà beaucoup."; }
-      else { titre = 'Vous avez survécu'; txt = "Trois semaines de théâtre, la troupe debout et la caisse à l'équilibre. Personne ne vous a repéré·es, mais vous êtes encore là. À refaire."; }
+      if (p >= 68) { titre = 'Révélation du OFF'; txt = "Vous avez tenu le mois entier et la presse ne parle que de vous. Un producteur vous embarque en tournée : le pari est gagné."; icKey = 'trophee'; icColor = '#b5651d'; }
+      else if (p >= 42 || pub >= 60) { titre = 'Le mois est sauvé'; txt = "Vous êtes allé·es au bout, avec quelques belles salles et deux ou trois dates décrochées pour la suite. Honorable, et déjà beaucoup."; icKey = 'masques'; icColor = '#2d4a3e'; }
+      else { titre = 'Vous avez survécu'; txt = "Trois semaines de théâtre, la troupe debout et la caisse à l'équilibre. Personne ne vous a repéré·es, mais vous êtes encore là. À refaire."; icKey = 'mains'; icColor = '#5a3e7a'; }
       $('endTitle').textContent = titre;
       $('endTxt').textContent = txt;
       $('endScore').innerHTML = `Trésorerie <b>${g.treso}</b> · Public <b>${g.public}</b> · Moral <b>${g.moral}</b> · Presse <b>${g.presse}</b>`;
@@ -351,7 +387,13 @@ const jsonld = [
       $('endTitle').textContent = 'Le rideau tombe trop tôt';
       $('endTxt').textContent = cause;
       $('endScore').innerHTML = `Vous avez tenu <b>${jour - 1}</b> représentation${jour - 1 > 1 ? 's' : ''}.`;
+      icKey = OUTCOME_IC[deathKey] || 'masques'; icColor = '#7a2018';
     }
+    const ei = $('endIcon');
+    ei.style.background = icColor;
+    ei.innerHTML = `<svg viewBox="0 0 24 24">${ICONS[icKey]}</svg>`;
+    ei.classList.remove('pop'); void ei.offsetWidth; ei.classList.add('pop');
+    if (win) sWin(); else sLose();
   }
 
   function reset() {
@@ -365,8 +407,10 @@ const jsonld = [
   }
 
   // ---- Interaction : boutons ----
-  $('start').addEventListener('click', reset);
-  $('again').addEventListener('click', reset);
+  $('start').addEventListener('click', () => { ac(); reset(); });
+  $('again').addEventListener('click', () => { ac(); reset(); });
+  $('mute').addEventListener('click', () => { ac(); setMute(!muted); if (!muted) sClick(); });
+  setMute(muted);
   $('btnL').addEventListener('click', () => apply('L'));
   $('btnR').addEventListener('click', () => apply('R'));
   $('btnL').addEventListener('mouseenter', () => showHint('L'));
@@ -412,7 +456,7 @@ const jsonld = [
 </script>
 
 <style>
-  .game { margin: 8px 0 20px; }
+  .game { margin: 8px 0 20px; position: relative; padding-top: 30px; }
   /* .panel/.choices posent display:flex|grid, ce qui écrase [hidden]. On rétablit. */
   .game [hidden] { display: none !important; }
   .daycount { font-family: var(--sans); font-size: 0.68rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.13em; color: var(--ink-3); text-align: center; margin: 0 0 14px; }
@@ -434,9 +478,26 @@ const jsonld = [
 
   .card { cursor: grab; touch-action: pan-y; user-select: none; }
   .card:active { cursor: grabbing; }
-  .portrait { width: 92px; height: 92px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff; margin-bottom: 14px; box-shadow: 0 6px 22px rgba(0,0,0,0.18); }
+  .portrait { width: 98px; height: 98px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff; margin-bottom: 16px; box-shadow: 0 10px 26px rgba(0,0,0,0.24), inset 0 0 0 3px rgba(255,255,255,0.32), inset 0 0 0 4px rgba(0,0,0,0.06); }
   /* le SVG est injecté en JS : :global sinon le scope Astro ne l'atteint pas. */
-  .portrait :global(svg) { width: 48px; height: 48px; fill: none; stroke: #fff; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+  .portrait :global(svg) { width: 52px; height: 52px; fill: none; stroke: #fff; stroke-width: 2.3; stroke-linecap: round; stroke-linejoin: round; }
+
+  /* Entrée en scène de la pastille et du texte à chaque nouvelle carte. */
+  .card.enter .portrait { animation: popIn 0.5s cubic-bezier(.2,1.3,.45,1) both; }
+  .card.enter .perso { animation: fadeUp 0.5s ease 0.08s both; }
+  .card.enter .ctext { animation: fadeUp 0.55s ease 0.16s both; }
+  .portrait.pop { animation: popIn 0.55s cubic-bezier(.2,1.3,.45,1) both; }
+  @keyframes popIn { 0% { transform: scale(.4) rotate(-10deg); opacity: 0; } 55% { opacity: 1; } 100% { transform: scale(1) rotate(0); opacity: 1; } }
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+  @media (prefers-reduced-motion: reduce) {
+    .card.enter .portrait, .card.enter .perso, .card.enter .ctext, .portrait.pop { animation: none; }
+  }
+
+  /* Bouton son */
+  .sound-toggle { position: absolute; top: 0; right: 0; font-family: var(--sans); font-size: 0.6rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--ink-3); background: var(--paper); border: 1px solid var(--rule-2); border-radius: 999px; padding: 5px 12px 5px 23px; cursor: pointer; transition: all 0.12s ease; z-index: 2; }
+  .sound-toggle::before { content: ''; position: absolute; left: 11px; top: 50%; width: 7px; height: 7px; margin-top: -3.5px; border-radius: 50%; background: var(--red); }
+  .sound-toggle.off::before { background: var(--ink-3); }
+  .sound-toggle:hover { border-color: var(--ink-3); color: var(--ink); }
   .perso { font-family: var(--sans); font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--ink-3); margin: 0 0 12px; }
   .ctext { font-family: var(--display); font-weight: 500; font-size: 1.5rem; line-height: 1.28; color: var(--ink); max-width: 24ch; margin: 0; letter-spacing: -0.01em; }
   .hint { position: absolute; top: 14px; font-family: var(--sans); font-size: 0.62rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--ink-3); opacity: 0; transition: opacity .15s; max-width: 40%; }
