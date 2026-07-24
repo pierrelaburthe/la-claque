@@ -1,0 +1,123 @@
+---
+import Base from '../../layouts/Base.astro';
+import { url } from '../../lib/url';
+
+const abs = (p: string) => new URL(url(p), Astro.site).href;
+
+const faqs = [
+  {
+    q: "Combien d'heures vaut un cachet ?",
+    r: "Pour l'assurance chômage, un cachet vaut 12 heures, quelle que soit la durée réelle du contrat. C'est l'unité de compte des artistes, dont les engagements se comptent souvent en cachets plutôt qu'en heures.",
+  },
+  {
+    q: "Quelle différence entre cachet isolé et cachet groupé ?",
+    r: "C'était une distinction ancienne (le cachet groupé, sur plusieurs jours consécutifs chez le même employeur, valait moins d'heures). Depuis 2016, côté assurance chômage, tous les cachets sont ramenés à 12 heures : la distinction a disparu.",
+  },
+  {
+    q: "Y a-t-il un plafond d'heures par mois ?",
+    r: "Oui. Pour les artistes, on retient au maximum 28 cachets par mois. Pour les technicien·nes, le plafond est de 208 heures par mois, relevé en cas de multi-employeurs. Ces plafonds évitent de gonfler artificiellement le compteur.",
+  },
+];
+
+const jsonld = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: "Le cachet et le décompte des heures",
+    description: "Tout comprendre au cachet des intermittents : la règle des 12 heures, la fin de la distinction isolé/groupé, les plafonds mensuels et les heures d'enseignement.",
+    author: { '@type': 'Organization', name: 'La Claque' },
+    publisher: { '@type': 'Organization', name: 'La Claque' },
+    mainEntityOfPage: abs('/guides/le-cachet-et-le-decompte-des-heures'),
+    inLanguage: 'fr',
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqs.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.r } })),
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Accueil', item: abs('/') },
+      { '@type': 'ListItem', position: 2, name: 'Guides', item: abs('/guides') },
+      { '@type': 'ListItem', position: 3, name: "Le cachet", item: abs('/guides/le-cachet-et-le-decompte-des-heures') },
+    ],
+  },
+];
+---
+<Base
+  title="Le cachet et le décompte des heures d'intermittent — La Claque"
+  description="La règle des 12 heures par cachet, la fin de la distinction isolé/groupé, les plafonds mensuels et les heures d'enseignement : le décompte des heures des intermittents, expliqué."
+  active="guides"
+  jsonld={jsonld}
+>
+  <article class="wrap-narrow guide">
+    <p class="breadcrumb"><a href={url('/')}>Accueil</a> › <a href={url('/guides')}>Guides</a> › Le cachet</p>
+    <div class="guide-head">
+      <p class="kicker">Statut et droits</p>
+      <h1>Le cachet et le décompte des heures</h1>
+      <p class="stand">Le mot revient à chaque contrat, et derrière lui se cache tout le calcul de l'intermittence. Voici comment se comptent vraiment les heures.</p>
+    </div>
+
+    <div class="prose">
+      <p>
+        Quand on parle d'atteindre ses <a href={url('/guides/intermittence-spectacle')}>507 heures</a>, encore faut-il savoir comment chaque engagement se transforme en heures. C'est là qu'intervient le cachet, l'unité de compte des artistes.
+      </p>
+
+      <h2>Un cachet = 12 heures</h2>
+      <p>
+        Pour le calcul de l'assurance chômage, <strong>un cachet est converti en 12 heures</strong>, peu importe la durée réelle de la représentation ou de la répétition. Un·e comédien·ne qui joue un soir déclare un cachet, soit douze heures au compteur. C'est l'unité reine des artistes, là où les technicien·nes sont plutôt décompté·es en heures réelles.
+      </p>
+      <p>
+        Attention : cette équivalence vaut <strong>pour France Travail</strong> et l'assurance chômage. D'autres calculs (cotisations, retraite) peuvent retenir une autre règle. Ne mélangez pas les deux.
+      </p>
+
+      <h2>La fin du cachet « groupé »</h2>
+      <p>
+        Jadis, on distinguait le cachet isolé du cachet groupé (plusieurs jours consécutifs chez le même employeur), qui valait moins d'heures. Depuis <strong>2016</strong>, côté assurance chômage, cette subtilité a disparu : tous les cachets sont ramenés à douze heures. Un casse-tête en moins.
+      </p>
+
+      <h2>Les plafonds mensuels</h2>
+      <p>On ne peut pas empiler indéfiniment les heures sur un mois. Le régime pose des plafonds :</p>
+      <div class="gtable-wrap">
+        <table class="gtable">
+          <caption>Ce qui est retenu au maximum sur un mois</caption>
+          <thead>
+            <tr><th></th><th>Plafond mensuel</th></tr>
+          </thead>
+          <tbody>
+            <tr><th>Artistes (annexe 10)</th><td>28 cachets par mois</td></tr>
+            <tr><th>Technicien·nes (annexe 8)</th><td>208 heures par mois, relevé en cas de plusieurs employeurs</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h2>Les heures d'enseignement</h2>
+      <p>
+        Bonne nouvelle pour qui transmet son art : les <strong>heures d'enseignement</strong> artistique ou technique peuvent compter dans les 507 heures, mais dans une limite (de l'ordre de 70 heures, davantage à partir de 50 ans), et sous conditions d'agrément de l'établissement. De quoi consolider un dossier quand la scène se fait rare.
+      </p>
+
+      <h2>Questions fréquentes</h2>
+      <div class="faq">
+        {faqs.map((f) => (
+          <details>
+            <summary>{f.q}</summary>
+            <p>{f.r}</p>
+          </details>
+        ))}
+      </div>
+
+      <p class="sources" style="font-size:0.86rem; margin-top:26px">
+        Règles de décompte d'après le <a href="https://www.francetravail.fr/candidat/vos-recherches/les-intermittents-du-spectacle.html" rel="noopener nofollow">guide France Travail des intermittents</a> et l'<a href="https://www.artcena.fr/precis-juridique/droit-du-travail/assurance-chomage" rel="noopener nofollow">ARTCENA</a>. Les plafonds et limites exacts peuvent évoluer : vérifiez sur France Travail avant de vous y fier. Vérifié en juillet 2026.
+      </p>
+    </div>
+
+    <div class="related">
+      <h2>À lire aussi</h2>
+      <a href={url('/guides/intermittence-spectacle')}>L'intermittence, expliquée</a>
+      <a href={url('/guides/obtenir-son-intermittence')}>Obtenir son intermittence, étape par étape</a>
+      <a href={url('/guides/comment-se-faire-produire')}>Se faire produire et programmer</a>
+    </div>
+  </article>
+</Base>

@@ -1,0 +1,247 @@
+---
+import Base from '../../layouts/Base.astro';
+import { url } from '../../lib/url';
+
+const abs = (p: string) => new URL(url(p), Astro.site).href;
+
+const faqs = [
+  {
+    q: "Combien coûte une salle au Festival OFF d'Avignon ?",
+    r: "Une règle du pouce couramment citée par les compagnies : environ 100 euros par siège pour le mois. Une salle de 50 places revient donc autour de 5 000 euros de location pour le festival. Le prix grimpe avec la jauge, la réputation du lieu et l'horaire.",
+  },
+  {
+    q: "Quel taux de remplissage faut-il pour rentabiliser un OFF ?",
+    r: "Cela dépend de votre budget total, de votre jauge, du nombre de représentations et du prix réellement encaissé par billet. Notre simulateur calcule le taux de remplissage nécessaire pour équilibrer : il dépasse souvent 100 %, ce qui explique pourquoi presque personne ne rentabilise le OFF par la seule billetterie.",
+  },
+  {
+    q: "Faut-il des coproducteurs pour jouer à Avignon ?",
+    r: "Le plus souvent, oui, ou des aides. Comme la billetterie couvre rarement la totalité des frais, les compagnies bouclent leur budget avec des coproductions, des subventions ou de l'autofinancement. Le simulateur estime le montant qui reste à trouver et le nombre de partenaires nécessaires.",
+  },
+];
+
+const jsonld = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: "Combien coûte le Festival OFF d'Avignon ? Le simulateur",
+    description: "Simulateur du budget d'un OFF d'Avignon : location de salle, cachets des comédiens et charges, transport, logement, com. Calcule le taux de remplissage nécessaire et le nombre de coproducteurs pour équilibrer.",
+    author: { '@type': 'Organization', name: 'La Claque' },
+    publisher: { '@type': 'Organization', name: 'La Claque' },
+    mainEntityOfPage: abs('/guides/budget-festival-off-avignon'),
+    inLanguage: 'fr',
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqs.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.r } })),
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Accueil', item: abs('/') },
+      { '@type': 'ListItem', position: 2, name: 'Guides', item: abs('/guides') },
+      { '@type': 'ListItem', position: 3, name: "Le budget d'un OFF", item: abs('/guides/budget-festival-off-avignon') },
+    ],
+  },
+];
+
+// Champs du simulateur, groupés.
+const fields = [
+  { group: 'La salle et les représentations' },
+  { id: 'places', label: 'Places dans la salle', val: 50, suffix: 'places' },
+  { id: 'parPlace', label: 'Coût de la salle par place, pour le mois', val: 100, suffix: '€' },
+  { id: 'repr', label: 'Nombre de représentations', val: 21, suffix: 'repr.' },
+  { group: "L'équipe et les cachets" },
+  { id: 'comediens', label: 'Nombre de comédien·nes', val: 3, suffix: 'pers.' },
+  { id: 'cachet', label: 'Cachet brut par comédien·ne et par représentation', val: 120, suffix: '€' },
+  { id: 'charges', label: 'Charges patronales sur les cachets', val: 55, suffix: '%' },
+  { id: 'personnes', label: 'Personnes à défrayer (équipe complète)', val: 4, suffix: 'pers.' },
+  { group: 'Le séjour à Avignon' },
+  { id: 'train', label: 'Transport aller-retour par personne', val: 120, suffix: '€' },
+  { id: 'nuits', label: 'Nuits sur place', val: 21, suffix: 'nuits' },
+  { id: 'logement', label: 'Logement par personne et par nuit', val: 35, suffix: '€' },
+  { id: 'repas', label: 'Repas et défraiement par personne et par jour', val: 20, suffix: '€' },
+  { group: 'Communication et divers' },
+  { id: 'com', label: 'Affiches, tracts, attaché·e de presse', val: 1500, suffix: '€' },
+  { id: 'divers', label: 'Adhésion AF&C, droits, imprévus', val: 800, suffix: '€' },
+  { group: 'Recettes et financement' },
+  { id: 'billet', label: 'Prix moyen réellement encaissé par billet', val: 12, suffix: '€' },
+  { id: 'remplissage', label: 'Taux de remplissage réaliste visé', val: 50, suffix: '%' },
+  { id: 'apport', label: 'Apport moyen par coproducteur ou partenaire', val: 3000, suffix: '€' },
+];
+---
+<Base
+  title="Combien coûte le Festival OFF d'Avignon ? Simulateur de budget — La Claque"
+  description="Simulateur du budget d'un OFF d'Avignon : salle (≈100 €/place), cachets et charges, transport, logement, com. Calcule le taux de remplissage nécessaire et le nombre de coproducteurs pour équilibrer."
+  active="guides"
+  jsonld={jsonld}
+>
+  <article class="wrap-narrow guide">
+    <p class="breadcrumb"><a href={url('/')}>Accueil</a> › <a href={url('/guides')}>Guides</a> › Le budget d'un OFF</p>
+    <div class="guide-head">
+      <p class="kicker">Production et diffusion</p>
+      <h1>Combien coûte le Festival OFF d'Avignon ?</h1>
+      <p class="stand">Jouer au OFF, c'est un pari artistique autant que financier. Voici comment se compose le budget d'une compagnie, et un simulateur pour savoir ce qu'il faudrait remplir, et trouver, pour équilibrer.</p>
+    </div>
+
+    <div class="prose">
+      <p>
+        Au OFF, personne ne vous paie pour jouer : <a href={url('/guides/comment-se-faire-produire')}>c'est la compagnie qui s'autofinance</a>. Le premier poste, le plus redouté, c'est la location de la salle. La règle du pouce que se transmettent les troupes est simple : comptez environ <strong>100 euros par siège pour le mois</strong>. Une salle de 50 places revient donc à quelque <strong>5 000 euros</strong> de location.
+      </p>
+      <p>
+        Mais le vrai gouffre, ce sont souvent les <strong>salaires</strong> : chaque comédien·ne joue au cachet, et sur ce cachet s'ajoutent les charges patronales, qui l'alourdissent de plus de moitié. Multipliez par le nombre de représentations et d'interprètes, ajoutez le transport, trois semaines de logement et de repas, la communication… et le total donne le vertige. C'est pourquoi presque personne ne rentabilise un OFF par la seule billetterie.
+      </p>
+
+      <h2>Le simulateur</h2>
+      <p>Ajustez chaque chiffre à votre projet. Le budget, le taux de remplissage nécessaire et le reste à financer se recalculent aussitôt.</p>
+
+      <div class="calc">
+        <div class="calc-fields">
+          {fields.map((f) => (
+            f.group
+              ? <p class="calc-group">{f.group}</p>
+              : <label class="calc-field">
+                  <span class="l">{f.label}</span>
+                  <span class="in"><input type="number" id={f.id} value={f.val} min="0" inputmode="numeric" /><span class="s">{f.suffix}</span></span>
+                </label>
+          ))}
+        </div>
+        <aside class="calc-out">
+          <div class="calc-total">
+            <span class="lbl">Budget estimé</span>
+            <strong id="total">—</strong>
+            <span class="sub" id="perPers"></span>
+          </div>
+          <ul class="calc-lines" id="lines"></ul>
+          <div class="calc-fill">
+            <span class="lbl">Remplissage nécessaire pour équilibrer</span>
+            <strong id="fill">—</strong>
+            <span class="sub" id="fillNote"></span>
+          </div>
+          <div class="calc-break">
+            <p>À <strong id="rempShown">—</strong> de remplissage, vous encaissez <strong id="recettes">—</strong>.</p>
+            <p>Reste à financer : <strong id="reste">—</strong>, soit environ <strong id="coprod">—</strong> (aides ou coproductions).</p>
+          </div>
+          <p class="calc-note">Estimations à partir de vos chiffres. La location de salle (~100 €/place) est une règle du pouce, pas un tarif officiel.</p>
+        </aside>
+      </div>
+
+      <h2>Ce que le simulateur révèle</h2>
+      <p>
+        Le chiffre qui pique, c'est le <strong>taux de remplissage nécessaire</strong>. Avec des cachets et des charges réalistes, il dépasse fréquemment 100 %, autrement dit : même à guichets fermés tous les soirs, la billetterie ne rembourse pas tout. Voilà pourquoi une compagnie ne « monte » pas à Avignon pour gagner de l'argent, mais pour être <a href={url('/guides/comment-se-faire-produire')}>vue et programmée ensuite</a>. L'équilibre se boucle avec des <strong>aides</strong> (DRAC, SACD, régions) et des <strong>coproductions</strong>.
+      </p>
+
+      <h2>Questions fréquentes</h2>
+      <div class="faq">
+        {faqs.map((f) => (
+          <details>
+            <summary>{f.q}</summary>
+            <p>{f.r}</p>
+          </details>
+        ))}
+      </div>
+
+      <p class="sources" style="font-size:0.86rem; margin-top:26px">
+        L'ordre de grandeur de 100 € par place et le taux de charges sont des repères de terrain partagés par les compagnies, pas des tarifs officiels : les prix réels se négocient au devis et les charges dépendent des conventions. Tous les montants du simulateur sont vos propres estimations, à ajuster. Pour les aides mobilisables, voir <a href={url('/guides/comment-se-faire-produire')}>Se faire produire et programmer</a>.
+      </p>
+    </div>
+
+    <div class="related">
+      <h2>À lire aussi</h2>
+      <a href={url('/guides/comment-se-faire-produire')}>Se faire produire et programmer</a>
+      <a href={url('/guides/le-cachet-et-le-decompte-des-heures')}>Le cachet et le décompte des heures</a>
+      <a href={url('/guides/creer-sa-compagnie-de-theatre')}>Créer sa compagnie</a>
+    </div>
+  </article>
+</Base>
+
+<script>
+  const ids = ['places','parPlace','repr','comediens','cachet','charges','personnes','train','nuits','logement','repas','com','divers','billet','remplissage','apport'];
+  const el = {};
+  ids.forEach((i) => (el[i] = document.getElementById(i)));
+  const eur = (n) => Math.round(n).toLocaleString('fr-FR') + ' €';
+  const num = (i) => Math.max(0, Number(el[i] && el[i].value) || 0);
+  const set = (id, txt) => { const e = document.getElementById(id); if (e) e.textContent = txt; };
+
+  function compute() {
+    const places = num('places'), repr = num('repr'), comediens = num('comediens');
+    const personnes = num('personnes'), nuits = num('nuits');
+    const salle = places * num('parPlace');
+    const masse = comediens * num('cachet') * repr;
+    const charges = masse * num('charges') / 100;
+    const salaires = masse + charges;
+    const transport = personnes * num('train');
+    const logement = personnes * nuits * num('logement');
+    const repas = personnes * nuits * num('repas');
+    const com = num('com'), divers = num('divers');
+    const total = salle + salaires + transport + logement + repas + com + divers;
+
+    const lines = [
+      ['Location de la salle', salle],
+      ['Cachets et charges', salaires],
+      ['Transport', transport],
+      ['Logement', logement],
+      ['Repas et défraiements', repas],
+      ['Communication', com],
+      ['Adhésion, droits, imprévus', divers],
+    ];
+    const ul = document.getElementById('lines');
+    if (ul) ul.innerHTML = lines.map(([k, v]) => `<li><span>${k}</span><span>${eur(v)}</span></li>`).join('');
+
+    set('total', eur(total));
+    set('perPers', personnes > 0 ? eur(total / personnes) + ' par personne' : '');
+
+    const billet = num('billet');
+    const recette100 = places * repr * billet;
+    const fill = recette100 > 0 ? (total / recette100) * 100 : 0;
+    set('fill', recette100 > 0 ? Math.round(fill) + ' %' : '—');
+    const fillNote = document.getElementById('fillNote');
+    if (fillNote) {
+      if (fill > 100) { fillNote.textContent = "au-dessus de 100 % : impossible par la seule billetterie"; fillNote.style.color = '#f0c74a'; }
+      else { fillNote.textContent = "atteignable à guichets bien remplis"; fillNote.style.color = ''; }
+    }
+
+    const remplissage = num('remplissage');
+    const recettes = places * repr * billet * remplissage / 100;
+    const reste = Math.max(0, total - recettes);
+    const apport = num('apport');
+    const nbCoprod = apport > 0 && reste > 0 ? Math.ceil(reste / apport) : 0;
+    set('rempShown', remplissage + ' %');
+    set('recettes', eur(recettes));
+    set('reste', eur(reste));
+    set('coprod', reste <= 0 ? "c'est équilibré !" : (nbCoprod + ' partenaire' + (nbCoprod > 1 ? 's' : '') + ' à ' + eur(apport)));
+  }
+
+  ids.forEach((i) => el[i] && el[i].addEventListener('input', compute));
+  compute();
+</script>
+
+<style>
+  .calc { display: grid; grid-template-columns: 1.1fr 1fr; gap: 24px; margin: 22px 0 8px; align-items: start; }
+  .calc-fields { display: flex; flex-direction: column; gap: 11px; }
+  .calc-group { font-family: var(--sans); font-size: 0.66rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--red); margin: 12px 0 2px; }
+  .calc-group:first-child { margin-top: 0; }
+  .calc-field { display: flex; flex-direction: column; gap: 4px; }
+  .calc-field .l { font-family: var(--sans); font-size: 0.8rem; color: var(--ink-2); }
+  .calc-field .in { display: flex; align-items: center; border: 1px solid var(--rule-2); background: var(--card); border-radius: 2px; overflow: hidden; }
+  .calc-field .in:focus-within { border-color: var(--red); }
+  .calc-field input { border: 0; background: transparent; outline: none; width: 100%; font-family: var(--serif); font-weight: 700; font-size: 1.02rem; padding: 8px 12px; color: var(--ink); }
+  .calc-field .s { font-family: var(--sans); font-size: 0.72rem; color: var(--ink-3); padding: 0 12px; white-space: nowrap; }
+  .calc-out { position: sticky; top: 96px; background: var(--ink); color: var(--paper); padding: 22px; }
+  .calc-total, .calc-fill { border-bottom: 1px solid rgba(255,255,255,0.18); padding-bottom: 14px; margin-bottom: 14px; }
+  .calc-total .lbl, .calc-fill .lbl { font-family: var(--sans); font-size: 0.66rem; text-transform: uppercase; letter-spacing: 0.12em; color: rgba(255,255,255,0.7); }
+  .calc-total strong { display: block; font-family: var(--display); font-weight: 900; font-size: 2.3rem; line-height: 1.05; color: #fff; }
+  .calc-fill strong { display: block; font-family: var(--display); font-weight: 900; font-size: 1.9rem; line-height: 1.05; color: #f0c74a; }
+  .calc-total .sub, .calc-fill .sub { font-family: var(--sans); font-size: 0.74rem; color: rgba(255,255,255,0.7); }
+  .calc-lines { list-style: none; padding: 0; margin: 0 0 14px; }
+  .calc-lines li { display: flex; justify-content: space-between; gap: 12px; font-family: var(--sans); font-size: 0.84rem; padding: 4px 0; color: rgba(255,255,255,0.9); border-bottom: 1px solid rgba(255,255,255,0.08); }
+  .calc-break { font-family: var(--sans); font-size: 0.88rem; }
+  .calc-break p { margin: 0 0 6px; color: rgba(255,255,255,0.9); }
+  .calc-break strong { color: #f0c74a; }
+  .calc-note { font-family: var(--sans); font-size: 0.66rem; color: rgba(255,255,255,0.55); margin: 12px 0 0; }
+  @media (max-width: 720px) {
+    .calc { grid-template-columns: 1fr; }
+    .calc-out { position: static; }
+  }
+</style>

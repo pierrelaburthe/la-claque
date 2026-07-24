@@ -1,0 +1,142 @@
+---
+import Base from '../../layouts/Base.astro';
+import { url } from '../../lib/url';
+
+const abs = (p: string) => new URL(url(p), Astro.site).href;
+
+// Salle → une de nos critiques qui s'y est jouée (maillage interne).
+const salles = [
+  { nom: 'Théâtre du Chêne Noir', lieu: 'Intra-muros · 2 salles (288 et 120 pl.)', ligne: 'Théâtre de création, adresse historique du OFF', crit: 'intra-muros', critTitre: 'Intra Muros' },
+  { nom: 'La Scala Provence', lieu: 'Intra-muros · 4 salles (600 à 60 pl.)', ligne: 'Pluridisciplinaire, ouverte toute l\'année', crit: 'bigre', critTitre: 'Bigre' },
+  { nom: 'Théâtre du Train Bleu', lieu: 'Intra-muros · jusqu\'à 150 pl.', ligne: 'Écritures contemporaines et émergentes', crit: 'moliere-et-ses-masques', critTitre: 'Molière et ses masques' },
+  { nom: 'Le Rouge Gorge', lieu: 'Intra-muros · 200 pl. (ancienne imprimerie)', ligne: 'Cabaret, burlesque et théâtre', crit: 'hercule', critTitre: 'Hercule' },
+  { nom: 'La Factory', lieu: 'Intra-muros · plusieurs lieux, 49 à 194 pl.', ligne: 'Fabrique de création pluridisciplinaire', crit: 'tout-contre-la-terre', critTitre: 'Tout contre la terre' },
+  { nom: 'Présence Pasteur', lieu: 'Intra-muros · 45 à 198 pl.', ligne: 'Théâtre d\'auteur, contemporain et classique', crit: 'munchausen', critTitre: 'Munchausen ?' },
+  { nom: 'Théâtre du Balcon', lieu: 'Intra-muros · ancienne cave à vin', ligne: 'Pluridisciplinaire (théâtre conventionné)', crit: 'la-menagerie-de-verre', critTitre: 'La Ménagerie de Verre' },
+  { nom: 'Théâtre La Luna', lieu: 'Intra-muros · 3 salles (150, 95, 67 pl.)', ligne: 'Théâtre généraliste', crit: 'a-pile-ou-face', critTitre: 'Pile ou Face' },
+  { nom: 'Théâtre des Béliers', lieu: 'Intra-muros · 2 salles', ligne: 'Comédie, souvent reprise à Paris', crit: 'j-ai-8-ans-et-je-m-appelle-jean-rochefort', critTitre: "J'ai 8 ans et je m'appelle Jean Rochefort" },
+  { nom: 'Théâtre Golovine', lieu: 'Intra-muros · 146 pl.', ligne: 'Dédié à la danse (contemporaine, urbaine)', crit: 'kairos', critTitre: 'Kairós' },
+  { nom: 'Les 3T (10ème Avenue)', lieu: 'Hors les murs · 285 pl.', ligne: 'Généraliste, actif toute l\'année', crit: 'on-ne-badine-pas-avec-l-amour', critTitre: "On ne badine pas avec l'amour" },
+  { nom: 'Théâtre du Tremplin', lieu: 'Intra-muros · cœur historique', ligne: 'Création contemporaine et formation', crit: 'danser-conjurer-le-sort', critTitre: 'Danser / Conjurer le sort' },
+];
+
+const faqs = [
+  {
+    q: "Quelle différence entre une salle « intra-muros » et « hors les murs » ?",
+    r: "Intra-muros désigne les salles situées à l'intérieur des remparts d'Avignon, au cœur du festival. Hors les murs, ce sont les théâtres un peu excentrés, souvent plus grands et moins chers d'accès, à quelques minutes du centre.",
+  },
+  {
+    q: "Les salles du OFF sont-elles climatisées ?",
+    r: "De plus en plus, mais pas toutes. En juillet, à Avignon, la chaleur est un vrai sujet : beaucoup de grandes salles (La Scala Provence, Le Rouge Gorge, La Luna…) sont climatisées, les plus petites pas toujours. Prévoyez de l'eau.",
+  },
+  {
+    q: "Quelle est la plus ancienne salle du OFF ?",
+    r: "Le Théâtre du Chêne Noir, fondé en 1971 par Gérard Gelas, est l'un des pionniers historiques du OFF. Installé dans une ancienne chapelle classée, il reste une adresse emblématique du festival.",
+  },
+];
+
+const jsonld = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: "Les salles du Festival OFF d'Avignon",
+    description: "Le guide des principaux théâtres du OFF d'Avignon : quartier, jauge, particularités, du Chêne Noir à La Scala Provence, avec nos critiques jouées dans chaque salle.",
+    author: { '@type': 'Organization', name: 'La Claque' },
+    publisher: { '@type': 'Organization', name: 'La Claque' },
+    mainEntityOfPage: abs('/guides/salles-du-off-avignon'),
+    inLanguage: 'fr',
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqs.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.r } })),
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Accueil', item: abs('/') },
+      { '@type': 'ListItem', position: 2, name: 'Guides', item: abs('/guides') },
+      { '@type': 'ListItem', position: 3, name: "Les salles du OFF", item: abs('/guides/salles-du-off-avignon') },
+    ],
+  },
+];
+---
+<Base
+  title="Les salles du Festival OFF d'Avignon : le guide — La Claque"
+  description="Le guide des théâtres du OFF d'Avignon : quartier, jauge et particularités, du Chêne Noir à La Scala Provence, avec nos critiques jouées dans chaque salle."
+  active="guides"
+  jsonld={jsonld}
+>
+  <article class="wrap-narrow guide">
+    <p class="breadcrumb"><a href={url('/')}>Accueil</a> › <a href={url('/guides')}>Guides</a> › Les salles du OFF</p>
+    <div class="guide-head">
+      <p class="kicker">Guide pratique</p>
+      <h1>Les salles du Festival OFF d'Avignon</h1>
+      <p class="stand">Une chapelle classée, un ancien cinéma, une cave à vin, une imprimerie : les théâtres du OFF ont chacun leur âme. Petit tour des adresses où l'on a posé nos fauteuils.</p>
+    </div>
+
+    <div class="prose">
+      <p>
+        Avignon compte, le temps du festival, plusieurs centaines de lieux de spectacle. Impossible de tous les citer, mais quelques adresses reviennent sans cesse dans nos critiques. Voici celles qu'il faut connaître, avec leur ambiance et leur ligne artistique. Car chaque théâtre a sa personnalité : l'un défend la création contemporaine, l'autre la comédie qui cartonne, un troisième la danse. Choisir sa salle, quand on programme, c'est déjà choisir son public.
+      </p>
+
+      <h2>Intra-muros ou hors les murs</h2>
+      <p>
+        Première distinction utile : la plupart des salles sont <strong>intra-muros</strong>, à l'intérieur des célèbres remparts, dans un mouchoir de poche qu'on traverse à pied. Quelques théâtres sont <strong>hors les murs</strong>, un peu excentrés, souvent plus grands, à une poignée de minutes du centre. On y va exprès, pour un spectacle qu'on ne veut pas manquer.
+      </p>
+
+      <h2>Trois adresses emblématiques</h2>
+      <p>
+        Le <strong>Théâtre du Chêne Noir</strong>, fondé en 1971 par Gérard Gelas, est l'un des berceaux du OFF. Installé dans une ancienne chapelle classée derrière le Palais des Papes, il mêle histoire et création : c'est là qu'on a vu <a href={url('/critiques/intra-muros')}>Intra Muros</a>.
+      </p>
+      <p>
+        La <strong>Scala Provence</strong>, ancien cinéma Le Capitole entièrement rénové et antenne de La Scala Paris, aligne quatre salles climatisées de 60 à 600 places, ouvertes été comme hiver. On y a applaudi <a href={url('/critiques/bigre')}>Bigre</a> et <a href={url('/critiques/une-vie-sur-mesure')}>Une vie sur mesure</a>.
+      </p>
+      <p>
+        Le <strong>Rouge Gorge</strong>, aménagé dans l'ancienne imprimerie Aubanel avec ses balcons en mezzanine, cultive l'esprit cabaret : le décor idéal pour un spectacle aussi flamboyant qu'<a href={url('/critiques/hercule')}>Hercule</a>.
+      </p>
+
+      <h2>Le guide express des salles</h2>
+      <div class="gtable-wrap">
+        <table class="gtable">
+          <caption>Les principales salles du OFF : le lieu, la ligne artistique, et une de nos critiques qui s'y est jouée</caption>
+          <thead>
+            <tr><th>Salle</th><th>Le lieu</th><th>Ligne artistique</th><th>Chez nous</th></tr>
+          </thead>
+          <tbody>
+            {salles.map((s) => (
+              <tr>
+                <th>{s.nom}</th>
+                <td>{s.lieu}</td>
+                <td>{s.ligne}</td>
+                <td><a href={url(`/critiques/${s.crit}`)}>{s.critTitre}</a></td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      <h2>Questions fréquentes</h2>
+      <div class="faq">
+        {faqs.map((f) => (
+          <details>
+            <summary>{f.q}</summary>
+            <p>{f.r}</p>
+          </details>
+        ))}
+      </div>
+
+      <p class="sources" style="font-size:0.86rem; margin-top:26px">
+        Adresses, jauges et histoire des salles d'après les pages « lieux » de <a href="https://www.festivaloffavignon.com" rel="noopener nofollow">festivaloffavignon.com</a> et les sites officiels des théâtres. Certaines jauges varient selon les configurations. Vérifié en juillet 2026.
+      </p>
+    </div>
+
+    <div class="related">
+      <h2>À lire aussi</h2>
+      <a href={url('/guides/off-avignon-mode-demploi')}>Le OFF, mode d'emploi</a>
+      <a href={url('/guides/festival-in-et-off-avignon')}>IN et OFF : la différence</a>
+      <a href={url('/critiques')}>Toutes nos critiques</a>
+    </div>
+  </article>
+</Base>

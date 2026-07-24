@@ -24,8 +24,12 @@ export const GET: APIRoute = ({ site }) => {
   L.push(`- [Festival IN et OFF d’Avignon : quelle différence ?](${abs('/guides/festival-in-et-off-avignon')}) : programmation sélective contre accès libre, histoire, lieux, billetterie.`);
   L.push(`- [Le Festival d’Avignon en chiffres](${abs('/guides/chiffres-cles-festival-avignon')}) : fréquentation et statistiques 2025 du IN et du OFF, sourcées.`);
   L.push(`- [Le OFF d’Avignon, mode d’emploi](${abs('/guides/off-avignon-mode-demploi')}) : choisir ses spectacles, la carte OFF, le tractage.`);
+  L.push(`- [Les salles du OFF d’Avignon](${abs('/guides/salles-du-off-avignon')}) : quartier, jauge et ligne artistique des principaux théâtres.`);
   L.push(`- [Lexique du théâtre](${abs('/guides/lexique-du-theatre')}) : le vocabulaire des plateaux expliqué.`);
   L.push(`- [L'intermittence du spectacle, expliquée simplement](${abs('/guides/intermittence-spectacle')}) : annexes 8 et 10, seuil de 507 heures, cachet, date anniversaire.`);
+  L.push(`- [Comment obtenir son intermittence](${abs('/guides/obtenir-son-intermittence')}) : 507 heures, AEM, inscription France Travail, actualisation.`);
+  L.push(`- [Le cachet et le décompte des heures](${abs('/guides/le-cachet-et-le-decompte-des-heures')}) : cachet = 12 h, plafonds mensuels, heures d'enseignement.`);
+  L.push(`- [Combien coûte le OFF d’Avignon (simulateur de budget)](${abs('/guides/budget-festival-off-avignon')}) : salle (~100 €/place), transport, logement, repas.`);
   L.push(`- [Comment se faire produire et programmer](${abs('/guides/comment-se-faire-produire')}) : production, diffusion, modèle du OFF, aides à la création.`);
   L.push(`- [Créer sa compagnie de théâtre](${abs('/guides/creer-sa-compagnie-de-theatre')}) : association loi 1901, licence, GUSO.`);
   L.push('');

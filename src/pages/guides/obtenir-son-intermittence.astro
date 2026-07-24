@@ -1,0 +1,115 @@
+---
+import Base from '../../layouts/Base.astro';
+import { url } from '../../lib/url';
+
+const abs = (p: string) => new URL(url(p), Astro.site).href;
+
+const faqs = [
+  {
+    q: "Comment prouve-t-on ses heures d'intermittent ?",
+    r: "Par les attestations employeur mensuelles (AEM). À chaque contrat, l'employeur établit une AEM qui récapitule vos heures ou vos cachets et la transmet à France Travail. Ce sont ces attestations qui servent à décompter vos 507 heures.",
+  },
+  {
+    q: "Que faut-il pour ouvrir des droits ?",
+    r: "Avoir réuni 507 heures (ou cachets équivalents) sur les 12 mois précédant la fin de votre dernier contrat, être inscrit comme demandeur d'emploi à France Travail et déposer une demande d'ouverture de droits au titre de l'annexe 8 ou 10.",
+  },
+  {
+    q: "Faut-il s'actualiser chaque mois ?",
+    r: "Oui. Comme tout demandeur d'emploi indemnisé, l'intermittent doit s'actualiser chaque mois auprès de France Travail et déclarer ses périodes travaillées. C'est ce qui déclenche l'indemnisation des jours non travaillés.",
+  },
+];
+
+const jsonld = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: "Comment obtenir son intermittence, étape par étape",
+    description: "Le parcours concret pour ouvrir ses droits d'intermittent du spectacle : réunir 507 heures, rassembler ses AEM, s'inscrire à France Travail et s'actualiser chaque mois.",
+    author: { '@type': 'Organization', name: 'La Claque' },
+    publisher: { '@type': 'Organization', name: 'La Claque' },
+    mainEntityOfPage: abs('/guides/obtenir-son-intermittence'),
+    inLanguage: 'fr',
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqs.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.r } })),
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Accueil', item: abs('/') },
+      { '@type': 'ListItem', position: 2, name: 'Guides', item: abs('/guides') },
+      { '@type': 'ListItem', position: 3, name: "Obtenir son intermittence", item: abs('/guides/obtenir-son-intermittence') },
+    ],
+  },
+];
+---
+<Base
+  title="Comment obtenir son intermittence, étape par étape — La Claque"
+  description="Le parcours concret pour ouvrir ses droits d'intermittent du spectacle : réunir ses 507 heures, rassembler ses AEM, s'inscrire à France Travail et s'actualiser chaque mois."
+  active="guides"
+  jsonld={jsonld}
+>
+  <article class="wrap-narrow guide">
+    <p class="breadcrumb"><a href={url('/')}>Accueil</a> › <a href={url('/guides')}>Guides</a> › Obtenir son intermittence</p>
+    <div class="guide-head">
+      <p class="kicker">Statut et droits</p>
+      <h1>Comment obtenir son intermittence, étape par étape</h1>
+      <p class="stand">On sait ce qu'est l'intermittence, mais concrètement, par où commencer ? Voici les grandes étapes du parcours, du premier contrat à l'ouverture des droits.</p>
+    </div>
+
+    <div class="prose">
+      <p>
+        Devenir intermittent ne se décrète pas : c'est le résultat d'une année de travail bien documentée. Si vous débutez, commencez par lire notre guide de fond sur <a href={url('/guides/intermittence-spectacle')}>le fonctionnement de l'intermittence</a>. Ensuite, voici le chemin.
+      </p>
+
+      <h2>1. Réunir 507 heures</h2>
+      <p>
+        Tout part de là : cumuler <strong>507 heures</strong> de travail (ou de cachets équivalents) sur <strong>12 mois</strong>, en contrats courts, chez des employeurs relevant du champ du spectacle et de l'audiovisuel. Un cachet valant 12 heures pour l'assurance chômage, on raisonne souvent en cachets pour les artistes. Notre guide sur <a href={url('/guides/le-cachet-et-le-decompte-des-heures')}>le cachet et le décompte des heures</a> détaille ce calcul.
+      </p>
+
+      <h2>2. Rassembler ses AEM</h2>
+      <p>
+        À chaque contrat, votre employeur établit une <strong>attestation employeur mensuelle</strong> (AEM), qui récapitule les heures ou les cachets et les rémunérations, et la transmet à France Travail. Ce sont ces attestations qui font foi. Conservez-les précieusement, vérifiez qu'elles sont bien déclarées, et réclamez-les si un employeur tarde : sans AEM, une prestation n'est pas comptabilisée.
+      </p>
+
+      <h2>3. S'inscrire à France Travail</h2>
+      <p>
+        Une fois vos heures atteintes et un contrat qui se termine, inscrivez-vous comme demandeur d'emploi auprès de <strong>France Travail</strong> (l'ex-Pôle emploi, dont le service dédié au spectacle traite les intermittents) et déposez une <strong>demande d'ouverture de droits</strong> au titre de l'annexe 8 (technicien·nes) ou 10 (artistes). C'est France Travail qui calcule votre allocation et votre durée d'indemnisation.
+      </p>
+
+      <h2>4. S'actualiser chaque mois</h2>
+      <p>
+        L'intermittence n'est pas un revenu automatique : chaque mois, vous devez <strong>vous actualiser</strong> et déclarer vos périodes travaillées. L'indemnisation vient compléter les jours non travaillés, selon un calcul propre au régime, avec des délais d'attente et des franchises la première fois. C'est le rythme de la vie d'intermittent : jouer, déclarer, être indemnisé entre deux engagements.
+      </p>
+
+      <h2>5. Penser à la date anniversaire</h2>
+      <p>
+        Vos droits sont ouverts pour douze mois. À la <strong>date anniversaire</strong>, France Travail réexamine votre situation : si vous avez de nouveau réuni 507 heures sur l'année, vos droits sont rechargés. D'où l'importance de suivre son compteur d'heures toute l'année, et de ne pas se laisser surprendre à l'approche de l'échéance.
+      </p>
+
+      <h2>Questions fréquentes</h2>
+      <div class="faq">
+        {faqs.map((f) => (
+          <details>
+            <summary>{f.q}</summary>
+            <p>{f.r}</p>
+          </details>
+        ))}
+      </div>
+
+      <p class="sources" style="font-size:0.86rem; margin-top:26px">
+        Parcours décrit d'après le <a href="https://www.francetravail.fr/candidat/vos-recherches/les-intermittents-du-spectacle.html" rel="noopener nofollow">guide France Travail des intermittents du spectacle</a> et l'<a href="https://www.unedic.org/" rel="noopener nofollow">Unédic</a>. Ce guide donne les grandes étapes et ne remplace pas la procédure officielle : les documents, délais et calculs exacts sont à vérifier sur France Travail. Vérifié en juillet 2026.
+      </p>
+    </div>
+
+    <div class="related">
+      <h2>À lire aussi</h2>
+      <a href={url('/guides/intermittence-spectacle')}>L'intermittence, expliquée</a>
+      <a href={url('/guides/le-cachet-et-le-decompte-des-heures')}>Le cachet et le décompte des heures</a>
+      <a href={url('/guides/creer-sa-compagnie-de-theatre')}>Créer sa compagnie</a>
+    </div>
+  </article>
+</Base>
