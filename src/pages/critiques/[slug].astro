@@ -5,7 +5,7 @@ import Avatar from '../../components/Avatar.astro';
 import PieceCard from '../../components/PieceCard.astro';
 import RelatedGuides from '../../components/RelatedGuides.astro';
 import { PIECES } from '../../data/pieces';
-import { CRITICS } from '../../data/critics';
+import { CRITICS, criticSlug } from '../../data/critics';
 import { verdictFor, nbVus, estPlebiscite, starsFor, seenLabel } from '../../lib/rating';
 import { relatedPieces } from '../../lib/related';
 import { categorieFor } from '../../lib/categories';
@@ -59,7 +59,7 @@ const jsonld = [
       bestRating: 5,
       worstRating: 1,
     },
-    author: { '@type': 'Person', name: c.plume },
+    author: { '@type': 'Person', name: c.plume, url: abs(`/equipe/${criticSlug(c)}`) },
     publisher: { '@type': 'Organization', name: 'La Claque' },
     inLanguage: 'fr',
   },
@@ -102,7 +102,7 @@ const jsonld = [
     <div class="byline-row">
       <Avatar critic={piece.signataire} size={48} />
       <div class="who">
-        <div class="n">Par {c.plume}</div>
+        <div class="n">Par <a href={url(`/equipe/${criticSlug(c)}`)} rel="author">{c.plume}</a></div>
         <div class="r">{c.role}</div>
       </div>
       <div class="crit-topics">

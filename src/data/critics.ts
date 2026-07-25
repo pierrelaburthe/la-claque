@@ -102,3 +102,14 @@ export const CRITICS: Record<CriticKey, Critic> = {
 export const CRITIC_ORDER: CriticKey[] = [
   'julie', 'pierre', 'alexandre', 'etienne', 'henry', 'cedric', 'lucie', 'sana',
 ];
+
+// Slug d'URL d'une plume, à partir de son nom de scène.
+// « Pierre Strapontin » -> « pierre-strapontin ».
+export function criticSlug(c: Critic): string {
+  return c.plume
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[̀-ͯ]/g, '')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/(^-|-$)/g, '');
+}

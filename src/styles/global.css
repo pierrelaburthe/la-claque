@@ -77,7 +77,6 @@ img { max-width: 100%; display: block; }
 .masthead .word { font-family: var(--display); font-weight: 900; font-size: 2rem; line-height: 1; letter-spacing: -0.02em; }
 .masthead .word b { color: var(--red); font-weight: 900; }
 .masthead .wm small { font-family: var(--sans); font-weight: 700; font-size: 0.58rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-3); margin-top: 4px; }
-.masthead .edition { font-family: var(--sans); font-size: 0.64rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-3); text-align: right; line-height: 1.5; }
 .masthead nav { border-top: 1px solid var(--rule); }
 .masthead nav .inner { max-width: var(--wrap); margin: 0 auto; padding: 7px 24px; display: flex; gap: 26px; flex-wrap: wrap; }
 .masthead nav a {
@@ -226,6 +225,8 @@ img { max-width: 100%; display: block; }
 .art-body { max-width: 720px; padding: 36px 0 10px; }
 .byline-row { display: flex; align-items: center; gap: 12px; padding-bottom: 18px; margin-bottom: 24px; border-bottom: 1px solid var(--rule); }
 .byline-row .who .n { font-family: var(--serif); font-weight: 700; font-size: 1.05rem; }
+.byline-row .who .n a { color: inherit; text-decoration: none; border-bottom: 2px solid var(--rule-2); transition: border-color 0.12s ease, color 0.12s ease; }
+.byline-row .who .n a:hover { color: var(--red); border-color: var(--red); }
 .byline-row .who .r { font-family: var(--sans); font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--ink-3); }
 
 .stand { font-size: 1.34rem; line-height: 1.4; font-style: italic; color: var(--ink); margin: 0 0 26px; }
@@ -320,7 +321,6 @@ img { max-width: 100%; display: block; }
 @media (max-width: 620px) {
   .masthead .word { font-size: 1.55rem; }
   .masthead .wm small { display: none; }
-  .masthead .edition { display: none; }
 }
 @media (max-width: 560px) {
   body { font-size: 18px; }

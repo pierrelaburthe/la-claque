@@ -1,7 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
 import Avatar from '../components/Avatar.astro';
-import { CRITICS, CRITIC_ORDER } from '../data/critics';
+import { CRITICS, CRITIC_ORDER, criticSlug } from '../data/critics';
 import { PIECES } from '../data/pieces';
 import { url } from '../lib/url';
 
@@ -27,7 +27,7 @@ const team = CRITIC_ORDER.map((key) => {
           <div class="head">
             <Avatar critic={critic.key} size={76} />
             <div>
-              <h3>{critic.plume}</h3>
+              <h3>{signees.length > 0 ? <a href={url(`/equipe/${criticSlug(critic)}`)}>{critic.plume}</a> : critic.plume}</h3>
               <p class="role">{critic.role}</p>
             </div>
           </div>
@@ -41,7 +41,7 @@ const team = CRITIC_ORDER.map((key) => {
               Récemment :
               {signees.slice(0, 3).map((p, i) => (
                 <> {i > 0 ? ', ' : ' '}<a href={url(`/critiques/${p.slug}`)}>{p.titre}</a></>
-              ))}.
+              ))}. <a class="more" href={url(`/equipe/${criticSlug(critic)}`)}>Sa page →</a>
             </p>
           ) : (
             <p class="signes muted">Cette année, {critic.prenomScene} a surtout tenu la billetterie et distribué les bonnes adresses à toute la bande. Ses critiques signées, ce sera pour la prochaine édition.</p>
@@ -57,6 +57,9 @@ const team = CRITIC_ORDER.map((key) => {
   .member { background: var(--card); border: 1px solid var(--rule-2); border-top: 3px solid var(--acc); padding: 22px; }
   .member .head { display: flex; gap: 15px; align-items: center; margin-bottom: 14px; }
   .member h3 { margin: 0; font-size: 1.3rem; }
+  .member h3 a { color: inherit; text-decoration: none; }
+  .member h3 a:hover { color: var(--acc); }
+  .member .signes .more { font-weight: 700; white-space: nowrap; }
   .member .role { margin: 3px 0 0; font-family: var(--sans); font-size: 0.68rem; color: var(--acc); font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; }
   .member .bio { color: var(--ink-2); font-size: 0.98rem; }
   .member .stats { display: flex; gap: 22px; margin: 14px 0 10px; padding-top: 12px; border-top: 1px solid var(--rule); }
