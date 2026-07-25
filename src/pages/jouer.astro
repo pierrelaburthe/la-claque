@@ -73,7 +73,11 @@ const jsonld = [
             <h2 id="endTitle"></h2>
             <p class="end-txt" id="endTxt"></p>
             <p class="end-score" id="endScore"></p>
-            <button class="btn play" id="again">Rejouer</button>
+            <div class="end-actions">
+              <button class="btn play" id="again">Rejouer</button>
+              <button class="btn-share" id="share" type="button">Partager mon résultat</button>
+            </div>
+            <span class="share-done" id="shareDone" hidden>Résultat copié : collez-le où vous voulez.</span>
           </div>
         </div>
       </div>
@@ -245,6 +249,7 @@ const jsonld = [
   let bag = [];
   let lastCard = null;
   let busy = false;
+  let shareText = '';
 
   const $ = (id) => document.getElementById(id);
   const clamp = (n) => Math.max(0, Math.min(100, n));
@@ -407,6 +412,15 @@ const jsonld = [
     ei.innerHTML = `<svg viewBox="0 0 24 24">${ICONS[icKey]}</svg>`;
     ei.classList.remove('pop'); void ei.offsetWidth; ei.classList.add('pop');
     if (win) sWin(); else sLose();
+
+    // Texte de résultat, prêt à partager.
+    const link = location.href.split(/[?#]/)[0];
+    if (win) {
+      shareText = `« Un mois au OFF » sur La Claque : ${$('endTitle').textContent.toLowerCase()} ! J'ai tenu les ${MAX_JOUR} représentations à Avignon (caisse ${g.treso}, public ${g.public}, moral ${g.moral}, presse ${g.presse}). Sauras-tu tenir le mois ? ${link}`;
+    } else {
+      shareText = `« Un mois au OFF » sur La Claque : rideau au jour ${jour} sur ${MAX_JOUR}, j'ai tenu ${jour - 1} représentation${jour - 1 > 1 ? 's' : ''}. À toi de faire mieux : ${link}`;
+    }
+    $('shareDone').hidden = true;
   }
 
   function reset() {
@@ -424,6 +438,18 @@ const jsonld = [
   $('again').addEventListener('click', () => { ac(); reset(); });
   $('mute').addEventListener('click', () => { ac(); setMute(!muted); if (!muted) sClick(); });
   setMute(muted);
+  $('share').addEventListener('click', async () => {
+    if (!shareText) return;
+    const data = { title: 'Un mois au OFF — La Claque', text: shareText };
+    try {
+      if (navigator.share) { await navigator.share(data); return; }
+    } catch (e) { if (e && e.name === 'AbortError') return; }
+    try { await navigator.clipboard.writeText(shareText); } catch (e) {}
+    const done = $('shareDone');
+    done.hidden = false;
+    clearTimeout(done._t);
+    done._t = setTimeout(() => { done.hidden = true; }, 3000);
+  });
   $('btnL').addEventListener('click', () => apply('L'));
   $('btnR').addEventListener('click', () => apply('R'));
 
@@ -515,6 +541,10 @@ const jsonld = [
 
   .btn.play { font-family: var(--sans); font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; background: var(--red); color: #fff; border: 0; padding: 13px 26px; border-radius: 2px; cursor: pointer; }
   .btn.play:hover { filter: brightness(1.08); }
+  .end-actions { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; align-items: center; }
+  .btn-share { font-family: var(--sans); font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; background: transparent; color: var(--ink); border: 1px solid var(--ink); padding: 12px 22px; border-radius: 2px; cursor: pointer; transition: all 0.12s ease; }
+  .btn-share:hover { background: var(--ink); color: var(--paper); }
+  .share-done { display: block; font-family: var(--sans); font-size: 0.74rem; color: var(--ink-3); margin-top: 12px; }
   .end h2 { font-family: var(--display); font-size: 2rem; margin: 0 0 10px; }
   .end-score { font-family: var(--sans); font-size: 0.82rem; color: var(--ink-3); margin: 0 0 22px; }
   .end-score b { color: var(--ink); }
