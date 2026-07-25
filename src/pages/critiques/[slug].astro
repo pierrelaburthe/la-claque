@@ -38,7 +38,7 @@ const hostname = (u: string) => {
 };
 
 const abs = (p: string) => new URL(url(p), Astro.site).href;
-const ogImage = piece.image ? abs(piece.image) : undefined;
+const ogImage = abs(`/og/${piece.slug}.png`);
 const critiqueUrl = abs(`/critiques/${piece.slug}`);
 
 // Dates : publication du dossier, et dernière mise à jour (resync du tableur).

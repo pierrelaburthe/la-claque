@@ -18,7 +18,7 @@ const solos = PIECES.filter(estDecouverteSolo).sort((a, b) => b.noteMoy - a.note
 
 const totalVues = PIECES.reduce((s, p) => s + nbVus(p), 0);
 const c = CRITICS[une.signataire];
-const ogImage = une.image ? new URL(url(une.image), Astro.site).href : undefined;
+const ogImage = new URL(url(`/og/${une.slug}.png`), Astro.site).href;
 ---
 <Base title="La Claque — critiques de théâtre" active="accueil" image={ogImage}>
   <div class="frontline">

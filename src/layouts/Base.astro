@@ -13,6 +13,8 @@ interface Props {
 const { title, description = "Critiques de théâtre par une bande d'ami·es qui applaudit fort. Étoiles, coups de cœur et découvertes, à Avignon et toute l'année.", active, jsonld = [], image } = Astro.props;
 const canonical = new URL(Astro.url.pathname, Astro.site).href;
 const siteRoot = new URL(url('/'), Astro.site).href;
+// Carte de partage 1200×630 : celle fournie, sinon la carte par défaut.
+const ogImage = image || new URL(url('/og/default.png'), Astro.site).href;
 
 // Données structurées présentes sur toutes les pages (identité du site).
 const baseJsonld = [
@@ -56,9 +58,12 @@ const nav = [
     <meta property="og:url" content={canonical} />
     <meta property="og:site_name" content="La Claque" />
     <meta property="og:locale" content="fr_FR" />
-    {image && <meta property="og:image" content={image} />}
-    <meta name="twitter:card" content={image ? 'summary_large_image' : 'summary'} />
-    {image && <meta name="twitter:image" content={image} />}
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:type" content="image/png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content={ogImage} />
     <meta name="robots" content="index, follow, max-image-preview:large" />
     <link rel="icon" href={url('/favicon.svg')} type="image/svg+xml" />
     <link rel="alternate" type="application/rss+xml" title="La Claque — critiques de théâtre" href={url('/rss.xml')} />
