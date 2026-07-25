@@ -7,7 +7,7 @@ import { CATEGORIES, categorieFor } from '../../lib/categories';
 const pieces = [...PIECES].sort((a, b) => b.noteMoy - a.noteMoy);
 const present = CATEGORIES.filter((cat) => pieces.some((p) => categorieFor(p.style) === cat));
 ---
-<Base title="Toutes les critiques — La Claque" active="critiques" description="Les 34 spectacles du OFF d'Avignon 2026 vus et notés par la bande de La Claque. Cherchez par titre, lieu, plume ou catégorie.">
+<Base title="Critiques de théâtre : tout le OFF d'Avignon 2026 noté et raconté | La Claque" active="critiques" description={`Toutes nos critiques et avis de théâtre : ${pieces.length} spectacles du OFF d'Avignon 2026 vus et notés par la bande. Cherchez par titre, lieu, plume ou genre.`}>
   <div class="wrap">
     <div class="rubric" style="margin-top:40px">
       <h2>Les {pieces.length} critiques</h2>

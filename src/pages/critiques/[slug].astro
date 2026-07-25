@@ -98,7 +98,7 @@ const jsonld = [
   },
 ];
 ---
-<Base title={`${piece.titre} — La Claque`} active="critiques" description={piece.chapo} jsonld={jsonld} image={ogImage}>
+<Base title={`${piece.titre} — critique et avis${piece.festival ? ` · ${piece.festival}` : ''} | La Claque`} active="critiques" description={`Notre critique de « ${piece.titre} » : ${piece.chapo}`} jsonld={jsonld} image={ogImage}>
   <div class="art-hero">
     <div class="art-bg" style={piece.image ? `background-image:url(${url(piece.image)})` : `background:${c.couleur}`}></div>
     <div class="wrap art-hero-in">
