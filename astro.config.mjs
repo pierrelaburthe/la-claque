@@ -1,15 +1,13 @@
 import { defineConfig } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
 
-// « La Claque » — site statique.
-// En local, servi à la racine (base '/'). En CI (GitHub Actions), servi sous
-// le sous-chemin du repo GitHub Pages. Les URLs internes passent toutes par le
-// helper src/lib/url.ts, qui s'appuie sur import.meta.env.BASE_URL.
-const onPages = process.env.GITHUB_ACTIONS === 'true';
-
+// « La Claque » — site statique, servi à la racine du domaine la-claque.com
+// (GitHub Pages avec domaine personnalisé). base '/' partout : plus de
+// sous-chemin /la-claque. Les URLs internes passent toujours par le helper
+// src/lib/url.ts (qui devient un simple passe-plat, BASE_URL = '/').
 export default defineConfig({
-  site: 'https://pierrelaburthe.github.io',
-  base: onPages ? '/la-claque' : '/',
+  site: 'https://la-claque.com',
+  base: '/',
   trailingSlash: 'ignore',
   build: { format: 'directory' },
   integrations: [sitemap()],

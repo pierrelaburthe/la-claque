@@ -33,4 +33,4 @@ Allow: /
 User-agent: Meta-ExternalAgent
 Allow: /
 
-Sitemap: https://pierrelaburthe.github.io/la-claque/sitemap-index.xml
+Sitemap: https://la-claque.com/sitemap-index.xml
