@@ -1,0 +1,108 @@
+---
+import Base from '../layouts/Base.astro';
+import { PROGRAMME } from '../data/programme';
+import { url } from '../lib/url';
+
+const abs = (p) => new URL(url(p), Astro.site).href;
+
+const rentree = PROGRAMME.filter((r) => r.contexte === 'rentree');
+const avignon = PROGRAMME.filter((r) => r.contexte !== 'rentree');
+const host = (u) => { try { return new URL(u).hostname.replace(/^www\./, ''); } catch { return 'la billetterie'; } };
+
+const jsonld = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'CollectionPage',
+    name: 'La rédaction va voir',
+    url: abs('/la-redaction-va-voir'),
+    description: "Les spectacles que la rédaction de La Claque a repérés et ira voir. Pas encore de critique : juste ce qui nous donne envie, avant le lever de rideau.",
+    inLanguage: 'fr',
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'ItemList',
+    name: 'Spectacles repérés par La Claque',
+    itemListElement: PROGRAMME.map((r, i) => ({ '@type': 'ListItem', position: i + 1, name: r.titre })),
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Accueil', item: abs('/') },
+      { '@type': 'ListItem', position: 2, name: 'La rédaction va voir', item: abs('/la-redaction-va-voir') },
+    ],
+  },
+];
+---
+<Base
+  title="La rédaction va voir : nos prochains spectacles de théâtre | La Claque"
+  description="Les spectacles de théâtre qu'on a repérés et qu'on ira voir, à Paris à la rentrée et au-delà. Pas encore de critique, juste ce qui nous donne envie avant le lever de rideau."
+  active="programme"
+  jsonld={jsonld}
+>
+  <div class="wrap-narrow">
+    <p class="breadcrumb"><a href={url('/')}>Accueil</a> › La rédaction va voir</p>
+    <div class="guide-head">
+      <p class="kicker">Carnet de repérage</p>
+      <h1>La rédaction va voir</h1>
+      <p class="stand">Les spectacles qu'on a repérés et qu'on ira voir. Pas encore de critique, juste ce qui nous donne envie avant le lever de rideau. On la publie dès qu'on est sorti de la salle.</p>
+    </div>
+  </div>
+
+  <div class="wrap">
+    {rentree.length > 0 && (
+      <>
+        <div class="rubric"><h2>La rentrée à Paris</h2><span class="line"></span><span class="note">Prochainement</span></div>
+        <div class="prog-grid">
+          {rentree.map((r) => (
+            <article class="prog-card">
+              <div class="pc-top">
+                <span class="pc-genre">{r.genre}</span>
+                <span class="pc-badge">Pas encore vu</span>
+              </div>
+              <h3>{r.titre}</h3>
+              <p class="pc-meta">{[r.lieu, r.ville, r.periode].filter(Boolean).join(' · ')}</p>
+              <p class="pc-note">{r.note}</p>
+              {r.lien && <a class="pc-link" href={r.lien} rel="noopener nofollow">Voir sur {host(r.lien)} →</a>}
+            </article>
+          ))}
+        </div>
+      </>
+    )}
+
+    <div class="rubric"><h2>Repérés au OFF d'Avignon 2026</h2><span class="line"></span><span class="note">Dans notre viseur</span></div>
+    <p class="rubric-intro">Le festival est une jungle : impossible de tout voir. Voici les pièces qu'on avait cochées et qu'on guette, à Avignon comme en tournée.</p>
+    <div class="prog-grid">
+      {avignon.map((r) => (
+        <article class="prog-card">
+          <div class="pc-top">
+            <span class="pc-genre">{r.genre}</span>
+            <span class="pc-badge">Pas encore vu</span>
+          </div>
+          <h3>{r.titre}</h3>
+          {r.lieu && <p class="pc-meta">{r.lieu}</p>}
+          <p class="pc-note">{r.note}</p>
+          {r.lien && <a class="pc-link" href={r.lien} rel="noopener nofollow">Voir sur {host(r.lien)} →</a>}
+        </article>
+      ))}
+    </div>
+
+    <div class="center" style="margin:44px 0 60px; display:flex; gap:12px; justify-content:center; flex-wrap:wrap;">
+      <a class="btn" href={url('/critiques')}>Nos critiques</a>
+      <a class="btn btn-ghost" href={url('/palmares')}>Le palmarès</a>
+    </div>
+  </div>
+</Base>
+
+<style>
+  .prog-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 16px; margin-bottom: 12px; }
+  .prog-card { background: var(--card); border: 1px solid var(--rule-2); border-left: 4px solid var(--ink-3); padding: 20px 22px; display: flex; flex-direction: column; }
+  .prog-card .pc-top { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; margin-bottom: 6px; }
+  .prog-card .pc-genre { font-family: var(--sans); font-size: 0.66rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--red); }
+  .prog-card .pc-badge { font-family: var(--sans); font-size: 0.6rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--ink-3); border: 1px solid var(--rule-2); border-radius: 999px; padding: 3px 9px; white-space: nowrap; }
+  .prog-card h3 { font-family: var(--display); font-weight: 700; font-size: 1.4rem; margin: 0 0 6px; }
+  .prog-card .pc-meta { font-family: var(--sans); font-size: 0.74rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--ink-3); margin: 0 0 10px; }
+  .prog-card .pc-note { font-family: var(--serif); font-size: 1rem; line-height: 1.5; color: var(--ink-2); margin: 0 0 14px; flex: 1; }
+  .prog-card .pc-link { font-family: var(--sans); font-size: 0.78rem; font-weight: 700; color: var(--red); text-decoration: none; margin-top: auto; }
+  .prog-card .pc-link:hover { text-decoration: underline; }
+</style>

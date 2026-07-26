@@ -45,6 +45,10 @@ const critiqueUrl = abs(`/critiques/${piece.slug}`);
 const DATE_PUBLI = '2026-07-24';
 const DATE_MAJ = '2026-07-25';
 
+// Infos & réservation : on privilégie une billetterie, sinon la meilleure source.
+const billetUrl = piece.sources.find((u) => /billetreduc|ticketoff|festivaloffavignon/.test(u)) || piece.sources[0];
+const billetLabel = billetUrl && /billetreduc|ticketoff|festivaloffavignon/.test(billetUrl) ? 'Trouver les billets' : 'Voir la fiche du spectacle';
+
 // Partage social (liens construits côté serveur, un seul bouton en JS pour la copie).
 const enc = encodeURIComponent;
 const shareTitle = `${piece.titre} — la critique de La Claque`;
@@ -160,6 +164,16 @@ const jsonld = [
       <span>vu par {seen} d'entre nous</span>
     </div>
 
+    <aside class="pratique">
+      <p class="pr-lbl">Où voir « {piece.titre} »</p>
+      <div class="pr-rows">
+        {piece.salle && <div class="pr-row"><span>Salle</span><strong>{piece.salle}</strong></div>}
+        {piece.festival && <div class="pr-row"><span>Dossier</span><strong>{piece.festival}</strong></div>}
+        <div class="pr-row"><span>Genre</span><strong>{piece.style}</strong></div>
+      </div>
+      {billetUrl && <a class="btn pr-btn" href={billetUrl} target="_blank" rel="noopener nofollow">{billetLabel} →</a>}
+    </aside>
+
     <div class="share">
       <span class="share-lbl">Faites tourner</span>
       <div class="share-btns">
@@ -225,6 +239,14 @@ const jsonld = [
 </script>
 
 <style>
+  .pratique { background: var(--card); border: 1px solid var(--rule-2); border-left: 4px solid var(--red); padding: 20px 22px; margin: 30px 0 6px; }
+  .pratique .pr-lbl { font-family: var(--sans); font-size: 0.68rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.09em; color: var(--ink-3); margin: 0 0 14px; }
+  .pratique .pr-rows { display: flex; flex-wrap: wrap; gap: 10px 34px; margin-bottom: 18px; }
+  .pratique .pr-row { display: flex; flex-direction: column; }
+  .pratique .pr-row span { font-family: var(--sans); font-size: 0.62rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--ink-3); }
+  .pratique .pr-row strong { font-family: var(--serif); font-size: 1.05rem; color: var(--ink); }
+  .pratique .pr-btn { display: inline-block; }
+
   .share { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; margin: 30px 0 6px; padding-top: 22px; border-top: 1px solid var(--rule); }
   .share-lbl { font-family: var(--sans); font-size: 0.72rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.1em; color: var(--ink-3); }
   .share-btns { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }

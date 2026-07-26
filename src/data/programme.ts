@@ -7,11 +7,37 @@ export interface Repere {
   titre: string;
   genre: string;
   lieu?: string;
+  ville?: string; // Paris, Avignon…
+  periode?: string; // « à la rentrée », « OFF 2026 »
+  contexte?: 'rentree' | 'avignon'; // défaut : avignon (repérages du OFF)
   note: string; // pourquoi c'est sur notre liste
   lien?: string; // billetterie / fiche, seulement si URL réelle
 }
 
 export const PROGRAMME: Repere[] = [
+  // ---- La rentrée parisienne (toute l'année) ----
+  {
+    slug: 'courir-a-la-catastrophe',
+    titre: 'Courir à la catastrophe',
+    genre: 'Seul en scène',
+    lieu: 'Théâtre La Flèche',
+    ville: 'Paris 11ᵉ',
+    periode: 'À la rentrée',
+    contexte: 'rentree',
+    note: "Le seul-en-scène d'Antoine Heuillet : l'aveu d'un garçon anxieux et rêveur qui avance dans une vie chaotique, entre chutes, premiers amours et éclats de résilience. On y va à la rentrée.",
+    lien: 'https://www.billetreduc.com/spectacle/courir-a-la-catastrophe-398348',
+  },
+  {
+    slug: 'the-loop',
+    titre: 'The Loop',
+    genre: 'Comédie',
+    ville: 'Paris',
+    periode: 'À la rentrée',
+    contexte: 'rentree',
+    note: "La comédie à boucle temporelle de Robin Goupil, Molière 2025 de la meilleure comédie : une enquête pour meurtre rejouée à l'infini, dix comédiens et un rythme démentiel. De retour à Paris, on ne la manquera pas.",
+    lien: 'https://www.billetreduc.com/spectacle/the-loop-391973',
+  },
+  // ---- Repérés au OFF d'Avignon 2026 ----
   {
     slug: 'le-schpountz',
     titre: 'Le Schpountz',
