@@ -76,6 +76,27 @@ export const GUIDES: Guide[] = [
     desc: "La grande cérémonie du théâtre français depuis 1987 : son histoire, ses catégories, et à quoi sert un Molière.",
     section: 'spectateur',
   },
+  {
+    slug: 'grands-auteurs-theatre-francais',
+    k: 'Comprendre le théâtre',
+    titre: 'Les grands auteurs du théâtre français',
+    desc: "Molière, Racine, Marivaux, Hugo, Feydeau : dix dramaturges qui ont façonné la scène française, et ce qu'on joue encore d'eux.",
+    section: 'spectateur',
+  },
+  {
+    slug: 'emmener-un-enfant-au-theatre',
+    k: 'En famille',
+    titre: 'Emmener un enfant au théâtre : à quel âge et quoi voir',
+    desc: "À partir de quel âge, quels spectacles, comment préparer la sortie : le guide pour une première fois réussie au théâtre.",
+    section: 'spectateur',
+  },
+  {
+    slug: 'theatre-a-paris-guide-des-salles',
+    k: 'À Paris',
+    titre: 'Le théâtre à Paris : guide des quartiers et des salles',
+    desc: "Grands Boulevards, rive gauche, théâtres nationaux : comment s'y retrouver dans la géographie théâtrale parisienne, toute l'année.",
+    section: 'spectateur',
+  },
   // ---- Côté métier ----
   {
     slug: 'intermittence-spectacle',

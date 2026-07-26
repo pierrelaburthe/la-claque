@@ -1,0 +1,129 @@
+---
+import Base from '../../layouts/Base.astro';
+import { url } from '../../lib/url';
+
+const abs = (p: string) => new URL(url(p), Astro.site).href;
+
+const ages = [
+  { a: 'Dès 1 à 3 ans', d: "Des spectacles très courts (20 à 30 minutes), sensoriels, faits de musique, de lumière et d'images plutôt que de mots. On parle de « spectacle petite enfance » ou « très jeune public »." },
+  { a: 'De 3 à 6 ans', d: "L'âge des contes, des marionnettes et des histoires simples. Une durée de 30 à 45 minutes, une intrigue claire et beaucoup de rythme pour tenir l'attention." },
+  { a: 'De 6 à 10 ans', d: "L'enfant suit une vraie histoire, apprécie l'humour et les rebondissements. Contes détournés, aventures, premières pièces du répertoire adaptées." },
+  { a: 'Dès 10-11 ans', d: "On peut aborder des textes plus ambitieux, des classiques allégés, des sujets qui font réfléchir. C'est souvent l'âge des premières sorties scolaires au théâtre." },
+];
+
+const faqs = [
+  {
+    q: "À partir de quel âge peut-on emmener un enfant au théâtre ?",
+    r: "Il existe des spectacles dès le plus jeune âge, parfois dès un an, conçus spécialement pour la petite enfance : très courts, sensoriels, sans texte ou presque. L'essentiel est de respecter l'âge indiqué par la compagnie : un spectacle « à partir de 6 ans » suppose une attention et une compréhension qu'un enfant de trois ans n'a pas encore. Bien choisi, le théâtre se découvre donc à tout âge.",
+  },
+  {
+    q: "Comment savoir si un spectacle convient à mon enfant ?",
+    r: "Fiez-vous d'abord à l'âge minimum recommandé, presque toujours affiché. Regardez ensuite la durée : plus l'enfant est jeune, plus le spectacle doit être court. Enfin, lisez le résumé pour vérifier le thème et le ton. En cas de doute, la billetterie de la salle peut vous renseigner sur le contenu.",
+  },
+  {
+    q: "Comment préparer un enfant à sa première sortie au théâtre ?",
+    r: "Racontez-lui en quelques mots ce qu'il va voir et expliquez les règles du jeu : la salle s'éteint, on reste assis, on écoute, on applaudit à la fin. Prévoyez d'arriver en avance pour trouver sa place tranquillement, passez aux toilettes avant, et choisissez une séance qui ne tombe pas en pleine sieste ou trop tard le soir.",
+  },
+  {
+    q: "Que faire si mon enfant s'agite ou veut sortir ?",
+    r: "C'est fréquent et sans gravité. S'il est petit et vraiment gêné ou gênant, mieux vaut sortir discrètement le temps qu'il se calme, par respect pour les comédiens et les autres spectateurs. Choisir un spectacle vraiment adapté à son âge et à sa fatigue reste la meilleure prévention.",
+  },
+];
+
+const jsonld = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: 'Emmener un enfant au théâtre : à quel âge et quoi voir',
+    description: "À partir de quel âge emmener un enfant au théâtre, quels spectacles choisir selon l'âge et comment préparer une première sortie réussie.",
+    author: { '@type': 'Organization', name: 'La Claque' },
+    publisher: { '@type': 'Organization', name: 'La Claque' },
+    mainEntityOfPage: abs('/guides/emmener-un-enfant-au-theatre'),
+    inLanguage: 'fr',
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqs.map((f) => ({
+      '@type': 'Question',
+      name: f.q,
+      acceptedAnswer: { '@type': 'Answer', text: f.r },
+    })),
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Accueil', item: abs('/') },
+      { '@type': 'ListItem', position: 2, name: 'Guides', item: abs('/guides') },
+      { '@type': 'ListItem', position: 3, name: 'Emmener un enfant au théâtre', item: abs('/guides/emmener-un-enfant-au-theatre') },
+    ],
+  },
+];
+---
+<Base
+  title="Emmener un enfant au théâtre : à quel âge et quoi voir — La Claque"
+  description="À partir de quel âge, quels spectacles selon l'âge, comment préparer la sortie : le guide pour réussir la première fois d'un enfant au théâtre."
+  active="guides"
+  jsonld={jsonld}
+>
+  <article class="wrap-narrow guide">
+    <p class="breadcrumb"><a href={url('/')}>Accueil</a> › <a href={url('/guides')}>Guides</a> › Emmener un enfant au théâtre</p>
+    <div class="guide-head">
+      <p class="kicker">En famille</p>
+      <h1>Emmener un enfant au théâtre : à quel âge et quoi voir</h1>
+      <p class="stand">Le théâtre se découvre très tôt, à condition de choisir le bon spectacle au bon âge. Voici comment offrir à un enfant une première fois réussie, celle qui donne envie d'y revenir.</p>
+    </div>
+
+    <div class="prose">
+      <p>
+        Il n'y a pas d'âge pour entrer dans une salle : il existe des spectacles pensés pour chaque étape, du tout-petit émerveillé par une lumière au préado captivé par un récit. Le secret tient en un mot : <strong>l'adéquation</strong>. Un spectacle trop long ou trop complexe rebute ; un spectacle bien choisi émerveille pour longtemps.
+      </p>
+
+      <h2>Quel spectacle à quel âge ?</h2>
+      <div class="gtable-wrap">
+        <table class="gtable">
+          <caption>Repères par tranche d'âge (à ajuster à chaque enfant)</caption>
+          <thead>
+            <tr><th>Âge</th><th>Ce qui fonctionne</th></tr>
+          </thead>
+          <tbody>
+            {ages.map((x) => (
+              <tr><th>{x.a}</th><td>{x.d}</td></tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <p>
+        Ces repères sont indicatifs : chaque enfant a son rythme. La règle la plus fiable reste <strong>l'âge minimum recommandé par la compagnie</strong>, presque toujours indiqué sur l'affiche et la billetterie. Un « à partir de 6 ans » n'est pas un détail : il traduit une durée et une exigence d'attention réelles.
+      </p>
+
+      <h2>Préparer la sortie</h2>
+      <p>
+        Racontez à l'enfant, en une phrase, ce qu'il va voir, et expliquez les règles du jeu : la salle s'éteint, on reste assis, on écoute, on applaudit à la fin. Ce sont d'ailleurs les mêmes usages que pour les grands, résumés dans notre guide du <a href={url('/guides/etiquette-au-theatre')}>savoir-vivre au théâtre</a>. Arrivez en avance pour trouver votre place sans stress, passez aux toilettes avant le début, et évitez les séances qui tombent en pleine sieste.
+      </p>
+
+      <h2>Et si ça ne se passe pas comme prévu ?</h2>
+      <p>
+        Un enfant qui s'agite, c'est normal, surtout la première fois. S'il est petit et vraiment gêné, on sort discrètement quelques minutes, par égard pour le plateau et la salle. L'important n'est pas que tout soit parfait, mais que le souvenir soit bon : c'est ce qui donnera envie de revenir. Le théâtre, comme on le répète à La Claque, ça se <a href={url('/a-propos')}>partage sans bouder son plaisir</a>.
+      </p>
+
+      <h2>Questions fréquentes</h2>
+      <div class="faq">
+        {faqs.map((f) => (
+          <details>
+            <summary>{f.q}</summary>
+            <p>{f.r}</p>
+          </details>
+        ))}
+      </div>
+    </div>
+
+    <div class="related">
+      <h2>À lire aussi</h2>
+      <a href={url('/guides/etiquette-au-theatre')}>Le savoir-vivre au théâtre</a>
+      <a href={url('/guides/choisir-sa-place-au-theatre')}>Bien choisir sa place</a>
+      <a href={url('/guides/genres-du-theatre')}>Les genres du théâtre</a>
+    </div>
+  </article>
+</Base>

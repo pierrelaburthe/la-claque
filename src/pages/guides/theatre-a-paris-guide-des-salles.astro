@@ -1,0 +1,142 @@
+---
+import Base from '../../layouts/Base.astro';
+import { url } from '../../lib/url';
+
+const abs = (p: string) => new URL(url(p), Astro.site).href;
+
+const quartiers = [
+  { t: 'Les Grands Boulevards (2ᵉ, 9ᵉ, 10ᵉ)', d: "Le cœur historique du théâtre privé parisien. Une concentration de salles à l'italienne où l'on joue surtout la comédie et le boulevard, du vaudeville aux créations à succès. C'est ici, au Théâtre Saint-Georges, qu'on ira voir The Loop." },
+  { t: 'Montmartre et Pigalle (18ᵉ)', d: "Un quartier de théâtres à taille humaine, entre tradition et jeune scène, où l'on découvre autant des reprises que des créations d'humoristes et de jeunes compagnies." },
+  { t: 'Rive gauche et Montparnasse (6ᵉ, 14ᵉ)', d: "Autour de la rue de la Gaîté, un pôle historique de salles et de café-théâtres. On y trouve aussi bien du répertoire que des seuls-en-scène et de la comédie." },
+  { t: 'Le Marais, Bastille et l’est (3ᵉ, 4ᵉ, 11ᵉ)', d: "Le terrain des petites salles, des café-théâtres et de la scène indépendante, où éclosent beaucoup de nouveaux talents. C'est près de là, au Petit Saint-Martin, qu'est repris Courir à la catastrophe." },
+];
+
+const nationaux = [
+  { t: 'La Comédie-Française', d: "La « maison de Molière », salle Richelieu au Palais-Royal (1ᵉʳ). La plus ancienne troupe permanente au monde, gardienne du grand répertoire." },
+  { t: "L'Odéon-Théâtre de l'Europe", d: "Théâtre national tourné vers la création et les grands textes européens, dans le 6ᵉ arrondissement." },
+  { t: 'Le Théâtre national de la Colline', d: "Dédié aux écritures contemporaines, dans le 20ᵉ. La maison des auteurs vivants." },
+  { t: 'Chaillot – Théâtre national de la Danse', d: "Au Trocadéro (16ᵉ), théâtre national consacré à la danse et au spectacle chorégraphique." },
+];
+
+const faqs = [
+  {
+    q: "Quels sont les théâtres nationaux à Paris ?",
+    r: "Paris compte plusieurs théâtres nationaux : la Comédie-Française (salle Richelieu, au Palais-Royal), l'Odéon-Théâtre de l'Europe, le Théâtre national de la Colline, dédié aux écritures contemporaines, et Chaillot, Théâtre national de la Danse. Ce sont des institutions financées par l'État, à distinguer des nombreux théâtres privés de la capitale.",
+  },
+  {
+    q: "Quelle est la différence entre un théâtre public et un théâtre privé à Paris ?",
+    r: "Un théâtre public (national ou municipal) est largement financé par des fonds publics et porte une mission artistique : création, répertoire, écritures contemporaines. Un théâtre privé vit principalement de sa billetterie et programme souvent des spectacles pensés pour un large public, comédies et pièces de boulevard en tête. Les Grands Boulevards concentrent l'essentiel des théâtres privés.",
+  },
+  {
+    q: "Où voir une comédie à Paris ?",
+    r: "Le quartier des Grands Boulevards, entre les 2ᵉ, 9ᵉ et 10ᵉ arrondissements, est le fief historique de la comédie et du théâtre de boulevard. On trouve aussi beaucoup de café-théâtres et de seuls-en-scène comiques rive gauche, autour de Montparnasse, et dans l'est parisien.",
+  },
+];
+
+const jsonld = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: 'Le théâtre à Paris : guide des quartiers et des salles',
+    description: "Grands Boulevards, rive gauche, théâtres nationaux et privés : comment s'orienter dans la géographie théâtrale de Paris, toute l'année.",
+    author: { '@type': 'Organization', name: 'La Claque' },
+    publisher: { '@type': 'Organization', name: 'La Claque' },
+    mainEntityOfPage: abs('/guides/theatre-a-paris-guide-des-salles'),
+    inLanguage: 'fr',
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqs.map((f) => ({
+      '@type': 'Question',
+      name: f.q,
+      acceptedAnswer: { '@type': 'Answer', text: f.r },
+    })),
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Accueil', item: abs('/') },
+      { '@type': 'ListItem', position: 2, name: 'Guides', item: abs('/guides') },
+      { '@type': 'ListItem', position: 3, name: 'Le théâtre à Paris', item: abs('/guides/theatre-a-paris-guide-des-salles') },
+    ],
+  },
+];
+---
+<Base
+  title="Le théâtre à Paris : guide des quartiers et des salles — La Claque"
+  description="Grands Boulevards, rive gauche, théâtres nationaux et privés : comment s'orienter dans la géographie théâtrale de Paris et choisir sa salle, toute l'année."
+  active="guides"
+  jsonld={jsonld}
+>
+  <article class="wrap-narrow guide">
+    <p class="breadcrumb"><a href={url('/')}>Accueil</a> › <a href={url('/guides')}>Guides</a> › Le théâtre à Paris</p>
+    <div class="guide-head">
+      <p class="kicker">À Paris</p>
+      <h1>Le théâtre à Paris : guide des quartiers et des salles</h1>
+      <p class="stand">Paris compte des dizaines de salles, des grandes institutions aux petits café-théâtres. Voici comment lire cette géographie pour savoir où chercher selon l'envie du soir, une comédie, une création ou un classique.</p>
+    </div>
+
+    <div class="prose">
+      <p>
+        À Avignon, tout se joue en trois semaines de juillet. À Paris, le théâtre vit <strong>toute l'année</strong>, et la ville s'organise en quartiers aux personnalités bien tranchées. Connaître cette carte, c'est déjà orienter sa soirée. C'est aussi le terrain que La Claque va arpenter au fil des saisons, au-delà du festival.
+      </p>
+
+      <h2>Les quartiers de théâtre</h2>
+      <div class="gtable-wrap">
+        <table class="gtable">
+          <caption>Où chercher, quartier par quartier</caption>
+          <thead>
+            <tr><th>Quartier</th><th>Ce qu'on y trouve</th></tr>
+          </thead>
+          <tbody>
+            {quartiers.map((q) => (
+              <tr><th>{q.t}</th><td>{q.d}</td></tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      <h2>Public ou privé : deux mondes</h2>
+      <p>
+        La grande ligne de partage du théâtre parisien oppose le <strong>théâtre public</strong>, financé par l'État ou la Ville et porteur d'une mission artistique, au <strong>théâtre privé</strong>, qui vit surtout de sa billetterie. Comme aux <a href={url('/guides/les-molieres-recompenses-theatre')}>Molières</a>, cette distinction structure tout le paysage. Les grandes institutions publiques sont les <strong>théâtres nationaux</strong> :
+      </p>
+      <div class="gtable-wrap">
+        <table class="gtable">
+          <caption>Les grandes institutions publiques</caption>
+          <thead>
+            <tr><th>Salle</th><th>Vocation</th></tr>
+          </thead>
+          <tbody>
+            {nationaux.map((n) => (
+              <tr><th>{n.t}</th><td>{n.d}</td></tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      <h2>Par où commencer</h2>
+      <p>
+        Pour une soirée légère et sûre, mettez le cap sur les <strong>Grands Boulevards</strong> et leurs comédies. Pour une création ou un texte contemporain, tournez-vous vers le public, de l'Odéon à la Colline. Pour dénicher un talent avant tout le monde, poussez la porte d'un petit théâtre de l'est parisien, dans l'esprit du <a href={url('/guides/off-avignon-mode-demploi')}>OFF d'Avignon</a>. Et pour savoir ce qu'on est allés voir, gardez un œil sur <a href={url('/la-redaction-va-voir')}>notre carnet de repérage</a>.
+      </p>
+
+      <h2>Questions fréquentes</h2>
+      <div class="faq">
+        {faqs.map((f) => (
+          <details>
+            <summary>{f.q}</summary>
+            <p>{f.r}</p>
+          </details>
+        ))}
+      </div>
+    </div>
+
+    <div class="related">
+      <h2>À lire aussi</h2>
+      <a href={url('/la-redaction-va-voir')}>La rédaction va voir</a>
+      <a href={url('/guides/choisir-sa-place-au-theatre')}>Bien choisir sa place</a>
+      <a href={url('/guides/genres-du-theatre')}>Les genres du théâtre</a>
+    </div>
+  </article>
+</Base>

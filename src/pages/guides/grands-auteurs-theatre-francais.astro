@@ -1,0 +1,128 @@
+---
+import Base from '../../layouts/Base.astro';
+import { url } from '../../lib/url';
+
+const abs = (p: string) => new URL(url(p), Astro.site).href;
+
+const auteurs = [
+  { n: 'Molière', v: '1622-1673', d: "Comédien et dramaturge, figure tutélaire de la comédie française. Ses comédies de mœurs et de caractère (Le Tartuffe, Le Misanthrope, L'Avare, Le Bourgeois gentilhomme) sont les plus jouées du répertoire. La troupe de la Comédie-Française est surnommée « la maison de Molière »." },
+  { n: 'Pierre Corneille', v: '1606-1684', d: "Maître de la tragédie et de la tragi-comédie du Grand Siècle. Le Cid, Horace ou Cinna mettent en scène le conflit entre le devoir et la passion, dans une langue d'une grande noblesse." },
+  { n: 'Jean Racine', v: '1639-1699', d: "L'autre sommet de la tragédie classique, à la langue plus épurée et plus musicale que Corneille. Andromaque, Phèdre et Britannicus peignent des passions dévorantes qui mènent au désastre." },
+  { n: 'Marivaux', v: '1688-1763', d: "Le grand auteur de la comédie sentimentale du XVIIIᵉ siècle. Le Jeu de l'amour et du hasard ou Les Fausses Confidences ont donné le mot « marivaudage » : ce badinage subtil où l'on se cache ce que l'on ressent." },
+  { n: 'Beaumarchais', v: '1732-1799', d: "Auteur du diptyque Le Barbier de Séville et Le Mariage de Figaro, comédies brillantes et frondeuses où le valet Figaro tient tête aux puissants, à la veille de la Révolution." },
+  { n: 'Alfred de Musset', v: '1810-1857', d: "Figure du drame romantique, tout en mélancolie et en fantaisie. On joue encore beaucoup Lorenzaccio, On ne badine pas avec l'amour et Les Caprices de Marianne." },
+  { n: 'Victor Hugo', v: '1802-1885', d: "Chef de file du drame romantique, qui fait voler en éclats les règles classiques. La bataille d'Hernani, en 1830, est restée célèbre. Ruy Blas est son drame le plus joué." },
+  { n: 'Georges Feydeau', v: '1862-1921', d: "Le roi du vaudeville. Ses mécaniques de quiproquos et de portes qui claquent (Le Dindon, La Puce à l'oreille, Un fil à la patte) sont un sommet de précision comique, toujours à l'affiche." },
+  { n: 'Edmond Rostand', v: '1868-1918', d: "Auteur de Cyrano de Bergerac, l'une des pièces françaises les plus jouées et aimées au monde : panache, tirades en vers et cœur brisé." },
+  { n: 'Jean Anouilh', v: '1910-1987', d: "Dramaturge majeur du XXᵉ siècle, dont l'Antigone, créée sous l'Occupation, reste un classique des scènes et des salles de classe." },
+];
+
+const faqs = [
+  {
+    q: "Quels sont les auteurs de théâtre français les plus joués ?",
+    r: "Molière domine très largement le répertoire, notamment à la Comédie-Française, surnommée « la maison de Molière ». Suivent les grands tragiques Corneille et Racine, puis Marivaux et Beaumarchais pour la comédie du XVIIIᵉ siècle, Victor Hugo et Musset pour le drame romantique, Feydeau pour le vaudeville, et Edmond Rostand avec l'indémodable Cyrano de Bergerac.",
+  },
+  {
+    q: "Quelle est la différence entre Corneille et Racine ?",
+    r: "Tous deux sont des maîtres de la tragédie classique du XVIIᵉ siècle, mais leurs univers diffèrent. Corneille met en scène des héros partagés entre le devoir et la passion, dans une langue noble et héroïque. Racine, plus tardif, peint des passions fatales et dévorantes dans une langue plus épurée et musicale. On résume souvent : Corneille peint les hommes tels qu'ils devraient être, Racine tels qu'ils sont.",
+  },
+  {
+    q: "Pourquoi la Comédie-Française est-elle appelée « la maison de Molière » ?",
+    r: "Parce que la troupe est l'héritière directe de celle de Molière : après sa mort en 1673, ses comédiens fusionnent avec d'autres troupes, ce qui aboutit en 1680 à la création de la Comédie-Française. Molière y reste l'auteur le plus joué, d'où le surnom.",
+  },
+];
+
+const jsonld = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: 'Les grands auteurs du théâtre français',
+    description: "Molière, Corneille, Racine, Marivaux, Hugo, Feydeau : dix dramaturges qui ont façonné le théâtre français et ce qu'on joue encore d'eux.",
+    author: { '@type': 'Organization', name: 'La Claque' },
+    publisher: { '@type': 'Organization', name: 'La Claque' },
+    mainEntityOfPage: abs('/guides/grands-auteurs-theatre-francais'),
+    inLanguage: 'fr',
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqs.map((f) => ({
+      '@type': 'Question',
+      name: f.q,
+      acceptedAnswer: { '@type': 'Answer', text: f.r },
+    })),
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Accueil', item: abs('/') },
+      { '@type': 'ListItem', position: 2, name: 'Guides', item: abs('/guides') },
+      { '@type': 'ListItem', position: 3, name: 'Les grands auteurs du théâtre français', item: abs('/guides/grands-auteurs-theatre-francais') },
+    ],
+  },
+];
+---
+<Base
+  title="Les grands auteurs du théâtre français — La Claque"
+  description="Molière, Corneille, Racine, Marivaux, Beaumarchais, Hugo, Feydeau, Rostand : dix dramaturges qui ont façonné le théâtre français, et ce qu'on joue encore d'eux."
+  active="guides"
+  jsonld={jsonld}
+>
+  <article class="wrap-narrow guide">
+    <p class="breadcrumb"><a href={url('/')}>Accueil</a> › <a href={url('/guides')}>Guides</a> › Les grands auteurs</p>
+    <div class="guide-head">
+      <p class="kicker">Comprendre le théâtre</p>
+      <h1>Les grands auteurs du théâtre français</h1>
+      <p class="stand">Derrière les affiches d'aujourd'hui se cachent souvent des textes vieux de trois ou quatre siècles, toujours vivants. Voici dix dramaturges qui ont façonné le théâtre français, et ce qu'on continue de jouer d'eux, à Avignon comme à Paris.</p>
+    </div>
+
+    <div class="prose">
+      <p>
+        Le répertoire français repose sur une poignée de géants. Certains ont inventé des formes, d'autres ont fixé une langue, tous ont laissé des pièces qu'on remonte sans cesse. Les connaître, même de loin, aide à mieux savourer une reprise ou une relecture contemporaine, comme on en croise beaucoup dans <a href={url('/critiques')}>nos critiques</a>.
+      </p>
+
+      <h2>Dix dramaturges, du Grand Siècle au XXᵉ</h2>
+      <div class="gtable-wrap">
+        <table class="gtable">
+          <caption>Les grands auteurs du théâtre français et leurs œuvres majeures</caption>
+          <thead>
+            <tr><th>Auteur</th><th>Dates</th><th>Ce qu'on joue de lui</th></tr>
+          </thead>
+          <tbody>
+            {auteurs.map((a) => (
+              <tr><th>{a.n}</th><td>{a.v}</td><td>{a.d}</td></tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      <h2>Des classiques bien vivants</h2>
+      <p>
+        Ces auteurs ne dorment pas dans les manuels : ils remplissent les salles. Une saison ne se passe jamais sans un <strong>Molière</strong> revisité, un <strong>Feydeau</strong> endiablé ou un <strong>Cyrano</strong> de Rostand. Au <a href={url('/guides/festival-in-et-off-avignon')}>OFF d'Avignon</a>, on croise sans cesse des adaptations et des relectures modernes de ces textes, preuve que le classique reste un terrain de jeu et non un musée.
+      </p>
+
+      <h2>Comment les aborder</h2>
+      <p>
+        Nul besoin d'avoir tout lu pour apprécier une reprise. L'intérêt d'un classique aujourd'hui tient autant au texte qu'au regard qu'un metteur en scène pose dessus : transposition d'époque, distribution surprenante, parti pris radical. C'est souvent là que se joue la réussite, et c'est ce qu'on raconte dans nos critiques. Pour voir ce qui nous a marqués, filez au <a href={url('/palmares')}>palmarès</a>.
+      </p>
+
+      <h2>Questions fréquentes</h2>
+      <div class="faq">
+        {faqs.map((f) => (
+          <details>
+            <summary>{f.q}</summary>
+            <p>{f.r}</p>
+          </details>
+        ))}
+      </div>
+    </div>
+
+    <div class="related">
+      <h2>À lire aussi</h2>
+      <a href={url('/guides/genres-du-theatre')}>Les genres du théâtre</a>
+      <a href={url('/guides/les-molieres-recompenses-theatre')}>Les Molières</a>
+      <a href={url('/guides/lexique-du-theatre')}>Le lexique du théâtre</a>
+    </div>
+  </article>
+</Base>
