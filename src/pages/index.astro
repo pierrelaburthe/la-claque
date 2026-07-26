@@ -16,7 +16,6 @@ const featured = new Set([une, ...side].map((p) => p.slug));
 const chefs = PIECES.filter((p) => p.noteMoy >= 8 && !featured.has(p.slug)).sort((a, b) => b.noteMoy - a.noteMoy);
 const solos = PIECES.filter(estDecouverteSolo).sort((a, b) => b.noteMoy - a.noteMoy);
 
-const totalVues = PIECES.reduce((s, p) => s + nbVus(p), 0);
 const c = CRITICS[une.signataire];
 const ogImage = new URL(url(`/og/${une.slug}.png`), Astro.site).href;
 ---
@@ -24,7 +23,7 @@ const ogImage = new URL(url(`/og/${une.slug}.png`), Astro.site).href;
   <div class="frontline">
     <div class="inner">
       <span>Festival OFF d'Avignon 2026 · Dossier nº1</span>
-      <span><b>{PIECES.length} critiques</b> · une dizaine de plumes · {totalVues} paires d'yeux</span>
+      <span><b>{PIECES.length} critiques</b> · une dizaine de plumes</span>
     </div>
   </div>
 
