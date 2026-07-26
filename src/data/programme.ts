@@ -12,6 +12,18 @@ export interface Repere {
   contexte?: 'rentree' | 'avignon'; // défaut : avignon (repérages du OFF)
   note: string; // pourquoi c'est sur notre liste
   lien?: string; // billetterie / fiche, seulement si URL réelle
+  // Représentation confirmée (dates réelles, sourcées) → alimente le schéma
+  // TheaterEvent. À ne remplir QUE si les dates sont vérifiées.
+  event?: {
+    salle: string;
+    adresse: string; // n° + rue
+    codePostal: string;
+    ville: string;
+    debut: string; // ISO YYYY-MM-DD
+    fin: string; // ISO YYYY-MM-DD
+    dureeMin?: number;
+    auteur?: string; // interprète / metteur en scène
+  };
 }
 
 export const PROGRAMME: Repere[] = [
@@ -20,22 +32,43 @@ export const PROGRAMME: Repere[] = [
     slug: 'courir-a-la-catastrophe',
     titre: 'Courir à la catastrophe',
     genre: 'Seul en scène',
-    lieu: 'Théâtre La Flèche',
-    ville: 'Paris 11ᵉ',
-    periode: 'À la rentrée',
+    lieu: 'Théâtre du Petit Saint-Martin',
+    ville: 'Paris 10ᵉ',
+    periode: 'Du 29 septembre au 27 octobre 2026',
     contexte: 'rentree',
-    note: "Le seul-en-scène d'Antoine Heuillet : l'aveu d'un garçon anxieux et rêveur qui avance dans une vie chaotique, entre chutes, premiers amours et éclats de résilience. On y va à la rentrée.",
-    lien: 'https://www.billetreduc.com/spectacle/courir-a-la-catastrophe-398348',
+    note: "Le seul-en-scène d'Antoine Heuillet : l'aveu d'un garçon anxieux et rêveur qui avance dans une vie chaotique, entre chutes, premiers amours et éclats de résilience. Après un passage complet à La Flèche, il est repris au Petit Saint-Martin à la rentrée. On y va.",
+    lien: 'https://theatrelafleche.fr/la-saison/courir-a-la-catastrophe/',
+    event: {
+      salle: 'Théâtre du Petit Saint-Martin',
+      adresse: '17 rue René Boulanger',
+      codePostal: '75010',
+      ville: 'Paris',
+      debut: '2026-09-29',
+      fin: '2026-10-27',
+      dureeMin: 70,
+      auteur: 'Antoine Heuillet',
+    },
   },
   {
     slug: 'the-loop',
     titre: 'The Loop',
     genre: 'Comédie',
-    ville: 'Paris',
-    periode: 'À la rentrée',
+    lieu: 'Théâtre Saint-Georges',
+    ville: 'Paris 9ᵉ',
+    periode: "À l'affiche jusqu'au 29 août 2026",
     contexte: 'rentree',
-    note: "La comédie à boucle temporelle de Robin Goupil, Molière 2025 de la meilleure comédie : une enquête pour meurtre rejouée à l'infini, dix comédiens et un rythme démentiel. De retour à Paris, on ne la manquera pas.",
-    lien: 'https://www.billetreduc.com/spectacle/the-loop-391973',
+    note: "La comédie à boucle temporelle de Robin Goupil, Molière 2025 de la meilleure comédie : une enquête pour meurtre rejouée à l'infini, dix comédiens et un rythme démentiel. À Paris jusqu'à fin août au Saint-Georges, puis en tournée. On ne veut pas la manquer.",
+    lien: 'https://www.theatredesbeliersparisiens.com/spectacle/the-loop-tournee/',
+    event: {
+      salle: 'Théâtre Saint-Georges',
+      adresse: '51 rue Saint-Georges',
+      codePostal: '75009',
+      ville: 'Paris',
+      debut: '2026-07-28',
+      fin: '2026-08-29',
+      dureeMin: 80,
+      auteur: 'Robin Goupil',
+    },
   },
   // ---- Repérés au OFF d'Avignon 2026 ----
   {
