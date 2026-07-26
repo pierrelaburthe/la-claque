@@ -2,10 +2,13 @@
 import Base from '../../layouts/Base.astro';
 import PieceCard from '../../components/PieceCard.astro';
 import { PIECES } from '../../data/pieces';
-import { CATEGORIES, categorieFor } from '../../lib/categories';
+import { CATEGORIES, categorieFor, CATEGORIE_SLUG } from '../../lib/categories';
+import { url } from '../../lib/url';
 
 const pieces = [...PIECES].sort((a, b) => b.noteMoy - a.noteMoy);
 const present = CATEGORIES.filter((cat) => pieces.some((p) => categorieFor(p.style) === cat));
+// Genres qui ont leur propre page hub (≥ 3 critiques).
+const genresHub = CATEGORIES.filter((cat) => pieces.filter((p) => categorieFor(p.style) === cat).length >= 3);
 ---
 <Base title="Critiques de théâtre : tout le OFF d'Avignon 2026 noté et raconté | La Claque" active="critiques" description={`Toutes nos critiques et avis de théâtre : ${pieces.length} spectacles du OFF d'Avignon 2026 vus et notés par la bande. Cherchez par titre, lieu, plume ou genre.`}>
   <div class="wrap">
@@ -32,6 +35,18 @@ const present = CATEGORIES.filter((cat) => pieces.some((p) => categorieFor(p.sty
 
     <div class="cards" id="grid">
       {pieces.map((p) => <PieceCard piece={p} />)}
+    </div>
+
+    <div class="rubric" style="margin-top:46px">
+      <h2>Parcourir par genre</h2>
+      <span class="line"></span>
+      <span class="note">Nos pages dédiées</span>
+    </div>
+    <p class="rubric-intro">Envie d'un genre en particulier ? Retrouvez toutes nos critiques regroupées par famille, de la comédie au seul-en-scène.</p>
+    <div class="genre-links">
+      {genresHub.map((cat) => (
+        <a href={url(`/critiques/genre/${CATEGORIE_SLUG[cat]}`)}>{cat}</a>
+      ))}
     </div>
   </div>
 </Base>
@@ -114,4 +129,11 @@ const present = CATEGORIES.filter((cat) => pieces.some((p) => categorieFor(p.sty
   .searchcount { font-family: var(--sans); font-size: 0.8rem; color: var(--ink-3); margin: 0 0 16px; min-height: 1em; }
   .noresult { font-family: var(--serif); font-size: 1.1rem; color: var(--ink-2); margin: 20px 0; }
   .noresult button { font-family: var(--sans); font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; cursor: pointer; background: var(--red); color: #fff; border: 0; padding: 8px 14px; border-radius: 999px; margin-left: 8px; }
+  .genre-links { display: flex; flex-wrap: wrap; gap: 10px; margin: 6px 0 40px; }
+  .genre-links a {
+    font-family: var(--sans); font-size: 0.78rem; font-weight: 700; letter-spacing: 0.03em;
+    padding: 9px 16px; border-radius: 999px; text-decoration: none;
+    background: var(--card); color: var(--ink-2); border: 1px solid var(--rule-2); transition: all 0.12s ease;
+  }
+  .genre-links a:hover { border-color: var(--ink-3); color: var(--ink); }
 </style>

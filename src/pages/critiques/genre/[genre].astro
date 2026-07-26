@@ -1,0 +1,114 @@
+---
+import Base from '../../../layouts/Base.astro';
+import PieceCard from '../../../components/PieceCard.astro';
+import { PIECES } from '../../../data/pieces';
+import { CATEGORIES, categorieFor, CATEGORIE_SLUG, CATEGORIE_META } from '../../../lib/categories';
+import { consensusScore } from '../../../lib/rating';
+import { url } from '../../../lib/url';
+
+const MIN_PIECES = 3; // en dessous, pas de page hub (contenu trop maigre)
+
+export function getStaticPaths() {
+  const MIN = 3; // getStaticPaths tourne dans un scope isolé : seuil redéclaré ici
+  return CATEGORIES.map((cat) => ({
+    cat,
+    pieces: PIECES.filter((p) => categorieFor(p.style) === cat).sort(
+      (a, b) => consensusScore(b) - consensusScore(a)
+    ),
+  }))
+    .filter(({ pieces }) => pieces.length >= MIN)
+    .map(({ cat, pieces }) => ({
+      params: { genre: CATEGORIE_SLUG[cat] },
+      props: { cat, pieces },
+    }));
+}
+
+const { cat, pieces } = Astro.props;
+const meta = CATEGORIE_META[cat];
+const abs = (p: string) => new URL(url(p), Astro.site).href;
+
+// Les autres genres qui ont leur propre page (pour le maillage).
+const autresGenres = CATEGORIES.filter(
+  (c) => c !== cat && PIECES.filter((p) => categorieFor(p.style) === c).length >= MIN_PIECES
+);
+
+const jsonld = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'CollectionPage',
+    name: meta.h1,
+    url: abs(`/critiques/genre/${CATEGORIE_SLUG[cat]}`),
+    description: meta.desc,
+    inLanguage: 'fr',
+    isPartOf: { '@type': 'WebSite', name: 'La Claque', url: abs('/') },
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'ItemList',
+    name: meta.h1,
+    itemListElement: pieces.map((p, i) => ({
+      '@type': 'ListItem',
+      position: i + 1,
+      url: abs(`/critiques/${p.slug}`),
+      name: p.titre,
+    })),
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Accueil', item: abs('/') },
+      { '@type': 'ListItem', position: 2, name: 'Critiques', item: abs('/critiques') },
+      { '@type': 'ListItem', position: 3, name: cat, item: abs(`/critiques/genre/${CATEGORIE_SLUG[cat]}`) },
+    ],
+  },
+];
+---
+<Base title={meta.titre} description={meta.desc} active="critiques" jsonld={jsonld}>
+  <div class="wrap-narrow">
+    <p class="breadcrumb"><a href={url('/')}>Accueil</a> › <a href={url('/critiques')}>Critiques</a> › {cat}</p>
+    <div class="guide-head">
+      <p class="kicker">{meta.kicker}</p>
+      <h1>{meta.h1}</h1>
+      <p class="stand">{meta.intro}</p>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <div class="rubric" style="margin-top:8px">
+      <h2>Nos critiques</h2>
+      <span class="line"></span>
+      <span class="note">{pieces.length} spectacle{pieces.length > 1 ? 's' : ''}</span>
+    </div>
+    <div class="cards">
+      {pieces.map((p) => <PieceCard piece={p} />)}
+    </div>
+
+    <div class="rubric" style="margin-top:44px">
+      <h2>Explorer d'autres genres</h2>
+      <span class="line"></span>
+    </div>
+    <div class="genre-links">
+      {autresGenres.map((c) => (
+        <a href={url(`/critiques/genre/${CATEGORIE_SLUG[c]}`)}>{c}</a>
+      ))}
+      <a href={url('/critiques')} class="all">Toutes les critiques</a>
+    </div>
+
+    <div class="center" style="margin:40px 0 60px; display:flex; gap:12px; justify-content:center; flex-wrap:wrap;">
+      <a class="btn" href={url('/palmares')}>Le palmarès complet</a>
+      <a class="btn btn-ghost" href={url('/critiques-de-theatre')}>Critiques de théâtre</a>
+    </div>
+  </div>
+</Base>
+
+<style>
+  .genre-links { display: flex; flex-wrap: wrap; gap: 10px; margin: 6px 0 8px; }
+  .genre-links a {
+    font-family: var(--sans); font-size: 0.78rem; font-weight: 700; letter-spacing: 0.03em;
+    padding: 9px 16px; border-radius: 999px; text-decoration: none;
+    background: var(--card); color: var(--ink-2); border: 1px solid var(--rule-2); transition: all 0.12s ease;
+  }
+  .genre-links a:hover { border-color: var(--ink-3); color: var(--ink); }
+  .genre-links a.all { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+</style>
