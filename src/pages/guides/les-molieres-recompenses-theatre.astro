@@ -1,0 +1,114 @@
+---
+import Base from '../../layouts/Base.astro';
+import { url } from '../../lib/url';
+
+const abs = (p: string) => new URL(url(p), Astro.site).href;
+
+const faqs = [
+  {
+    q: "Qu'est-ce que les Molières ?",
+    r: "Les Molières, ou la Nuit des Molières, sont la grande cérémonie annuelle de récompenses du théâtre français. Créés en 1987, ils distinguent chaque année les meilleurs artistes et productions de la saison, aussi bien dans le théâtre public que dans le théâtre privé. C'est la plus importante remise de prix du théâtre en France, l'équivalent des César pour le cinéma.",
+  },
+  {
+    q: "Depuis quand les Molières existent-ils ?",
+    r: "La toute première cérémonie s'est tenue le 23 mai 1987 au Théâtre du Châtelet, à Paris, et fut retransmise à la télévision. L'association « Les Molières » a été fondée la même année par des directeurs et des figures du théâtre public et privé, pour saluer chaque saison le travail de la profession.",
+  },
+  {
+    q: "Pourquoi la récompense s'appelle-t-elle un « Molière » ?",
+    r: "Le nom rend hommage à Molière, comédien et dramaturge français du XVIIᵉ siècle, figure tutélaire du théâtre de langue française. Recevoir un Molière, c'est donc être placé, symboliquement, sous le patronage du plus célèbre homme de théâtre français.",
+  },
+  {
+    q: "Combien de Molières sont remis chaque année ?",
+    r: "La cérémonie remet en général entre vingt et une trentaine de trophées, répartis en de nombreuses catégories : meilleur spectacle, comédien et comédienne, mise en scène, auteur, révélation, ou encore humour. La plupart des catégories distinguent séparément le théâtre public et le théâtre privé.",
+  },
+];
+
+const jsonld = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: 'Les Molières : le guide des récompenses du théâtre',
+    description: "Histoire, catégories et prestige de la Nuit des Molières, la grande cérémonie du théâtre français depuis 1987.",
+    author: { '@type': 'Organization', name: 'La Claque' },
+    publisher: { '@type': 'Organization', name: 'La Claque' },
+    mainEntityOfPage: abs('/guides/les-molieres-recompenses-theatre'),
+    inLanguage: 'fr',
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqs.map((f) => ({
+      '@type': 'Question',
+      name: f.q,
+      acceptedAnswer: { '@type': 'Answer', text: f.r },
+    })),
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Accueil', item: abs('/') },
+      { '@type': 'ListItem', position: 2, name: 'Guides', item: abs('/guides') },
+      { '@type': 'ListItem', position: 3, name: 'Les Molières', item: abs('/guides/les-molieres-recompenses-theatre') },
+    ],
+  },
+];
+---
+<Base
+  title="Les Molières : le guide des récompenses du théâtre — La Claque"
+  description="La Nuit des Molières, grande cérémonie du théâtre français depuis 1987 : son histoire, ses catégories, son prestige, et à quoi sert vraiment un Molière."
+  active="guides"
+  jsonld={jsonld}
+>
+  <article class="wrap-narrow guide">
+    <p class="breadcrumb"><a href={url('/')}>Accueil</a> › <a href={url('/guides')}>Guides</a> › Les Molières</p>
+    <div class="guide-head">
+      <p class="kicker">Récompenses</p>
+      <h1>Les Molières : le guide des récompenses du théâtre</h1>
+      <p class="stand">Sur une affiche, la mention « Molière 2025 » agit comme un label de qualité. Mais que récompense au juste cette cérémonie, depuis quand existe-t-elle, et que vaut vraiment un Molière ? Petit tour d'horizon.</p>
+    </div>
+
+    <div class="prose">
+      <p>
+        Quand on voit « <strong>Molière de la meilleure comédie</strong> » ou « Molière du comédien » placardé au-dessus d'un titre, c'est que le spectacle a été distingué par la <strong>Nuit des Molières</strong>. C'est la plus grande cérémonie de récompenses du théâtre en France, l'équivalent des César pour le cinéma ou des Victoires pour la musique.
+      </p>
+
+      <h2>Une cérémonie née en 1987</h2>
+      <p>
+        La toute première Nuit des Molières s'est tenue le <strong>23 mai 1987 au Théâtre du Châtelet</strong>, à Paris, et fut retransmise à la télévision. Elle est née de la volonté de directeurs et de figures du théâtre, du public comme du privé, de doter la profession d'un grand rendez-vous annuel, à l'image de ce qui existait déjà pour le cinéma. Depuis, la cérémonie a lieu chaque année et récompense la saison écoulée.
+      </p>
+
+      <h2>Un hommage à Molière</h2>
+      <p>
+        Le nom du prix rend hommage à <strong>Molière</strong>, comédien et dramaturge du XVIIᵉ siècle, figure tutélaire du théâtre de langue française, dont l'ombre plane aussi sur la <a href={url('/critiques')}>scène d'aujourd'hui</a>. Recevoir un Molière, c'est donc être placé, symboliquement, sous le patronage du plus célèbre homme de théâtre français.
+      </p>
+
+      <h2>Que récompensent les Molières ?</h2>
+      <p>
+        La cérémonie remet chaque année une vingtaine à une trentaine de trophées, répartis en de nombreuses catégories : <strong>meilleur spectacle, comédien et comédienne, mise en scène, auteur, révélation, humour</strong>, et bien d'autres. Particularité française : la plupart des catégories <strong>distinguent séparément le théâtre public et le théâtre privé</strong>, deux mondes aux économies très différentes.
+      </p>
+
+      <h2>Un Molière, ça change quoi ?</h2>
+      <p>
+        Beaucoup. Pour un spectacle, un Molière est un formidable coup de projecteur : il prolonge souvent l'exploitation, remplit les salles et facilite les tournées. Pour un artiste, c'est une reconnaissance de toute la profession. C'est pourquoi on retrouve la mention sur les affiches longtemps après la cérémonie. Sur notre <a href={url('/la-redaction-va-voir')}>carnet de repérage</a>, un spectacle primé attire forcément notre attention, mais on garde notre œil critique : un prix donne envie, il ne fait pas la critique à notre place.
+      </p>
+
+      <h2>Questions fréquentes</h2>
+      <div class="faq">
+        {faqs.map((f) => (
+          <details>
+            <summary>{f.q}</summary>
+            <p>{f.r}</p>
+          </details>
+        ))}
+      </div>
+    </div>
+
+    <div class="related">
+      <h2>À lire aussi</h2>
+      <a href={url('/guides/genres-du-theatre')}>Les genres du théâtre</a>
+      <a href={url('/guides/festival-in-et-off-avignon')}>IN et OFF d'Avignon : quelle différence ?</a>
+      <a href={url('/palmares')}>Notre palmarès</a>
+    </div>
+  </article>
+</Base>

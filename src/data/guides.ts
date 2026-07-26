@@ -48,6 +48,34 @@ export const GUIDES: Guide[] = [
     desc: "Côté cour, côté jardin, la générale, la servante : le vocabulaire des plateaux, expliqué simplement.",
     section: 'spectateur',
   },
+  {
+    slug: 'genres-du-theatre',
+    k: 'Comprendre le théâtre',
+    titre: 'Les genres du théâtre expliqués',
+    desc: "Tragédie, comédie, drame, vaudeville, seul-en-scène, café-théâtre : reconnaître les grandes familles du spectacle vivant.",
+    section: 'spectateur',
+  },
+  {
+    slug: 'choisir-sa-place-au-theatre',
+    k: 'Guide pratique',
+    titre: 'Bien choisir sa place au théâtre',
+    desc: "Orchestre, corbeille, balcon, poulailler : où s'asseoir selon la salle, le spectacle et son budget, sans mauvaise surprise.",
+    section: 'spectateur',
+  },
+  {
+    slug: 'etiquette-au-theatre',
+    k: 'Savoir-vivre',
+    titre: 'Aller au théâtre : le guide du savoir-vivre',
+    desc: "Quand applaudir, comment s'habiller, que faire en cas de retard : les usages de la salle, sans snobisme.",
+    section: 'spectateur',
+  },
+  {
+    slug: 'les-molieres-recompenses-theatre',
+    k: 'Récompenses',
+    titre: 'Les Molières : le guide des récompenses du théâtre',
+    desc: "La grande cérémonie du théâtre français depuis 1987 : son histoire, ses catégories, et à quoi sert un Molière.",
+    section: 'spectateur',
+  },
   // ---- Côté métier ----
   {
     slug: 'intermittence-spectacle',

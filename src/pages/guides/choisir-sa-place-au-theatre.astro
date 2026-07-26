@@ -1,0 +1,132 @@
+---
+import Base from '../../layouts/Base.astro';
+import { url } from '../../lib/url';
+
+const abs = (p: string) => new URL(url(p), Astro.site).href;
+
+const faqs = [
+  {
+    q: "Quelle est la meilleure place dans un théâtre ?",
+    r: "En règle générale, les meilleures places sont au centre de l'orchestre, à quelques rangs du plateau, ou au premier rang de la corbeille (le premier balcon). On y a une vue d'ensemble sans se tordre le cou, et un son direct. Mais la « meilleure » place dépend du spectacle : pour un seul-en-scène intime, on cherche la proximité ; pour un grand décor ou une chorégraphie, on prend de la hauteur et du recul.",
+  },
+  {
+    q: "Vaut-il mieux être près ou loin de la scène ?",
+    r: "Trop près, on voit le détail du jeu mais on perd la vue d'ensemble et on lève la tête. Trop loin, on gagne en vision globale mais on perd en présence et en émotion. Le bon compromis se situe souvent entre le cinquième et le dixième rang de l'orchestre, au centre. Dans les petites salles du OFF d'Avignon, la question ne se pose presque pas : on est toujours près du plateau.",
+  },
+  {
+    q: "Que veut dire « vue partielle » sur un billet ?",
+    r: "C'est une place, souvent moins chère, dont la vue sur la scène est en partie masquée : par un pilier, une balustrade, un angle trop fermé ou le surplomb d'un balcon. C'est acceptable pour un spectacle très parlé, moins pour un spectacle visuel. Le tarif réduit compense le désagrément, mais lisez bien la mention avant d'acheter.",
+  },
+  {
+    q: "Les places les moins chères valent-elles le coup ?",
+    r: "Souvent, oui. Le dernier balcon (le « poulailler » ou « paradis ») offre une vue plongeante d'ensemble à petit prix, idéale pour un grand spectacle et un budget serré. On y perd en détail et en proximité, mais l'expérience reste entière. Dans le OFF d'Avignon, la plupart des salles sont petites et à tarif unique : la question du placement disparaît presque.",
+  },
+];
+
+const zones = [
+  { t: "L'orchestre (le parterre)", d: "Le rez-de-chaussée, face au plateau. Les rangs du centre offrent le meilleur équilibre entre proximité et vue d'ensemble. Les tout premiers rangs plongent dans le jeu mais obligent à lever la tête." },
+  { t: 'La corbeille (le premier balcon)', d: "Le premier niveau en surplomb. Le premier rang de corbeille, au centre, est l'une des places les plus prisées : vue dégagée, léger recul, son direct." },
+  { t: 'Le balcon', d: "Le niveau au-dessus de la corbeille. On y gagne une belle vue plongeante sur la scénographie et les déplacements, on y perd un peu en présence et en détail du jeu." },
+  { t: 'Le poulailler (le paradis)', d: "Le dernier niveau, tout en haut. Les places les moins chères, avec une vue d'ensemble plongeante. Parfait pour un grand spectacle à petit budget, moins pour un spectacle tout en nuances." },
+  { t: 'Les loges', d: "Les petits salons latéraux, hérités des théâtres à l'italienne. Intimes et élégantes, mais souvent en vue partielle car placées sur les côtés." },
+];
+
+const jsonld = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: 'Bien choisir sa place au théâtre',
+    description: "Orchestre, corbeille, balcon, poulailler, loges : comprendre le plan d'une salle et choisir la bonne place selon le spectacle et son budget.",
+    author: { '@type': 'Organization', name: 'La Claque' },
+    publisher: { '@type': 'Organization', name: 'La Claque' },
+    mainEntityOfPage: abs('/guides/choisir-sa-place-au-theatre'),
+    inLanguage: 'fr',
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqs.map((f) => ({
+      '@type': 'Question',
+      name: f.q,
+      acceptedAnswer: { '@type': 'Answer', text: f.r },
+    })),
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Accueil', item: abs('/') },
+      { '@type': 'ListItem', position: 2, name: 'Guides', item: abs('/guides') },
+      { '@type': 'ListItem', position: 3, name: 'Choisir sa place', item: abs('/guides/choisir-sa-place-au-theatre') },
+    ],
+  },
+];
+---
+<Base
+  title="Bien choisir sa place au théâtre — La Claque"
+  description="Orchestre, corbeille, balcon, poulailler, loges : comprendre le plan d'une salle et choisir la bonne place selon le spectacle, la vue et son budget."
+  active="guides"
+  jsonld={jsonld}
+>
+  <article class="wrap-narrow guide">
+    <p class="breadcrumb"><a href={url('/')}>Accueil</a> › <a href={url('/guides')}>Guides</a> › Choisir sa place</p>
+    <div class="guide-head">
+      <p class="kicker">Guide pratique</p>
+      <h1>Bien choisir sa place au théâtre</h1>
+      <p class="stand">Au moment de réserver, un plan de salle et une liste de tarifs, et soudain le doute : orchestre ou balcon ? Près ou loin ? Voici comment lire une salle et choisir sans se tromper, selon le spectacle et son budget.</p>
+    </div>
+
+    <div class="prose">
+      <p>
+        Dans un théâtre à l'italienne, la salle se lit comme un livre : le <strong>rez-de-chaussée</strong> face à la scène, puis des niveaux qui montent en surplomb. Chaque zone a son nom, son prix et son point de vue. La bonne nouvelle : il n'y a pas de « mauvaise » place dans l'absolu, seulement des places qui conviennent plus ou moins à ce qu'on va voir.
+      </p>
+
+      <h2>Le plan d'une salle, niveau par niveau</h2>
+      <div class="gtable-wrap">
+        <table class="gtable">
+          <caption>Les zones d'un théâtre, de la scène au dernier balcon</caption>
+          <thead>
+            <tr><th>Zone</th><th>Ce qu'il faut savoir</th></tr>
+          </thead>
+          <tbody>
+            {zones.map((z) => (
+              <tr><th>{z.t}</th><td>{z.d}</td></tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      <h2>Adapter sa place au spectacle</h2>
+      <p>
+        Pour un <a href={url('/guides/genres-du-theatre')}>seul-en-scène</a> ou une pièce intime, très parlée, cherchez la <strong>proximité</strong> : l'orchestre, dans les premiers rangs du centre, pour ne rien perdre du jeu et des regards. Pour un grand spectacle à décor, une chorégraphie ou une mise en scène spectaculaire, prenez au contraire de la <strong>hauteur et du recul</strong> : le premier rang de corbeille ou le balcon offrent la plus belle vue d'ensemble.
+      </p>
+
+      <h2>La règle d'or : le centre, à mi-distance</h2>
+      <p>
+        Si vous hésitez, visez le <strong>centre de la salle, entre le cinquième et le dixième rang de l'orchestre</strong>, ou le premier rang de corbeille. C'est là que l'image de plateau est la plus juste et le son le plus direct. Méfiez-vous des mentions <strong>« vue partielle »</strong> : un pilier ou une balustrade peuvent gâcher un spectacle visuel, même si le tarif réduit est tentant.
+      </p>
+
+      <h2>Et à Avignon ?</h2>
+      <p>
+        Bonne nouvelle pour le <a href={url('/guides/off-avignon-mode-demploi')}>OFF d'Avignon</a> : la plupart des salles sont petites, en gradins, à tarif unique. Le placement se fait souvent à l'entrée, dans l'ordre d'arrivée. La règle devient donc simple : arriver un peu en avance, viser le centre, et se laisser porter. Pour choisir quoi voir, jetez plutôt un œil à <a href={url('/palmares')}>notre palmarès</a>.
+      </p>
+
+      <h2>Questions fréquentes</h2>
+      <div class="faq">
+        {faqs.map((f) => (
+          <details>
+            <summary>{f.q}</summary>
+            <p>{f.r}</p>
+          </details>
+        ))}
+      </div>
+    </div>
+
+    <div class="related">
+      <h2>À lire aussi</h2>
+      <a href={url('/guides/etiquette-au-theatre')}>Le savoir-vivre au théâtre</a>
+      <a href={url('/guides/lexique-du-theatre')}>Le lexique du théâtre</a>
+      <a href={url('/guides/salles-du-off-avignon')}>Les salles du OFF d'Avignon</a>
+    </div>
+  </article>
+</Base>

@@ -1,0 +1,142 @@
+---
+import Base from '../../layouts/Base.astro';
+import { url } from '../../lib/url';
+
+const abs = (p: string) => new URL(url(p), Astro.site).href;
+
+const faqs = [
+  {
+    q: "Quels sont les grands genres du théâtre ?",
+    r: "On distingue traditionnellement la tragédie et la comédie, héritées de l'Antiquité, puis le drame, né au XVIIIᵉ siècle, qui mêle les deux. À côté de ces genres historiques, la scène d'aujourd'hui fait cohabiter le vaudeville et le théâtre de boulevard, le seul-en-scène, le café-théâtre, le stand-up, le théâtre musical, la marionnette ou encore le théâtre d'objet.",
+  },
+  {
+    q: "Quelle est la différence entre une comédie et un vaudeville ?",
+    r: "La comédie est le grand genre du rire, qui va de Molière à la comédie contemporaine. Le vaudeville en est une forme précise, codifiée au XIXᵉ siècle par des auteurs comme Feydeau ou Labiche : une mécanique de quiproquos, de portes qui claquent et de rythme effréné, souvent bâtie autour d'un adultère et d'un secret à cacher.",
+  },
+  {
+    q: "Qu'est-ce qu'un seul-en-scène ?",
+    r: "C'est un spectacle porté par un seul interprète, aussi appelé solo ou monologue. Le comédien y incarne parfois plusieurs personnages ou raconte sa propre histoire. C'est une forme reine du OFF d'Avignon, parce qu'elle est légère à produire et à faire tourner, et qu'elle met le jeu au premier plan.",
+  },
+  {
+    q: "Le stand-up est-il du théâtre ?",
+    r: "Le stand-up appartient à la grande famille du spectacle vivant et se joue dans les mêmes salles que le théâtre. Il s'en distingue par sa forme : un humoriste, seul face au public, enchaîne des vannes écrites à la première personne, sans personnage ni quatrième mur. La frontière avec le seul-en-scène comique est parfois mince.",
+  },
+];
+
+const genres = [
+  { t: 'La tragédie', d: "Le genre noble hérité des Grecs, où des personnages souvent illustres sont entraînés vers une fin funeste par le destin, la passion ou la faute. Racine et Corneille en sont les maîtres français." },
+  { t: 'La comédie', d: "Le genre du rire et de la satire des mœurs, de l'Antiquité à aujourd'hui. Molière en reste la figure tutélaire, au point d'avoir donné son nom à la troupe de la Comédie-Française et aux Molières." },
+  { t: 'Le drame', d: "Né au XVIIIᵉ siècle, il refuse la séparation stricte entre tragédie et comédie pour peindre la vie dans toute sa complexité. Le drame romantique, avec Hugo, mêle le sublime et le grotesque." },
+  { t: 'Le vaudeville', d: "Une comédie d'intrigue au rythme mécanique, faite de quiproquos, de coïncidences et de portes qui claquent. Feydeau et Labiche en ont porté l'art au sommet au XIXᵉ siècle." },
+  { t: 'Le théâtre de boulevard', d: "Le théâtre de divertissement des grandes salles privées, souvent une comédie légère sur les couples et la bourgeoisie, pensée d'abord pour faire rire et remplir la salle." },
+  { t: 'Le seul-en-scène', d: "Un spectacle à un seul interprète, solo ou monologue. Récit intime, galerie de personnages ou confession : une forme souple et reine du OFF d'Avignon." },
+  { t: 'Le café-théâtre', d: "Une forme née dans les petites salles à l'ambiance conviviale, où l'on joue court et près du public. Un tremplin historique pour beaucoup d'humoristes et de comédiens." },
+  { t: 'Le stand-up', d: "Un humoriste seul face au public, qui enchaîne des vannes écrites à la première personne, sans personnage ni décor. Un genre venu des scènes anglo-saxonnes, aujourd'hui installé partout." },
+  { t: 'Le théâtre musical', d: "Tout ce qui marie le jeu et la musique live ou chantée : de la comédie musicale au spectacle où la partition porte le récit autant que le texte." },
+  { t: 'La marionnette et le théâtre d’objet', d: "Un théâtre où le personnage n'est pas un comédien mais une figure manipulée, marionnette ou objet du quotidien détourné. Une scène inventive, pour tous les âges." },
+];
+
+const jsonld = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: 'Les genres du théâtre expliqués',
+    description: "Tragédie, comédie, drame, vaudeville, seul-en-scène, café-théâtre, stand-up : reconnaître les grandes familles du spectacle vivant, avec des exemples.",
+    author: { '@type': 'Organization', name: 'La Claque' },
+    publisher: { '@type': 'Organization', name: 'La Claque' },
+    mainEntityOfPage: abs('/guides/genres-du-theatre'),
+    inLanguage: 'fr',
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqs.map((f) => ({
+      '@type': 'Question',
+      name: f.q,
+      acceptedAnswer: { '@type': 'Answer', text: f.r },
+    })),
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Accueil', item: abs('/') },
+      { '@type': 'ListItem', position: 2, name: 'Guides', item: abs('/guides') },
+      { '@type': 'ListItem', position: 3, name: 'Les genres du théâtre', item: abs('/guides/genres-du-theatre') },
+    ],
+  },
+];
+---
+<Base
+  title="Les genres du théâtre expliqués — La Claque"
+  description="Tragédie, comédie, drame, vaudeville, seul-en-scène, café-théâtre, stand-up : reconnaître les grandes familles du spectacle vivant, simplement et avec des exemples."
+  active="guides"
+  jsonld={jsonld}
+>
+  <article class="wrap-narrow guide">
+    <p class="breadcrumb"><a href={url('/')}>Accueil</a> › <a href={url('/guides')}>Guides</a> › Les genres du théâtre</p>
+    <div class="guide-head">
+      <p class="kicker">Comprendre le théâtre</p>
+      <h1>Les genres du théâtre expliqués</h1>
+      <p class="stand">Sur une affiche, on lit « comédie », « seul-en-scène », « drame »… mais que promettent vraiment ces mots ? Voici les grandes familles du théâtre, pour savoir dans quoi vous mettez les pieds avant d'entrer en salle.</p>
+    </div>
+
+    <div class="prose">
+      <p>
+        Le théâtre ne se range pas dans une seule case. Depuis l'Antiquité, il s'est ramifié en une multitude de <strong>genres</strong>, chacun avec ses codes, son rythme et sa promesse faite au public. Connaître ces familles, c'est mieux choisir ses soirées : on ne va pas voir un vaudeville comme on va voir une tragédie.
+      </p>
+
+      <h2>Les genres historiques : tragédie, comédie, drame</h2>
+      <p>
+        Deux genres fondateurs nous viennent des Grecs. La <strong>tragédie</strong> met en scène des personnages souvent illustres, précipités vers une fin funeste par le destin ou la passion. La <strong>comédie</strong>, elle, fait rire en peignant les travers de son époque : c'est le territoire de Molière. Au XVIIIᵉ siècle, un troisième genre s'impose, le <strong>drame</strong>, qui refuse de séparer le rire et les larmes pour se rapprocher de la vie réelle.
+      </p>
+
+      <h2>Les comédies d'aujourd'hui : boulevard et vaudeville</h2>
+      <p>
+        La comédie a donné naissance à des formes très codifiées. Le <strong>vaudeville</strong>, porté au sommet par <a href={url('/la-redaction-va-voir')}>Feydeau</a> et Labiche, est une horlogerie de quiproquos, de secrets à cacher et de portes qui claquent. Le <strong>théâtre de boulevard</strong> désigne, lui, le théâtre de divertissement des grandes salles privées, pensé d'abord pour le plaisir et le rire.
+      </p>
+
+      <h2>Les formes courtes et solistes</h2>
+      <p>
+        Le <strong>seul-en-scène</strong> est sans doute la forme la plus emblématique du <a href={url('/guides/off-avignon-mode-demploi')}>OFF d'Avignon</a> : un interprète unique, un récit, et le jeu au premier plan. Le <strong>café-théâtre</strong> et le <strong>stand-up</strong> jouent eux aussi la carte de la proximité et de l'énergie, souvent dans de petites salles où l'on rit à quelques mètres des comédiens.
+      </p>
+
+      <h2>Le tableau des genres</h2>
+      <div class="gtable-wrap">
+        <table class="gtable">
+          <caption>Les grandes familles du théâtre en un coup d'œil</caption>
+          <thead>
+            <tr><th>Genre</th><th>Ce qu'on y trouve</th></tr>
+          </thead>
+          <tbody>
+            {genres.map((g) => (
+              <tr><th>{g.t}</th><td>{g.d}</td></tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      <h2>Et à La Claque ?</h2>
+      <p>
+        On ne se limite à aucun genre : on court la tragédie comme la comédie, le seul-en-scène comme la marionnette. Chaque critique indique le genre du spectacle, pour que vous sachiez d'emblée à quoi vous attendre. Parcourez <a href={url('/critiques')}>toutes nos critiques</a> ou filez au <a href={url('/palmares')}>palmarès</a> pour voir ce qui nous a le plus emballés.
+      </p>
+
+      <h2>Questions fréquentes</h2>
+      <div class="faq">
+        {faqs.map((f) => (
+          <details>
+            <summary>{f.q}</summary>
+            <p>{f.r}</p>
+          </details>
+        ))}
+      </div>
+    </div>
+
+    <div class="related">
+      <h2>À lire aussi</h2>
+      <a href={url('/guides/lexique-du-theatre')}>Le lexique du théâtre</a>
+      <a href={url('/guides/choisir-sa-place-au-theatre')}>Bien choisir sa place au théâtre</a>
+      <a href={url('/critiques')}>Toutes nos critiques</a>
+    </div>
+  </article>
+</Base>

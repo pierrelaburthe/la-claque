@@ -1,0 +1,133 @@
+---
+import Base from '../../layouts/Base.astro';
+import { url } from '../../lib/url';
+
+const abs = (p: string) => new URL(url(p), Astro.site).href;
+
+const faqs = [
+  {
+    q: "Comment doit-on s'habiller pour aller au théâtre ?",
+    r: "Il n'existe plus de code vestimentaire strict : une tenue correcte et confortable suffit dans l'immense majorité des salles. On s'habille un peu plus volontiers pour une grande soirée de première ou dans un théâtre prestigieux, mais l'essentiel est d'être à l'aise. Au OFF d'Avignon, en plein été, la tenue est franchement décontractée.",
+  },
+  {
+    q: "Quand faut-il applaudir au théâtre ?",
+    r: "On applaudit surtout au salut final, quand les comédiens reviennent sur scène. Il est aussi d'usage d'applaudir à l'entracte et, parfois, après une scène ou une tirade particulièrement réussie. Pour manifester un grand enthousiasme, on peut se lever : c'est la standing ovation. On évite en revanche d'applaudir en plein milieu d'une scène, ce qui casserait le rythme.",
+  },
+  {
+    q: "Que faire si on arrive en retard au théâtre ?",
+    r: "La plupart des théâtres refusent l'entrée une fois le spectacle commencé, ou font patienter les retardataires jusqu'à une pause pour les placer discrètement, parfois à d'autres places que les leurs. Mieux vaut donc arriver dix à quinze minutes en avance. En cas de retard, on suit les consignes du personnel d'accueil sans forcer le passage.",
+  },
+  {
+    q: "Peut-on prendre des photos pendant un spectacle ?",
+    r: "Non. Photographier ou filmer pendant la représentation est presque toujours interdit : le flash et l'écran allumé perturbent les comédiens et les autres spectateurs, et les œuvres sont protégées. On range son téléphone, on le met en mode avion, et on garde ses photos pour le hall ou l'affiche à la sortie.",
+  },
+];
+
+const regles = [
+  { t: 'Arriver en avance', d: "Dix à quinze minutes avant le lever de rideau, le temps de trouver sa place sans stress. Beaucoup de salles refusent les retardataires une fois le spectacle commencé." },
+  { t: 'Éteindre son téléphone', d: "Vraiment éteint ou en mode avion, pas seulement en silencieux : un écran qui s'allume dans le noir se voit de toute la salle et déconcentre les comédiens." },
+  { t: 'Garder le silence', d: "Pas de commentaires, de chuchotements ni de papiers de bonbons froissés. Le théâtre est un art du direct : le moindre bruit s'entend depuis le plateau." },
+  { t: 'Applaudir au bon moment', d: "Au salut final surtout, parfois à l'entracte ou après une scène marquante. On se lève pour une standing ovation quand l'enthousiasme le mérite." },
+  { t: 'Respecter les comédiens', d: "On ne siffle pas, on ne hue pas. Si un spectacle ne plaît pas, on reste courtois : le désaccord se dit à la sortie, pas pendant le jeu." },
+  { t: 'Ne pas partir avant le salut', d: "Sauf urgence, on attend la fin et le salut avant de se lever. Partir pendant les applaudissements est perçu comme un manque d'égard pour la troupe." },
+];
+
+const jsonld = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: 'Aller au théâtre : le guide du savoir-vivre',
+    description: "Quand applaudir, comment s'habiller, que faire en cas de retard, le téléphone : les usages de la salle de théâtre, expliqués sans snobisme.",
+    author: { '@type': 'Organization', name: 'La Claque' },
+    publisher: { '@type': 'Organization', name: 'La Claque' },
+    mainEntityOfPage: abs('/guides/etiquette-au-theatre'),
+    inLanguage: 'fr',
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqs.map((f) => ({
+      '@type': 'Question',
+      name: f.q,
+      acceptedAnswer: { '@type': 'Answer', text: f.r },
+    })),
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Accueil', item: abs('/') },
+      { '@type': 'ListItem', position: 2, name: 'Guides', item: abs('/guides') },
+      { '@type': 'ListItem', position: 3, name: 'Savoir-vivre au théâtre', item: abs('/guides/etiquette-au-theatre') },
+    ],
+  },
+];
+---
+<Base
+  title="Aller au théâtre : le guide du savoir-vivre — La Claque"
+  description="Quand applaudir, comment s'habiller, que faire en cas de retard, le téléphone : les usages de la salle de théâtre, expliqués simplement et sans snobisme."
+  active="guides"
+  jsonld={jsonld}
+>
+  <article class="wrap-narrow guide">
+    <p class="breadcrumb"><a href={url('/')}>Accueil</a> › <a href={url('/guides')}>Guides</a> › Savoir-vivre au théâtre</p>
+    <div class="guide-head">
+      <p class="kicker">Savoir-vivre</p>
+      <h1>Aller au théâtre : le guide du savoir-vivre</h1>
+      <p class="stand">Le théâtre n'est pas un musée guindé, mais c'est un art du direct où chacun partage la même salle et le même silence. Voici les quelques usages qui rendent la soirée agréable pour tout le monde, sur scène comme dans les fauteuils.</p>
+    </div>
+
+    <div class="prose">
+      <p>
+        Contrairement à une idée reçue, aller au théâtre n'impose ni tenue de soirée ni codes intimidants. Les règles tiennent en une phrase : <strong>être présent, discret et respectueux du travail sur le plateau</strong>. Le reste n'est que bon sens. Voici l'essentiel, sans chichi.
+      </p>
+
+      <h2>Les six règles qui comptent vraiment</h2>
+      <div class="gtable-wrap">
+        <table class="gtable">
+          <caption>Le savoir-vivre du spectateur, en six réflexes</caption>
+          <thead>
+            <tr><th>Réflexe</th><th>Pourquoi</th></tr>
+          </thead>
+          <tbody>
+            {regles.map((r) => (
+              <tr><th>{r.t}</th><td>{r.d}</td></tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      <h2>La tenue : confort avant tout</h2>
+      <p>
+        Il n'y a plus de code vestimentaire strict. Une tenue correcte et confortable convient partout. On peut soigner un peu sa mise pour une grande soirée de première ou un théâtre prestigieux, mais personne ne vous jugera sur vos chaussures. Au <a href={url('/guides/off-avignon-mode-demploi')}>OFF d'Avignon</a>, sous le soleil de juillet, la tenue est franchement estivale.
+      </p>
+
+      <h2>Le téléphone : l'ennemi numéro un</h2>
+      <p>
+        C'est le seul point sur lequel il faut être intransigeant. Un écran qui s'allume dans le noir se voit de toute la salle et déconcentre les comédiens. On l'éteint vraiment, ou on le passe en mode avion, et on garde ses photos pour l'affiche à la sortie. Filmer pendant la représentation est presque toujours interdit.
+      </p>
+
+      <h2>Applaudir, oui, mais quand ?</h2>
+      <p>
+        Le grand moment, c'est le <strong>salut final</strong> : les comédiens reviennent sur scène, on applaudit, on se lève pour une standing ovation si le cœur y est. On peut aussi applaudir à l'entracte ou après une scène particulièrement forte. On évite en revanche de couper une scène par des applaudissements, et on attend le salut avant de quitter son fauteuil. Après tout, c'est le moment où l'on rend au plateau ce qu'il vous a donné, et à La Claque, on ne <a href={url('/a-propos')}>boude jamais notre plaisir</a>.
+      </p>
+
+      <h2>Questions fréquentes</h2>
+      <div class="faq">
+        {faqs.map((f) => (
+          <details>
+            <summary>{f.q}</summary>
+            <p>{f.r}</p>
+          </details>
+        ))}
+      </div>
+    </div>
+
+    <div class="related">
+      <h2>À lire aussi</h2>
+      <a href={url('/guides/choisir-sa-place-au-theatre')}>Bien choisir sa place au théâtre</a>
+      <a href={url('/guides/lexique-du-theatre')}>Le lexique du théâtre</a>
+      <a href={url('/guides/genres-du-theatre')}>Les genres du théâtre</a>
+    </div>
+  </article>
+</Base>
