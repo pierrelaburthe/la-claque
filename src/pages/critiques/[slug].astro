@@ -25,9 +25,13 @@ const categorie = categorieFor(piece.style);
 const suggestions = relatedPieces(piece, PIECES, 3);
 
 // Guides contextuels : ceux qui aident vraiment à prolonger cette critique.
+// Ils dépendent du dossier : renvoyer un spectacle parisien vers le guide des
+// salles du OFF n'aurait aucun sens.
+const estAvignon = (piece.festival ?? '').includes('Avignon');
+const guideSalles = estAvignon ? 'salles-du-off-avignon' : 'theatre-a-paris-guide-des-salles';
 const guideSlugs = Array.from(new Set([
-  ...(piece.salle ? ['salles-du-off-avignon'] : []),
-  'off-avignon-mode-demploi',
+  ...(piece.salle ? [guideSalles] : []),
+  ...(estAvignon ? ['off-avignon-mode-demploi'] : ['choisir-sa-place-au-theatre']),
   'lexique-du-theatre',
 ]));
 
@@ -138,7 +142,7 @@ const jsonld = [
       </div>
       <div class="crit-topics">
         <a href={url(`/critiques?cat=${encodeURIComponent(categorie)}`)}>{categorie}</a>
-        {piece.salle && <a href={url('/guides/salles-du-off-avignon')}>{piece.salle}</a>}
+        {piece.salle && <a href={url(`/guides/${guideSalles}`)}>{piece.salle}</a>}
       </div>
     </div>
 
@@ -164,7 +168,6 @@ const jsonld = [
     <div class="artfoot">
       <Stars note={piece.noteMoy} />
       <span class="big">{verdictFor(piece.noteMoy)}</span>
-      <span>Par {AUTHOR.nom}</span>
     </div>
 
     <aside class="pratique">

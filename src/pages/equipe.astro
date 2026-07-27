@@ -69,13 +69,6 @@ const jsonld = [
         individuellement. Quand les avis divergent franchement, je le dis dans
         la critique plutôt que de lisser vers une moyenne tiède.
       </p>
-
-      <div class="chiffres">
-        <div><strong>{tailleBande}</strong><span>claqueurs</span></div>
-        <div><strong>{nbSpectacles}</strong><span>spectacles couverts</span></div>
-        <div><strong>{totalRegards}</strong><span>regards cumulés</span></div>
-        {plusVu && <div><strong>{nbVus(plusVu)}</strong><span>sur le plus vu, <a href={url(`/critiques/${plusVu.slug}`)}>{plusVu.titre}</a></span></div>}
-      </div>
     </section>
 
     <section class="pourquoi">

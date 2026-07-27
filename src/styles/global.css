@@ -133,7 +133,7 @@ img { max-width: 100%; display: block; }
 .frontline b { color: var(--red); font-weight: 700; }
 
 .frontpage { display: grid; grid-template-columns: 1fr 300px; gap: 40px; padding: 30px 0 34px; border-bottom: 3px double var(--ink); }
-.lead-story { display: grid; grid-template-columns: 250px 1fr; gap: 30px; align-items: start; }
+.lead-story { display: grid; grid-template-columns: 300px 1fr; gap: 32px; align-items: start; }
 .lead-story .lead-frame { position: relative; display: block; border: 1px solid var(--rule-2); overflow: hidden; background: var(--panel); }
 .lead-story .lead-frame img { width: 100%; height: auto; display: block; }
 .lead-story .lead-frame .corner { position: absolute; top: 0; left: 0; background: var(--red); color: #fff; font-family: var(--sans); font-size: 0.6rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; padding: 5px 10px; }
@@ -142,6 +142,11 @@ img { max-width: 100%; display: block; }
 .lead-story h1 a { color: var(--ink); text-decoration: none; }
 .lead-story h1 a:hover { color: var(--red); }
 .lead-story .lead-stand { font-size: 1.28rem; line-height: 1.4; font-style: italic; color: var(--ink-2); margin: 0 0 16px; }
+/* Le debut de la critique : sans lui, la colonne de la Une s'arretait bien avant la
+   liste « A l'affiche » et laissait un grand vide sous le chapo. */
+.lead-story .lead-excerpt { font-family: var(--serif); font-size: 1.04rem; line-height: 1.62; color: var(--ink-2); margin: 0 0 18px; }
+.lead-story .lead-more { font-family: var(--sans); font-size: 0.74rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; color: var(--red); text-decoration: none; margin-left: auto; white-space: nowrap; }
+.lead-story .lead-more:hover { text-decoration: underline; }
 .lead-story .lead-foot { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
 .lead-story .lead-foot .stars { font-size: 1.2rem; }
 .lead-story .lead-foot .byl { font-family: var(--sans); font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--ink-3); display: flex; align-items: center; gap: 8px; }

@@ -18,7 +18,7 @@ export const GET: APIRoute = ({ site }) => {
   L.push('# La Claque');
   L.push('');
   L.push(
-    `> La Claque est un média de critique théâtrale. Toutes les critiques sont écrites et signées par ${AUTHOR.nom}, comédien ayant joué au Festival OFF d’Avignon, à partir des spectacles vus par une bande d’une dizaine de comédiennes et comédiens (les « claqueurs »), qui notent chacun de leur côté. Le nombre de claqueurs ayant vu un spectacle est indiqué sur chaque critique : c’est la particularité du site, un avis vérifié par plusieurs regards plutôt que par un seul. Le site couvre le Festival OFF d’Avignon 2026 (premier dossier) et le théâtre à l’année. Les spectacles sont notés en étoiles (barème volontairement bienveillant : de trois à cinq étoiles) et les faits de production sont sourcés. Le site propose aussi des guides sur le théâtre et le Festival d’Avignon.`,
+    `> La Claque est un média de critique théâtrale. Toutes les critiques sont écrites et signées par ${AUTHOR.nom}, comédien ayant joué au Festival OFF d’Avignon, à partir des spectacles vus par une bande d’une dizaine de comédiennes et comédiens (les « claqueurs »), qui notent chacun de leur côté. Le nombre de claqueurs ayant vu un spectacle est indiqué sur chaque critique : c’est la particularité du site, un avis vérifié par plusieurs regards plutôt que par un seul. Le site couvre deux dossiers : le Festival OFF d’Avignon 2026 et le théâtre à Paris hors festival. Les spectacles sont notés en étoiles (barème volontairement bienveillant : de trois à cinq étoiles) et les faits de production sont sourcés. Le site propose aussi des guides sur le théâtre et le Festival d’Avignon.`,
   );
   L.push('');
   L.push('## Guides');
@@ -41,9 +41,9 @@ export const GET: APIRoute = ({ site }) => {
   L.push(`- [Qui écrit La Claque : ${AUTHOR.nom} et la bande](${abs('/equipe')})`);
   L.push(`- [À propos et méthode de notation](${abs('/a-propos')})`);
   L.push('');
-  L.push('## Critiques (Festival OFF d’Avignon 2026)');
+  L.push('## Critiques');
   for (const p of critiques) {
-    L.push(`- [${p.titre}](${abs('/critiques/' + p.slug)}) : ${p.style}, ${verdictFor(p.noteMoy).toLowerCase()}, vu par ${nbVus(p)} claqueur${nbVus(p) > 1 ? 's' : ''}.`);
+    L.push(`- [${p.titre}](${abs('/critiques/' + p.slug)}) : ${p.style}, ${verdictFor(p.noteMoy).toLowerCase()}, ${p.festival ?? ''}, vu par ${nbVus(p)} claqueur${nbVus(p) > 1 ? 's' : ''}.`);
   }
   L.push('');
 

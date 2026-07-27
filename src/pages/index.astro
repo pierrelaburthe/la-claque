@@ -3,24 +3,32 @@ import Base from '../layouts/Base.astro';
 import PieceCard from '../components/PieceCard.astro';
 import Stars from '../components/Stars.astro';
 import { PIECES } from '../data/pieces';
-import { AUTHOR } from '../data/author';
-import { consensusScore, estDecouverteSolo, nbVus, verdictFor, seenLabel } from '../lib/rating';
+import { consensusScore, estDecouverteSolo, estPlebiscite, nbVus, verdictFor, seenLabel } from '../lib/rating';
 import { url } from '../lib/url';
 
 const parConsensus = [...PIECES].sort((a, b) => consensusScore(b) - consensusScore(a));
-const une = parConsensus[0];
-const side = parConsensus.slice(1, 6);
+
+// La Une revient à un plébiscite : un spectacle que la bande est allée voir en
+// nombre ET a aimé. Sans cette règle, un coup de foudre solitaire très bien
+// noté passerait devant, ce qui contredirait la méthode annoncée sur /a-propos.
+const une = parConsensus.find(estPlebiscite) ?? parConsensus[0];
+const side = parConsensus.filter((p) => p.slug !== une.slug).slice(0, 5);
 const featured = new Set([une, ...side].map((p) => p.slug));
 
-const chefs = PIECES.filter((p) => p.noteMoy >= 8 && !featured.has(p.slug)).sort((a, b) => b.noteMoy - a.noteMoy);
-const solos = PIECES.filter(estDecouverteSolo).sort((a, b) => b.noteMoy - a.noteMoy);
+const dossiers = Array.from(new Set(PIECES.map((p) => p.festival).filter(Boolean)));
+const paris = PIECES.filter((p) => p.festival === 'Théâtre à Paris' && !featured.has(p.slug))
+  .sort((a, b) => b.noteMoy - a.noteMoy);
+const chefs = PIECES.filter((p) => p.noteMoy >= 8 && !featured.has(p.slug) && p.festival !== 'Théâtre à Paris')
+  .sort((a, b) => b.noteMoy - a.noteMoy);
+const solos = PIECES.filter((p) => estDecouverteSolo(p) && !featured.has(p.slug) && p.festival !== 'Théâtre à Paris')
+  .sort((a, b) => b.noteMoy - a.noteMoy);
 
 const ogImage = new URL(url(`/og/${une.slug}.png`), Astro.site).href;
 ---
 <Base title="La Claque — critiques de théâtre" active="accueil" image={ogImage}>
   <div class="frontline">
     <div class="inner">
-      <span>Festival OFF d'Avignon 2026 · Dossier nº1</span>
+      <span>{dossiers.join(' · ')}</span>
       <span><b>{PIECES.length} critiques</b> · une dizaine de claqueurs</span>
     </div>
   </div>
@@ -36,11 +44,12 @@ const ogImage = new URL(url(`/og/${une.slug}.png`), Astro.site).href;
           <span class="lead-kicker">{une.style}{une.salle ? ` · ${une.salle}` : ''}</span>
           <h1><a href={url(`/critiques/${une.slug}`)}>{une.titre}</a></h1>
           <p class="lead-stand">{une.chapo}</p>
+          <p class="lead-excerpt">{une.corps[0]}</p>
           <div class="lead-foot">
             <Stars note={une.noteMoy} />
             <span class="metaline">{verdictFor(une.noteMoy)} · {seenLabel(nbVus(une))}</span>
+            <a class="lead-more" href={url(`/critiques/${une.slug}`)}>Lire la critique →</a>
           </div>
-          <div class="byl" style="margin-top:12px">Par {AUTHOR.nom}</div>
         </div>
       </article>
 
@@ -80,6 +89,20 @@ const ogImage = new URL(url(`/og/${une.slug}.png`), Astro.site).href;
     <div class="cards">
       {chefs.map((p) => <PieceCard piece={p} />)}
     </div>
+
+    {paris.length > 0 && (
+      <>
+        <div class="rubric">
+          <h2>Théâtre à Paris</h2>
+          <span class="line"></span>
+          <span class="note">Hors festival</span>
+        </div>
+        <p class="rubric-intro">Ce que la bande voit le reste de l'année, dans les salles parisiennes.</p>
+        <div class="cards">
+          {paris.map((p) => <PieceCard piece={p} />)}
+        </div>
+      </>
+    )}
 
     <div class="rubric">
       <h2>Les découvertes en solo</h2>

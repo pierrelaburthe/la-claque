@@ -7,18 +7,38 @@ import { url } from '../lib/url';
 
 // À note comparable, ce que le plus grand nombre a vu passe devant (consensusScore).
 const classement = [...PIECES].sort((a, b) => consensusScore(b) - consensusScore(a));
+
+// On range par taille de claque, et la numérotation repart à 1 dans chaque
+// groupe : comparer un cinq étoiles à un trois étoiles dans un même classement
+// continu n'avait pas de sens.
+const GROUPES = [
+  { verdict: 'Grosse claque', note: 'Cinq étoiles', intro: "Le haut du panier. Ceux dont on parlera encore l'an prochain." },
+  { verdict: 'Belle claque', note: 'Quatre étoiles', intro: 'Les valeurs sûres, celles qu\'on recommande sans hésiter.' },
+  { verdict: 'Petite claque', note: 'Trois étoiles', intro: "Notre plancher. Même là, on a trouvé de quoi applaudir." },
+];
+const groupes = GROUPES
+  .map((g) => ({ ...g, pieces: classement.filter((p) => verdictFor(p.noteMoy) === g.verdict) }))
+  .filter((g) => g.pieces.length > 0);
 ---
-<Base title="Palmarès théâtre OFF Avignon 2026 : nos meilleures critiques | La Claque" active="palmares" description={`Le classement des ${PIECES.length} spectacles du OFF d'Avignon 2026, du meilleur au plus tendre. Notes, avis et coups de cœur de la rédaction de La Claque.`}>
+<Base title="Palmarès : nos meilleures critiques de théâtre | La Claque" active="palmares" description={`Le classement de nos ${PIECES.length} critiques de théâtre, du OFF d'Avignon aux salles parisiennes, rangées par taille de claque : grosses claques, belles claques, petites claques.`}>
   <div class="wrap">
     <div class="rubric" style="margin-top:40px">
       <h2>Le palmarès 2026</h2>
       <span class="line"></span>
       <span class="note">De la claque à la caresse</span>
     </div>
-    <p class="rubric-intro">Les {classement.length} spectacles rangés du meilleur au plus tendre. À note comparable, on fait remonter ce que le plus grand nombre de claqueurs a vu : une belle note partagée par toute la bande pèse plus lourd qu'un coup de cœur solitaire. La pastille signale les plébiscites, vus en nombre et adorés ensemble.</p>
+    <p class="rubric-intro">Les {classement.length} spectacles rangés par taille de claque, et classés à l'intérieur de chaque groupe. À note comparable, on fait remonter ce que le plus grand nombre de claqueurs a vu : une belle note partagée par toute la bande pèse plus lourd qu'un coup de cœur solitaire. La pastille signale les plébiscites, vus en nombre et adorés ensemble.</p>
 
+    {groupes.map((g) => (
+    <section class="palm-groupe">
+      <div class="rubric palm-titre">
+        <h2>{g.verdict}</h2>
+        <span class="line"></span>
+        <span class="note">{g.note} · {g.pieces.length} spectacle{g.pieces.length > 1 ? 's' : ''}</span>
+      </div>
+      <p class="rubric-intro">{g.intro}</p>
     <ol class="rank">
-      {classement.map((p, i) => {
+      {g.pieces.map((p, i) => {
         const seen = nbVus(p);
         return (
           <li>
@@ -43,10 +63,14 @@ const classement = [...PIECES].sort((a, b) => consensusScore(b) - consensusScore
         );
       })}
     </ol>
+    </section>
+    ))}
   </div>
 </Base>
 
 <style>
+  .palm-groupe { margin-bottom: 46px; }
+  .palm-titre { margin-top: 34px; }
   .rank { list-style: none; padding: 0; margin: 8px 0 0; display: flex; flex-direction: column; }
   .rank li { border-bottom: 1px solid var(--rule); }
   .rank li:first-child { border-top: 1px solid var(--rule); }
