@@ -1,9 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
 import Stars from '../components/Stars.astro';
-import Avatar from '../components/Avatar.astro';
 import { PIECES } from '../data/pieces';
-import { CRITICS } from '../data/critics';
 import { nbVus, estPlebiscite, verdictFor, seenLabel, consensusScore } from '../lib/rating';
 import { url } from '../lib/url';
 
@@ -17,11 +15,10 @@ const classement = [...PIECES].sort((a, b) => consensusScore(b) - consensusScore
       <span class="line"></span>
       <span class="note">De la claque à la caresse</span>
     </div>
-    <p class="rubric-intro">Les {classement.length} spectacles rangés du meilleur au plus tendre. À note comparable, on fait remonter ce que le plus grand nombre d'entre nous a vu : une belle note partagée par toute la bande pèse plus lourd qu'un coup de cœur solitaire. La pastille signale les plébiscites, vus en nombre et adorés ensemble.</p>
+    <p class="rubric-intro">Les {classement.length} spectacles rangés du meilleur au plus tendre. À note comparable, on fait remonter ce que le plus grand nombre de claqueurs a vu : une belle note partagée par toute la bande pèse plus lourd qu'un coup de cœur solitaire. La pastille signale les plébiscites, vus en nombre et adorés ensemble.</p>
 
     <ol class="rank">
       {classement.map((p, i) => {
-        const c = CRITICS[p.signataire];
         const seen = nbVus(p);
         return (
           <li>
@@ -30,11 +27,11 @@ const classement = [...PIECES].sort((a, b) => consensusScore(b) - consensusScore
               <span class="thumb">
                 {p.image
                   ? <img src={url(p.image)} alt={`Affiche de ${p.titre}`} loading="lazy" />
-                  : <span class="ph" style={`background:${c.couleur}`}></span>}
+                  : <span class="ph"></span>}
               </span>
               <span class="main">
                 <strong>{p.titre}{estPlebiscite(p) && <span class="dot" title="Plébiscite"></span>}</strong>
-                <span class="sub">{p.style}{p.salle ? ` · ${p.salle}` : ''} · par {c.plume}</span>
+                <span class="sub">{p.style}{p.salle ? ` · ${p.salle}` : ''}</span>
               </span>
               <span class="rating">
                 <Stars note={p.noteMoy} />

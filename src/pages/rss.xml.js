@@ -18,7 +18,7 @@ export function GET(context) {
   return rss({
     title: 'La Claque — critiques de théâtre',
     description:
-      "Les critiques de théâtre de La Claque : le Festival OFF d'Avignon 2026 vu par une bande d'ami·es, à plusieurs paires d'yeux.",
+      "Les critiques de théâtre de La Claque : le Festival OFF d'Avignon 2026 vu par une bande de comédien·nes, raconté par un seul rédacteur.",
     site: new URL(BASE, context.site).href,
     items,
     customData: '<language>fr-fr</language>',

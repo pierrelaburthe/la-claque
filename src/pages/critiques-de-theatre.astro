@@ -1,9 +1,9 @@
 ---
 import Base from '../layouts/Base.astro';
 import PieceCard from '../components/PieceCard.astro';
-import Avatar from '../components/Avatar.astro';
 import { PIECES } from '../data/pieces';
-import { CRITICS, CRITIC_ORDER, criticSlug } from '../data/critics';
+import { AUTHOR } from '../data/author';
+import type { CriticKey } from '../data/critics';
 import { CATEGORIES, categorieFor } from '../lib/categories';
 import { consensusScore, verdictFor, nbVus } from '../lib/rating';
 import { GUIDES } from '../data/guides';
@@ -11,11 +11,11 @@ import { url } from '../lib/url';
 
 const abs = (p) => new URL(url(p), Astro.site).href;
 
+const claqueurs = new Set(PIECES.flatMap((p) => Object.keys(p.notes) as CriticKey[])).size;
 const total = PIECES.length;
 const noteMoyenne = (PIECES.reduce((s, p) => s + p.noteMoy, 0) / total);
 const grossesClaques = PIECES.filter((p) => p.noteMoy >= 8).length;
 const totalYeux = PIECES.reduce((s, p) => s + nbVus(p), 0);
-const plumes = CRITIC_ORDER.map((k) => CRITICS[k]).filter((c) => PIECES.some((p) => p.signataire === c.key));
 
 const cats = CATEGORIES
   .map((cat) => ({ cat, count: PIECES.filter((p) => categorieFor(p.style) === cat).length }))
@@ -33,7 +33,7 @@ const jsonld = [
     name: 'Critiques de théâtre',
     headline: 'Critiques de théâtre : le meilleur du OFF d’Avignon et de la scène',
     url: abs('/critiques-de-theatre'),
-    description: `${total} critiques de théâtre signées par une rédaction de comédien·nes, à plusieurs paires d'yeux. Étoiles, coups de cœur, palmarès et guides.`,
+    description: `${total} critiques de théâtre signées ${AUTHOR.nom}, écrites à partir des spectacles vus par une bande de comédien·nes. Étoiles, coups de cœur, palmarès et guides.`,
     inLanguage: 'fr',
     isPartOf: { '@type': 'WebSite', name: 'La Claque', url: abs('/') },
     about: { '@type': 'Thing', name: 'Théâtre' },
@@ -65,12 +65,12 @@ const jsonld = [
     <div class="guide-head">
       <p class="kicker">Le repère des critiques de théâtre</p>
       <h1>Critiques de théâtre</h1>
-      <p class="stand">Une bande de comédien·nes qui court les salles à plusieurs paires d'yeux et ne boude jamais son plaisir. Le théâtre passé au crible, sans jargon et sans langue de bois.</p>
+      <p class="stand">Une bande de comédien·nes qui court les salles ensemble et ne boude jamais son plaisir. Ils voient, j'écris. Le théâtre passé au crible, sans jargon et sans langue de bois.</p>
     </div>
     <p class="pillar-stats">
       <span><strong>{total}</strong> spectacles critiqués</span>
       <span><strong>{grossesClaques}</strong> grosses claques</span>
-      <span><strong>{plumes.length}</strong> plumes</span>
+      <span><strong>{claqueurs}</strong> claqueurs</span>
       <span><strong>{fmt1(noteMoyenne)}</strong> de moyenne sur 10</span>
     </p>
   </div>
@@ -91,18 +91,13 @@ const jsonld = [
       {top.map((p) => <PieceCard piece={p} />)}
     </div>
 
-    <div class="rubric"><h2>La rédaction</h2><span class="line"></span><span class="note">Des plumes qu'on suit</span></div>
-    <div class="plume-row">
-      {plumes.map((c) => (
-        <a class="plume-chip" href={url(`/equipe/${criticSlug(c)}`)}>
-          <Avatar critic={c.key} size={44} />
-          <span class="pc-txt">
-            <span class="pc-name">{c.plume}</span>
-            <span class="pc-role">{c.role}</span>
-          </span>
-        </a>
-      ))}
-    </div>
+    <div class="rubric"><h2>Qui écrit</h2><span class="line"></span><span class="note">Un rédacteur, une bande</span></div>
+    <a class="author-strip" href={url('/equipe#auteur')}>
+      <span class="as-name">{AUTHOR.nom}</span>
+      <span class="as-role">{AUTHOR.ligne}</span>
+      <span class="as-txt">Je signe toutes les critiques du site. Elles s'appuient sur les spectacles vus par une bande d'une dizaine de comédiennes et comédiens, qui notent chacun de leur côté.</span>
+      <span class="as-more">Comment on travaille →</span>
+    </a>
 
     <div class="rubric"><h2>Pour aller plus loin</h2><span class="line"></span><span class="note">Nos guides du théâtre</span></div>
     <div class="guide-links">
@@ -133,4 +128,11 @@ const jsonld = [
   .guide-links a:hover { border-color: var(--ink); background: var(--paper); }
   .guide-links .gl-k { display: block; font-family: var(--sans); font-size: 0.62rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.07em; color: var(--red); margin-bottom: 3px; }
   .guide-links .gl-t { display: block; font-family: var(--serif); font-size: 1rem; color: var(--ink); line-height: 1.25; }
+
+  .author-strip { display: block; text-decoration: none; color: inherit; background: var(--card); border: 1px solid var(--rule-2); border-left: 4px solid var(--red); padding: 20px 24px; transition: border-color 0.12s ease; }
+  .author-strip:hover { border-left-color: var(--ink); }
+  .author-strip .as-name { display: block; font-family: var(--display); font-weight: 900; font-size: 1.35rem; }
+  .author-strip .as-role { display: block; font-family: var(--sans); font-size: 0.68rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--red); margin-top: 3px; }
+  .author-strip .as-txt { display: block; color: var(--ink-2); margin-top: 10px; max-width: 62ch; }
+  .author-strip .as-more { display: block; font-family: var(--sans); font-size: 0.78rem; font-weight: 700; color: var(--red); margin-top: 12px; }
 </style>

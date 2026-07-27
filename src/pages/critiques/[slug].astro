@@ -1,11 +1,10 @@
 ---
 import Base from '../../layouts/Base.astro';
 import Stars from '../../components/Stars.astro';
-import Avatar from '../../components/Avatar.astro';
 import PieceCard from '../../components/PieceCard.astro';
 import RelatedGuides from '../../components/RelatedGuides.astro';
 import { PIECES } from '../../data/pieces';
-import { CRITICS, criticSlug } from '../../data/critics';
+import { AUTHOR } from '../../data/author';
 import { verdictFor, nbVus, estPlebiscite, starsFor, seenLabel } from '../../lib/rating';
 import { relatedPieces } from '../../lib/related';
 import { categorieFor } from '../../lib/categories';
@@ -16,7 +15,6 @@ export function getStaticPaths() {
 }
 
 const { piece } = Astro.props;
-const c = CRITICS[piece.signataire];
 const seen = nbVus(piece);
 const pleb = estPlebiscite(piece);
 const chef = piece.noteMoy >= 8;
@@ -79,7 +77,13 @@ const jsonld = [
       bestRating: 5,
       worstRating: 1,
     },
-    author: { '@type': 'Person', name: c.plume, url: abs(`/equipe/${criticSlug(c)}`) },
+    author: {
+      '@type': 'Person',
+      name: AUTHOR.nom,
+      url: abs('/equipe#auteur'),
+      jobTitle: AUTHOR.role,
+      ...(AUTHOR.sameAs.length ? { sameAs: AUTHOR.sameAs } : {}),
+    },
     publisher: { '@type': 'Organization', name: 'La Claque' },
     inLanguage: 'fr',
   },
@@ -104,7 +108,7 @@ const jsonld = [
 ---
 <Base title={`${piece.titre} — critique et avis${piece.festival ? ` · ${piece.festival}` : ''} | La Claque`} active="critiques" description={`Notre critique de « ${piece.titre} » : ${piece.chapo}`} jsonld={jsonld} image={ogImage}>
   <div class="art-hero">
-    <div class="art-bg" style={piece.image ? `background-image:url(${url(piece.image)})` : `background:${c.couleur}`}></div>
+    <div class="art-bg" style={piece.image ? `background-image:url(${url(piece.image)})` : 'background:var(--red)'}></div>
     <div class="wrap art-hero-in">
       <a href={url('/critiques')} class="back">← Toutes les critiques</a>
       <div class="art-head">
@@ -128,10 +132,9 @@ const jsonld = [
   <article class="art-body">
     <p class="breadcrumb"><a href={url('/')}>Accueil</a> › <a href={url('/critiques')}>Critiques</a> › {piece.titre}</p>
     <div class="byline-row">
-      <Avatar critic={piece.signataire} size={48} />
       <div class="who">
-        <div class="n">Par <a href={url(`/equipe/${criticSlug(c)}`)} rel="author">{c.plume}</a></div>
-        <div class="r">{c.role}</div>
+        <div class="n">Par <a href={url('/equipe#auteur')} rel="author">{AUTHOR.nom}</a></div>
+        <div class="r">{AUTHOR.ligne} · Vu par {seenLabel(seen)} de la bande</div>
       </div>
       <div class="crit-topics">
         <a href={url(`/critiques?cat=${encodeURIComponent(categorie)}`)}>{categorie}</a>
@@ -161,7 +164,7 @@ const jsonld = [
     <div class="artfoot">
       <Stars note={piece.noteMoy} />
       <span class="big">{verdictFor(piece.noteMoy)}</span>
-      <span>vu par {seen} d'entre nous</span>
+      <span>Par {AUTHOR.nom}</span>
     </div>
 
     <aside class="pratique">

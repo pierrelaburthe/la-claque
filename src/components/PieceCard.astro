@@ -1,20 +1,20 @@
 ---
 import type { Piece } from '../data/pieces';
-import { CRITICS } from '../data/critics';
 import { verdictFor, nbVus, estPlebiscite, seenLabel } from '../lib/rating';
 import { categorieFor } from '../lib/categories';
 import Stars from './Stars.astro';
-import Avatar from './Avatar.astro';
 import { url } from '../lib/url';
 
 interface Props { piece: Piece; }
 const { piece } = Astro.props;
-const c = CRITICS[piece.signataire];
 const seen = nbVus(piece);
 const pleb = estPlebiscite(piece);
 const chef = piece.noteMoy >= 8;
 const categorie = categorieFor(piece.style);
-const searchText = [piece.titre, piece.titreExact, piece.style, categorie, c.plume, piece.salle, piece.chapo]
+// La signature est la même partout depuis qu'un seul rédacteur signe : sur une
+// grille de cartes, elle n'apporte rien. On affiche la salle à la place, qui
+// aide vraiment à choisir, et on la garde dans l'index de recherche.
+const searchText = [piece.titre, piece.titreExact, piece.style, categorie, piece.salle, piece.chapo]
   .filter(Boolean)
   .join(' ')
   .toLowerCase();
@@ -23,7 +23,7 @@ const searchText = [piece.titre, piece.titreExact, piece.style, categorie, c.plu
   <div class="frame">
     {piece.image
       ? <img src={url(piece.image)} alt={`Affiche de ${piece.titre}`} loading="lazy" />
-      : <div class="fallback" style={`background:${c.couleur}`}>{piece.titre}</div>}
+      : <div class="fallback">{piece.titre}</div>}
     {chef
       ? <span class="corner">Grosse claque</span>
       : pleb
@@ -32,13 +32,15 @@ const searchText = [piece.titre, piece.titreExact, piece.style, categorie, c.plu
   </div>
   <span class="kicker">{piece.style}</span>
   <h3>{piece.titre}</h3>
-  <div class="byline">
-    <Avatar critic={piece.signataire} size={22} ring={false} />
-    {c.plume}
-  </div>
+  {piece.salle && <div class="byline">{piece.salle}</div>}
   <div class="foot">
     <Stars note={piece.noteMoy} />
     <span class="verdict">{verdictFor(piece.noteMoy)}</span>
     <span class="seen">{seenLabel(seen)}</span>
   </div>
 </a>
+
+<style>
+  /* L'affiche manquante retombe sur le rouge de rideau du site. */
+  .pcard .frame .fallback { background: var(--red); }
+</style>

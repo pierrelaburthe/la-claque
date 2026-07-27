@@ -2,10 +2,9 @@
 import Base from '../layouts/Base.astro';
 import PieceCard from '../components/PieceCard.astro';
 import Stars from '../components/Stars.astro';
-import Avatar from '../components/Avatar.astro';
 import { PIECES } from '../data/pieces';
-import { CRITICS } from '../data/critics';
-import { consensusScore, estDecouverteSolo, nbVus, verdictFor } from '../lib/rating';
+import { AUTHOR } from '../data/author';
+import { consensusScore, estDecouverteSolo, nbVus, verdictFor, seenLabel } from '../lib/rating';
 import { url } from '../lib/url';
 
 const parConsensus = [...PIECES].sort((a, b) => consensusScore(b) - consensusScore(a));
@@ -16,14 +15,13 @@ const featured = new Set([une, ...side].map((p) => p.slug));
 const chefs = PIECES.filter((p) => p.noteMoy >= 8 && !featured.has(p.slug)).sort((a, b) => b.noteMoy - a.noteMoy);
 const solos = PIECES.filter(estDecouverteSolo).sort((a, b) => b.noteMoy - a.noteMoy);
 
-const c = CRITICS[une.signataire];
 const ogImage = new URL(url(`/og/${une.slug}.png`), Astro.site).href;
 ---
 <Base title="La Claque — critiques de théâtre" active="accueil" image={ogImage}>
   <div class="frontline">
     <div class="inner">
       <span>Festival OFF d'Avignon 2026 · Dossier nº1</span>
-      <span><b>{PIECES.length} critiques</b> · une dizaine de plumes</span>
+      <span><b>{PIECES.length} critiques</b> · une dizaine de claqueurs</span>
     </div>
   </div>
 
@@ -40,11 +38,9 @@ const ogImage = new URL(url(`/og/${une.slug}.png`), Astro.site).href;
           <p class="lead-stand">{une.chapo}</p>
           <div class="lead-foot">
             <Stars note={une.noteMoy} />
-            <span class="metaline">{verdictFor(une.noteMoy)} · {nbVus(une)} paires d'yeux</span>
+            <span class="metaline">{verdictFor(une.noteMoy)} · {seenLabel(nbVus(une))}</span>
           </div>
-          <div class="byl" style="margin-top:12px">
-            <Avatar critic={une.signataire} size={24} ring={false} /> Par {c.plume}
-          </div>
+          <div class="byl" style="margin-top:12px">Par {AUTHOR.nom}</div>
         </div>
       </article>
 
@@ -58,7 +54,7 @@ const ogImage = new URL(url(`/og/${une.slug}.png`), Astro.site).href;
                 <span class="th">{p.image && <img src={url(p.image)} alt={`Affiche de ${p.titre}`} loading="lazy" />}</span>
                 <span>
                   <span class="st">{p.titre}</span>
-                  <span class="sm">{verdictFor(p.noteMoy)} · vu par {nbVus(p)}</span>
+                  <span class="sm">{verdictFor(p.noteMoy)} · {seenLabel(nbVus(p))}</span>
                 </span>
               </a>
             </li>
@@ -68,7 +64,7 @@ const ogImage = new URL(url(`/og/${une.slug}.png`), Astro.site).href;
     </section>
 
     <div class="manifesto">
-      <p>La Claque, c'est une dizaine de comédien·nes qui courent les salles à plusieurs paires d'yeux et ne bouderont jamais leur plaisir. On note généreusement, on raconte, on partage nos coups de cœur.</p>
+      <p>La Claque, c'est une dizaine de comédien·nes qui courent les salles ensemble et ne bouderont jamais leur plaisir. Ils voient, on en discute, je rédige. On note généreusement et on partage nos coups de cœur.</p>
       <div class="actions">
         <a class="btn" href={url('/critiques')}>Les {PIECES.length} critiques</a>
         <a class="btn btn-ghost" href={url('/a-propos')}>Notre méthode</a>

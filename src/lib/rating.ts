@@ -44,10 +44,11 @@ export function estDecouverteSolo(p: Piece): boolean {
   return nbVus(p) === 1;
 }
 
-// Combien de la bande ont vu la pièce, dit de façon parlante et raccord
-// avec la signature « à plusieurs paires d'yeux ».
+// Combien de la bande ont vu la pièce. On les appelle les « claqueurs »,
+// en raccord avec le nom du site : la claque, c'était ce groupe de
+// spectateurs placés dans la salle pour applaudir.
 export function seenLabel(n: number): string {
-  return `${n} paire${n > 1 ? 's' : ''} d'yeux`;
+  return `${n} claqueur${n > 1 ? 's' : ''}`;
 }
 
 export function formatNote(note: number): string {
