@@ -13,9 +13,9 @@ const abs = (p) => new URL(url(p), Astro.site).href;
 
 const claqueurs = new Set(PIECES.flatMap((p) => Object.keys(p.notes) as CriticKey[])).size;
 const total = PIECES.length;
-const noteMoyenne = (PIECES.reduce((s, p) => s + p.noteMoy, 0) / total);
 const grossesClaques = PIECES.filter((p) => p.noteMoy >= 8).length;
 const totalYeux = PIECES.reduce((s, p) => s + nbVus(p), 0);
+const salles = new Set(PIECES.map((p) => p.salle).filter(Boolean)).size;
 
 const cats = CATEGORIES
   .map((cat) => ({ cat, count: PIECES.filter((p) => categorieFor(p.style) === cat).length }))
@@ -24,7 +24,6 @@ const cats = CATEGORIES
 
 const top = [...PIECES].sort((a, b) => consensusScore(b) - consensusScore(a)).slice(0, 6);
 
-const fmt1 = (n) => n.toFixed(1).replace('.', ',');
 
 const jsonld = [
   {
@@ -71,7 +70,7 @@ const jsonld = [
       <span><strong>{total}</strong> spectacles critiqués</span>
       <span><strong>{grossesClaques}</strong> grosses claques</span>
       <span><strong>{claqueurs}</strong> claqueurs</span>
-      <span><strong>{fmt1(noteMoyenne)}</strong> de moyenne sur 10</span>
+      <span><strong>{salles}</strong> salles couvertes</span>
     </p>
   </div>
 

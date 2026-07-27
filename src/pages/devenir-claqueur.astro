@@ -1,0 +1,172 @@
+---
+import Base from '../layouts/Base.astro';
+import { PIECES } from '../data/pieces';
+import { AUTHOR } from '../data/author';
+import { CONTACT_TEL_AFFICHE, CANDIDATURE, smsCandidature } from '../data/contact';
+import { nbVus } from '../lib/rating';
+import { url } from '../lib/url';
+
+const abs = (p: string) => new URL(url(p), Astro.site).href;
+const claqueurs = new Set(PIECES.flatMap((p) => Object.keys(p.notes))).size;
+const plusVu = Math.max(...PIECES.map(nbVus));
+
+const faqs = [
+  {
+    q: 'Faut-il être comédien ou critique pour devenir claqueur ?',
+    r: "Non. La bande est née entre comédiens, mais ce qu'on cherche c'est un regard de spectateur, pas une expertise. Si vous allez au théâtre et que vous savez dire ce que vous en avez pensé, vous avez tout ce qu'il faut.",
+  },
+  {
+    q: 'Est-ce que mon nom apparaîtra sur le site ?',
+    r: "Jamais, sauf si vous le demandez expressément. Les claqueurs restent anonymes : beaucoup travaillent dans ce milieu, et personne n'a envie que son avis sur un spectacle lui revienne un jour en audition. Le site n'affiche que le nombre de claqueurs qui ont vu une pièce.",
+  },
+  {
+    q: 'Est-ce que ma note sera publiée telle quelle ?',
+    r: "Non. Votre note sur 10 alimente la moyenne, qui détermine l'étoile et le verdict, mais elle n'est jamais publiée nom par nom. Ce que le public voit, ce sont les étoiles, le verdict et le nombre de claqueurs.",
+  },
+  {
+    q: 'Combien de spectacles faut-il voir ?',
+    r: "Aucun minimum. Certains claqueurs voient cinq spectacles par jour pendant le OFF et plus rien de l'année, d'autres deux par mois à Paris. Une seule note honnête vaut mieux que dix notes de complaisance.",
+  },
+  {
+    q: 'Faut-il savoir écrire ?',
+    r: "Non, et c'est le point le plus important. Vous envoyez une note et quelques lignes d'impressions, même mal fichues. La rédaction de la critique, c'est mon travail, et je signe seul.",
+  },
+  {
+    q: 'Comment est-ce que je vous contacte ?',
+    r: "Par SMS au " + CONTACT_TEL_AFFICHE + ". Le site est entièrement statique, il n'y a donc aucun formulaire à remplir : un message suffit, et c'est moi qui réponds.",
+  },
+  {
+    q: 'Est-ce que ça rapporte des places gratuites ?',
+    r: "Non, et c'est volontaire. On ne promet jamais une bonne critique en échange d'une invitation, et on ne veut pas d'un système où les claqueurs auraient intérêt à être aimables. Vous payez vos places comme tout le monde.",
+  },
+];
+
+const jsonld = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqs.map((f) => ({
+      '@type': 'Question',
+      name: f.q,
+      acceptedAnswer: { '@type': 'Answer', text: f.r },
+    })),
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Accueil', item: abs('/') },
+      { '@type': 'ListItem', position: 2, name: 'Devenir claqueur', item: abs('/devenir-claqueur') },
+    ],
+  },
+];
+---
+<Base
+  title="Devenir claqueur : rejoignez la bande de La Claque"
+  active="claqueur"
+  description="La Claque ouvre sa bande de claqueurs. Vous allez au théâtre, vous notez les spectacles, vos avis nourrissent les critiques du site. Un SMS suffit pour nous rejoindre. Anonyme, sans minimum, sans contrepartie."
+  jsonld={jsonld}
+>
+  <div class="wrap-narrow" style="padding-top:46px;">
+    <p class="breadcrumb"><a href={url('/')}>Accueil</a> › Devenir claqueur</p>
+    <p class="kicker">Rejoindre la bande</p>
+    <h1 style="font-size:clamp(2rem,5vw,3rem)">Devenir claqueur</h1>
+
+    <div class="prose" style="margin-top:18px">
+      <p>
+        La Claque a commencé entre amis : une dizaine de comédiennes et comédiens
+        qui allaient voir du théâtre ensemble et comparaient leurs impressions à
+        la sortie. C'est ce qui fait la valeur du site, et c'est aussi sa limite.
+        Une bande de dix personnes voit ce qu'une bande de dix personnes peut
+        voir, et elle a fatalement ses angles morts et ses goûts communs.
+      </p>
+      <p>
+        Alors on l'ouvre. Si vous allez au théâtre et que vous avez envie que
+        votre avis compte quelque part, vous pouvez devenir claqueur. Je ne vous
+        connais pas, et c'est précisément l'intérêt.
+      </p>
+
+      <h2>Ce qu'on vous demande</h2>
+      <p>
+        Trois choses, et rien d'autre. Aller voir des spectacles, comme vous le
+        faites déjà. Leur mettre une note sur 10, sincèrement. Écrire quelques
+        lignes sur ce que vous avez vu, même en vrac, même mal tournées.
+      </p>
+      <p>
+        Le reste, c'est mon travail. Je rassemble les notes, je recoupe les
+        impressions et je rédige la critique, que je signe seul. Vous n'avez
+        jamais de texte à produire.
+      </p>
+
+      <h2>Ce qui est publié, et ce qui ne l'est pas</h2>
+      <ul class="regles">
+        <li><strong>Publié :</strong> les étoiles, le verdict, et le nombre de claqueurs qui ont vu le spectacle. C'est tout.</li>
+        <li><strong>Jamais publié :</strong> votre nom, et votre note nom par nom. Les notes servent à calculer la moyenne, elles restent internes.</li>
+        <li><strong>Utilisé, mais à ma voix :</strong> vos impressions nourrissent la critique. Quand les avis divergent franchement dans la bande, je l'écris dans l'article au lieu de lisser vers une moyenne tiède.</li>
+      </ul>
+      <p>
+        L'anonymat n'est pas une coquetterie. Beaucoup de claqueurs travaillent
+        dans ce milieu, et personne n'a envie que son avis sur un spectacle lui
+        revienne un jour en audition. Il vaut pour vous comme pour les autres.
+      </p>
+
+      <h2>Nos règles, pour que ça vaille quelque chose</h2>
+      <ul class="regles">
+        <li>On ne promet jamais une critique favorable en échange d'une invitation. Être claqueur ne donne droit à aucune place gratuite, et c'est exactement ce qui rend l'avis crédible.</li>
+        <li>On ne critique aucun spectacle auquel on participe. Si le cas se présente, l'implication est indiquée en tête d'article.</li>
+        <li>Le barème est généreux, l'avis ne l'est pas. On note large parce qu'on reste du côté des artistes, mais on ne dit jamais avoir aimé ce qu'on n'a pas aimé.</li>
+      </ul>
+
+      <h2>Comment nous rejoindre</h2>
+      <p>
+        Envoyez-moi un SMS. Il n'y a pas de formulaire, pas de dossier, pas de
+        sélection sur CV : un message suffit, et j'y réponds moi-même. Dites-moi
+        simplement :
+      </p>
+      <ul class="regles">
+        {CANDIDATURE.map((l) => <li>{l}</li>)}
+      </ul>
+
+      <div class="cta-claqueur">
+        <a class="btn" href={smsCandidature()}>Envoyer un SMS →</a>
+        <p class="addr">ou enregistrez le numéro : <strong>{CONTACT_TEL_AFFICHE}</strong></p>
+      </div>
+
+      <h2>Questions fréquentes</h2>
+      <div class="faq">
+        {faqs.map((f) => (
+          <details>
+            <summary>{f.q}</summary>
+            <p>{f.r}</p>
+          </details>
+        ))}
+      </div>
+
+      <p class="muted" style="margin-top:30px; font-family:var(--sans); font-size:0.92rem;">
+        Aujourd'hui la bande compte {claqueurs} claqueurs, et le spectacle le plus
+        vu de nos dossiers a été regardé par {plusVu} d'entre eux. Plus on est
+        nombreux, plus l'avis devient fiable. C'est toute l'idée.
+        Notre méthode complète est sur <a href={url('/a-propos')}>la page dédiée</a>,
+        et vous pouvez voir qui écrit ici sur <a href={url('/equipe')}>Qui écrit</a>.
+      </p>
+    </div>
+  </div>
+</Base>
+
+<style>
+  .regles { list-style: none; padding: 0; margin: 14px 0 18px; display: flex; flex-direction: column; gap: 11px; }
+  .regles li { position: relative; padding-left: 22px; color: var(--ink-2); }
+  .regles li::before { content: ''; position: absolute; left: 0; top: 0.55em; width: 8px; height: 8px; background: var(--red); }
+  .regles li strong { color: var(--ink); }
+
+  .cta-claqueur { background: var(--card); border: 1px solid var(--rule-2); border-left: 4px solid var(--red); padding: 24px 26px; margin: 26px 0 10px; }
+  .cta-claqueur .addr { margin: 14px 0 0; font-family: var(--sans); font-size: 0.86rem; color: var(--ink-3); }
+  .cta-claqueur .addr a { color: var(--red); }
+
+  .faq details { border-bottom: 1px solid var(--rule); padding: 14px 0; }
+  .faq summary { font-family: var(--display); font-weight: 700; font-size: 1.08rem; cursor: pointer; list-style: none; display: flex; justify-content: space-between; align-items: center; gap: 14px; }
+  .faq summary::-webkit-details-marker { display: none; }
+  .faq summary::after { content: '+'; font-family: var(--sans); font-weight: 400; font-size: 1.5rem; color: var(--red); line-height: 1; flex: none; }
+  .faq details[open] summary::after { content: '−'; }
+  .faq details p { margin: 10px 0 0; color: var(--ink-2); }
+</style>

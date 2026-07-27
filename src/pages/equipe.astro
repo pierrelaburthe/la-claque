@@ -71,6 +71,16 @@ const jsonld = [
       </p>
     </section>
 
+    <section class="rejoindre">
+      <h2>Vous voulez en être ?</h2>
+      <p>
+        La bande s'ouvre. Si vous allez au théâtre et que vous avez envie que
+        votre avis compte, vous pouvez devenir claqueur : vous notez ce que vous
+        voyez, je rédige, et vous restez anonyme.
+      </p>
+      <a class="btn" href={url('/devenir-claqueur')}>Devenir claqueur →</a>
+    </section>
+
     <section class="pourquoi">
       <h2>Pourquoi une seule signature</h2>
       <p>
@@ -97,7 +107,10 @@ const jsonld = [
   .author .bio { margin: 0 0 14px; color: var(--ink-2); }
   .author .ci { margin: 0; padding-top: 12px; border-top: 1px solid var(--rule); font-family: var(--sans); font-size: 0.82rem; color: var(--ink-3); }
 
-  .bande, .pourquoi { margin-bottom: 34px; }
+  .bande, .pourquoi, .rejoindre { margin-bottom: 34px; }
+  .rejoindre { background: var(--card); border: 1px solid var(--rule-2); border-left: 4px solid var(--red); padding: 24px 26px; }
+  .rejoindre h2 { font-size: 1.5rem; margin: 0 0 10px; }
+  .rejoindre p { color: var(--ink-2); margin-bottom: 16px; }
   .bande h2, .pourquoi h2 { font-size: 1.5rem; margin: 0 0 12px; }
   .bande p, .pourquoi p { color: var(--ink-2); }
 

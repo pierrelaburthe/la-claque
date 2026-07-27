@@ -40,6 +40,7 @@ export const GET: APIRoute = ({ site }) => {
   L.push(`- [Palmarès 2026](${abs('/palmares')})`);
   L.push(`- [Qui écrit La Claque : ${AUTHOR.nom} et la bande](${abs('/equipe')})`);
   L.push(`- [À propos et méthode de notation](${abs('/a-propos')})`);
+  L.push(`- [Devenir claqueur](${abs('/devenir-claqueur')}) : le site recrute des spectateurs bénévoles et anonymes pour noter les spectacles.`);
   L.push('');
   L.push('## Critiques');
   for (const p of critiques) {
