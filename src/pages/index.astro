@@ -16,6 +16,9 @@ const side = parConsensus.filter((p) => p.slug !== une.slug).slice(0, 5);
 const featured = new Set([une, ...side].map((p) => p.slug));
 
 const dossiers = Array.from(new Set(PIECES.map((p) => p.festival).filter(Boolean)));
+// Les spectacles dont on a vérifié qu'ils ont des dates à venir : c'est ce que
+// le lecteur peut encore aller voir, donc ça passe avant le reste.
+const alAffiche = PIECES.filter((p) => p.reprise).sort((a, b) => consensusScore(b) - consensusScore(a));
 const paris = PIECES.filter((p) => p.festival === 'Théâtre à Paris' && !featured.has(p.slug))
   .sort((a, b) => b.noteMoy - a.noteMoy);
 const chefs = PIECES.filter((p) => p.noteMoy >= 8 && !featured.has(p.slug) && p.festival !== 'Théâtre à Paris')
@@ -79,6 +82,20 @@ const ogImage = new URL(url(`/og/${une.slug}.png`), Astro.site).href;
         <a class="btn btn-ghost" href={url('/a-propos')}>Notre méthode</a>
       </div>
     </div>
+
+    {alAffiche.length > 0 && (
+      <>
+        <div class="rubric">
+          <h2>Ce qui se joue encore</h2>
+          <span class="line"></span>
+          <span class="note">{alAffiche.length} spectacles à l'affiche</span>
+        </div>
+        <p class="rubric-intro">Le OFF est terminé, mais ces spectacles-là continuent leur route, à Paris ou en tournée. Dates vérifiées une par une, et lien de réservation dans chaque critique.</p>
+        <div class="cards">
+          {alAffiche.map((p) => <PieceCard piece={p} />)}
+        </div>
+      </>
+    )}
 
     <div class="rubric">
       <h2>Les autres grosses claques</h2>

@@ -32,7 +32,12 @@ const searchText = [piece.titre, piece.titreExact, piece.style, categorie, piece
   </div>
   <span class="kicker">{piece.style}</span>
   <h3>{piece.titre}</h3>
-  {piece.salle && <div class="byline">{piece.salle}</div>}
+  <div class="byline">
+    {piece.reprise && <span class="a-laffiche">À l'affiche</span>}
+    {/* Quand le spectacle se rejoue, la salle utile est celle de la reprise,
+        pas celle où on l'a vu il y a des mois. */}
+    {piece.reprise ? piece.reprise.lieu : piece.salle}
+  </div>
   <div class="foot">
     <Stars note={piece.noteMoy} />
     <span class="verdict">{verdictFor(piece.noteMoy)}</span>
@@ -43,4 +48,11 @@ const searchText = [piece.titre, piece.titreExact, piece.style, categorie, piece
 <style>
   /* L'affiche manquante retombe sur le rouge de rideau du site. */
   .pcard .frame .fallback { background: var(--red); }
+  /* Signale les spectacles dont on a vérifié qu'ils se jouent encore. */
+  .pcard .byline { align-items: flex-start; }
+  .a-laffiche {
+    display: inline-block; background: var(--red); color: #fff; border-radius: 2px;
+    font-size: 0.58rem; font-weight: 800; letter-spacing: 0.08em; padding: 2px 6px;
+    text-transform: uppercase; flex: none;
+  }
 </style>

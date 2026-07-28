@@ -47,9 +47,12 @@ const critiqueUrl = abs(`/critiques/${piece.slug}`);
 const DATE_PUBLI = '2026-07-24';
 const DATE_MAJ = '2026-07-25';
 
-// Infos & réservation : on privilégie une billetterie, sinon la meilleure source.
-const billetUrl = piece.sources.find((u) => /billetreduc|ticketoff|festivaloffavignon/.test(u)) || piece.sources[0];
-const billetLabel = billetUrl && /billetreduc|ticketoff|festivaloffavignon/.test(billetUrl) ? 'Trouver les billets' : 'Voir la fiche du spectacle';
+// Réservation. Le OFF d'Avignon 2026 est terminé : renvoyer vers sa billetterie
+// en promettant « Trouver les billets » induirait le lecteur en erreur. On ne
+// propose donc de réserver que si des dates à venir ont été vérifiées
+// (champ `reprise`). Sinon on se contente de la fiche du spectacle.
+const DATE_VERIF = '28 juillet 2026';
+const ficheUrl = piece.sources.find((u) => /billetreduc|ticketoff|festivaloffavignon/.test(u)) || piece.sources[0];
 
 // Partage social (liens construits côté serveur, un seul bouton en JS pour la copie).
 const enc = encodeURIComponent;
@@ -170,14 +173,29 @@ const jsonld = [
       <span class="big">{verdictFor(piece.noteMoy)}</span>
     </div>
 
-    <aside class="pratique">
-      <p class="pr-lbl">Où voir « {piece.titre} »</p>
-      <div class="pr-rows">
-        {piece.salle && <div class="pr-row"><span>Salle</span><strong>{piece.salle}</strong></div>}
-        {piece.festival && <div class="pr-row"><span>Dossier</span><strong>{piece.festival}</strong></div>}
-        <div class="pr-row"><span>Genre</span><strong>{piece.style}</strong></div>
-      </div>
-      {billetUrl && <a class="btn pr-btn" href={billetUrl} target="_blank" rel="noopener nofollow">{billetLabel} →</a>}
+    <aside class="pratique" class:list={['pratique', piece.reprise && 'pratique-on']}>
+      <p class="pr-lbl">{piece.reprise ? `Où voir « ${piece.titre} » en ce moment` : `Où nous avons vu « ${piece.titre} »`}</p>
+      {piece.reprise ? (
+        <div class="pr-rows">
+          <div class="pr-row"><span>À l'affiche</span><strong>{piece.reprise.lieu}</strong></div>
+          <div class="pr-row"><span>Dates</span><strong>{piece.reprise.dates}</strong></div>
+          <div class="pr-row"><span>Genre</span><strong>{piece.style}</strong></div>
+        </div>
+      ) : (
+        <div class="pr-rows">
+          {piece.salle && <div class="pr-row"><span>Salle</span><strong>{piece.salle}</strong></div>}
+          {piece.festival && <div class="pr-row"><span>Dossier</span><strong>{piece.festival}</strong></div>}
+          <div class="pr-row"><span>Genre</span><strong>{piece.style}</strong></div>
+        </div>
+      )}
+      {piece.reprise
+        ? <a class="btn pr-btn" href={piece.reprise.url} target="_blank" rel="noopener nofollow">Réserver →</a>
+        : ficheUrl && <a class="btn btn-ghost pr-btn" href={ficheUrl} target="_blank" rel="noopener nofollow">Voir la fiche du spectacle →</a>}
+      <p class="pr-note">
+        {piece.reprise
+          ? `Dates vérifiées le ${DATE_VERIF}. Les théâtres les font parfois évoluer, la billetterie fait foi.`
+          : `Nous n'avons pas trouvé de date à venir au ${DATE_VERIF}. Cela ne veut pas dire que le spectacle ne tourne plus : les compagnies annoncent souvent leur saison plus tard.`}
+      </p>
     </aside>
 
     <div class="share">
@@ -252,6 +270,8 @@ const jsonld = [
   .pratique .pr-row span { font-family: var(--sans); font-size: 0.62rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--ink-3); }
   .pratique .pr-row strong { font-family: var(--serif); font-size: 1.05rem; color: var(--ink); }
   .pratique .pr-btn { display: inline-block; }
+  .pratique.pratique-on { border-left-color: var(--red); }
+  .pratique .pr-note { margin: 14px 0 0; font-family: var(--sans); font-size: 0.74rem; line-height: 1.5; color: var(--ink-3); }
 
   .share { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; margin: 30px 0 6px; padding-top: 22px; border-top: 1px solid var(--rule); }
   .share-lbl { font-family: var(--sans); font-size: 0.72rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.1em; color: var(--ink-3); }

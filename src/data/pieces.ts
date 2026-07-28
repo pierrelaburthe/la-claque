@@ -22,6 +22,13 @@ export interface Piece {
   chapo: string;
   corps: string[];
   momentGarde?: string;
+  /**
+   * Où voir le spectacle MAINTENANT. Rempli uniquement quand des dates à venir
+   * ont été vérifiées sur le site du théâtre ou une billetterie officielle.
+   * Absent = aucune date repérée, et surtout pas « ça ne se joue plus » : on ne
+   * peut pas prouver une absence. L'article le dit dans ces termes.
+   */
+  reprise?: { lieu: string; dates: string; url: string };
   sources: string[];
 }
 
@@ -158,6 +165,11 @@ export const PIECES: Piece[] = [
       "On sort de là avec l'envie de remercier tous ceux qui montent sur des planches. Pour un spectacle sur Molière, c'est probablement le plus beau compliment qu'on puisse faire.",
     ],
     momentGarde: "Le vieux rideau et les tréteaux de bois, qui suffisent à faire tenir toute la cour de Louis XIV sur trois mètres carrés.",
+    reprise: {
+      lieu: "Théâtre des Célestins, Lyon, et en tournée",
+      dates: "En septembre 2026, puis saison 2026-2027",
+      url: 'https://compagnielek.fr/project/moliere/',
+    },
     sources: [
       'https://theatredutrainbleu.fr/festival-2026/moliere-et-ses-masques/',
       'https://www.journal-laterrasse.fr/moliere-et-ses-masques-une-creation-qui-honore-la-liberte-joyeuse-et-genereuse-de-lartisanat-du-theatre-mise-en-scene-par-simon-falguieres/',
@@ -226,6 +238,11 @@ export const PIECES: Piece[] = [
       "La bande n'a pas été unanime, et je le mentionne parce que ça compte. Deux d'entre nous ont trouvé que le spectacle appuyait trop, que l'émotion était un peu conduite. Les autres sont sortis en larmes. Je suis du second groupe, mais l'objection est recevable : la pièce sait très bien où elle veut nous emmener et elle ne s'en cache pas.",
       "Reste que c'est du théâtre populaire au meilleur sens du terme, celui qui prend un sujet dont personne ne parle et le rend insupportablement concret. On rit beaucoup, on pleure franchement, et on ressort en ayant compris quelque chose.",
     ],
+    reprise: {
+      lieu: "Théâtre La Dolce Vita, et en tournée",
+      dates: "Le 12 février 2027",
+      url: 'https://www.theatreladolcevita.fr/agenda/tout-contre-la-terre/',
+    },
     sources: [
       'https://www.la-factory.org/tout-contre-la-terre/',
       'https://coupsdoeil.fr/2026/03/tout-contre-la-terre-camille-beaurain-remi-couturier-critique/',
@@ -248,6 +265,11 @@ export const PIECES: Piece[] = [
       "L'esthétique est minimale et mobile : quelques perruques, des costumes de fortune, un pan de mur sur roulettes qui suffit à dessiner l'espace carcéral. Les acteurs se changent à vue avant d'aller s'asseoir en fond de scène. Rien n'est caché, et l'illusion n'en souffre pas, au contraire.",
       "Michalik obtient son effet non pas avec le plus de moyens, mais avec le plus de théâtre. La mécanique ne connaît pas de temps mort et l'émotion arrive toujours par un angle qu'on n'avait pas surveillé. Une valeur sûre, et pour une fois l'expression n'est pas un reproche.",
     ],
+    reprise: {
+      lieu: "La Pépinière Théâtre, Paris",
+      dates: "Jusqu'au 2 décembre 2026",
+      url: 'https://theatrelapepiniere.com/intra_muros.html',
+    },
     sources: [
       'https://www.chenenoir.fr/event/intra-muros-dalexis-michalik/',
       'https://pianopanier.com/intra-muros-chenenoir/',
@@ -809,6 +831,11 @@ export const PIECES: Piece[] = [
       "Le texte est cosigné par l'équipe du cycle « Huit Rois », celle-là même qui nous avait déjà bluffés avec son Chirac. Une comédie identitaire brillante, formidablement interprétée, qui montre nos présidents impuissants sans jamais tomber dans le tract.",
     ],
     momentGarde: "Hollande en clown voué à l'échec, dont la maladresse finit par devenir franchement touchante.",
+    reprise: {
+      lieu: "La Pépinière Théâtre, Paris",
+      dates: "Du 20 septembre 2026 au 4 avril 2027",
+      url: 'https://theatrelapepiniere.com/',
+    },
     sources: [
       'https://www.festivaloffavignon.com/spectacles/9130-sarkhollande-comedie-identitaire',
       'https://www.journal-laterrasse.fr/sarkhollande-comedie-identitaire-de-leo-cohen-paperman-une-traversee-a-vive-allure-de-lepoque-formidablement-interpretee/',
@@ -882,6 +909,11 @@ export const PIECES: Piece[] = [
       "C'est la note la plus haute de tout notre tableur, dossiers confondus. On ne la met pas souvent, et celle-ci n'a pas été discutée une seule seconde.",
     ],
     momentGarde: "Le groupe de femmes autour d'Elsa, tenu par une seule comédienne sans qu'on perde jamais le fil de qui est en train de parler.",
+    reprise: {
+      lieu: "En tournée, puis Théâtre de l'Atelier, Paris",
+      dates: "Tournée à l'automne 2026, Paris le 9 janvier 2027",
+      url: 'https://evarami.fr/billetterie/',
+    },
     sources: [
       'https://theatrelapepiniere.com/va_aimer__.html',
       'https://lestroiscoups.fr/va-aimer-eva-ravi-theatre-la-pepiniere-paris/',
@@ -905,6 +937,11 @@ export const PIECES: Piece[] = [
       "Plus de deux cent mille spectateurs plus tard, ça continue de tourner, et je comprends très bien pourquoi. Emmenez-y quelqu'un qui vous jure qu'il déteste la danse. Bravo.",
     ],
     momentGarde: "Les tableaux qui détournent le ballet classique, drôles parce qu'ils sont dansés par des gens capables de le faire parfaitement au premier degré.",
+    reprise: {
+      lieu: "En tournée en France",
+      dates: "Toulouse en octobre, Aubervilliers en décembre 2026, puis 2027",
+      url: 'https://www.francebillet.com/artist/chicos-mambo/',
+    },
     sources: [
       'https://www.philippelafeuille.com/creations/tutu/',
       'https://toitoitoi.fr/project/tutu-chicos-mambo/',
@@ -928,6 +965,11 @@ export const PIECES: Piece[] = [
       "On pourrait objecter que c'est un téléfilm du dimanche soir monté sur une scène. J'ai entendu l'argument et je ne le partage pas : la prouesse est justement d'obtenir cet effet-là avec des comédiens, des écrans et rien d'autre. Cinq nominations aux Molières 2023, et elles se comprennent.",
     ],
     momentGarde: "Les écrans qui se mettent à tourner comme une chaîne d'info en continu et transforment le plateau en rédaction en alerte.",
+    reprise: {
+      lieu: "Théâtre des Béliers Parisiens, puis en tournée",
+      dates: "Jusqu'au 23 août 2026, tournée ensuite",
+      url: 'https://www.theatredesbeliersparisiens.com/spectacle/big-mother/',
+    },
     sources: [
       'https://www.theatredesbeliersparisiens.com/spectacle/big-mother/',
       'https://www.artcena.fr/agendas/spectacles/big-mother-2023',
@@ -952,6 +994,11 @@ export const PIECES: Piece[] = [
       "Molière du meilleur spectacle de théâtre public en 2022, plus de six cents représentations et un quart de million de spectateurs plus tard, la mécanique n'a pas rouillé d'un cran.",
     ],
     momentGarde: "Les cartons : un bout de carton découpé à la main devient un décor entier parce que deux personnes ont décidé d'y croire très fort.",
+    reprise: {
+      lieu: "En tournée en France",
+      dates: "Saison 2026-2027, du Havre à Toulouse",
+      url: 'https://www.fnacspectacles.com/artist/les-gros-patinent-bien/les-gros-patinent-bien-tournee-3498418/',
+    },
     sources: [
       'https://libretheatre.fr/les-gros-patinent-bien/',
       'https://www.pierreguillois.fr/en/spectacle/the-ice-hole-a-cardboard-comedy/',
@@ -974,6 +1021,11 @@ export const PIECES: Piece[] = [
       "Deux comédiens portent l'ensemble, et il y a de très beaux moments. Il faut savoir en revanche que le rythme est nettement plus lent que dans les autres volets, et qu'on rit peu. Ce n'est pas un défaut d'exécution, c'est un choix : la pièce se range du côté de la désillusion, pas de la satire.",
       "Ce que je retiens, c'est la clarté avec laquelle le fil de ces quarante ans est tenu sans qu'on décroche jamais. On ressort en comprenant mieux comment un espoir collectif se défait, ce qui n'est pas rien pour une soirée de théâtre.",
     ],
+    reprise: {
+      lieu: "En tournée en France",
+      dates: "Blois en décembre 2026, Alès en février 2027",
+      url: 'https://theatre13.com/spectacle/huit-rois-nos-presidents/',
+    },
     sources: [
       'https://www.journal-laterrasse.fr/generation-mitterrand-de-leo-cohen-paperman-et-emilien-diard-detoeuf/',
       'https://theatre13.com/spectacle/huit-rois-nos-presidents/',
@@ -996,6 +1048,11 @@ export const PIECES: Piece[] = [
       "Une heure qu'on ne voit pas passer. Le concept mérite d'être piqué, d'ailleurs, et j'ai bien l'intention de m'en souvenir.",
     ],
     momentGarde: "L'idée de faire composer une pizza au public pour décider des scènes, une contrainte toute bête qui structure la soirée entière.",
+    reprise: {
+      lieu: "La Comédie des 3 Bornes, Paris",
+      dates: "Représentations régulières",
+      url: 'https://75.agendaculturel.fr/theatre/pizz-impro-1.html',
+    },
     sources: [
       'https://75.agendaculturel.fr/theatre/pizz-impro-1.html',
     ],
@@ -1017,6 +1074,11 @@ export const PIECES: Piece[] = [
       "Les personnages sont attachants, et c'est un peu là que le bât blesse : ils le restent du début à la fin sans que grand-chose leur arrive. Le récit reste assez monocorde, et il manque des péripéties pour emmener le spectateur plus loin que le décor.",
       "Ce sont de belles heures de théâtre bien fabriqué, portées par une distribution solide, et le public y trouve manifestement son compte. Nous sommes restés un cran en dessous de l'enthousiasme général.",
     ],
+    reprise: {
+      lieu: "Théâtre Saint-Georges, Paris",
+      dates: "De septembre à décembre 2026",
+      url: 'https://theatre-saint-georges.com/charbon-dans-les-veines/',
+    },
     sources: [
       'https://www.theatrepalaisroyal.com/Spectacles/du-charbon-dans-les-veines/',
       'https://www.billetreduc.com/spectacle/du-charbon-dans-les-veines-359030',
@@ -1083,6 +1145,11 @@ export const PIECES: Piece[] = [
       "Ce qui saute aux yeux, et qui ne s'apprend pas, c'est l'énergie de ces trois-là. Ils y vont sans se ménager, avec une générosité de jeu qui explique très bien le succès qui a suivi. Ce soir-là, j'ai surtout suivi une suite de très bons moments sans réussir à voir la ligne qui les reliait, et c'est précisément le genre de chose qu'une année de tournée resserre.",
       "Le public et les Molières leur ont donné raison, largement, et c'est une très belle histoire. Il faudra qu'on retourne les voir dans la version d'aujourd'hui, parce que ce n'est manifestement plus le même spectacle.",
     ],
+    reprise: {
+      lieu: "Théâtre Lepic, Paris",
+      dates: "Du 10 septembre au 18 octobre 2026",
+      url: 'https://billetterie-lepic.mapado.com/en/event/584585-fin-fin-et-fin',
+    },
     sources: [
       'https://theatredesbeliers.com/spectacle/fin-fin-et-fin/',
       'https://www.festivaloffavignon.com/spectacles/8318-fin-fin-et-fin',
@@ -1129,6 +1196,11 @@ export const PIECES: Piece[] = [
       "Fred Radix avait déjà tourné six cents fois avec Le Siffleur, et on comprend en le voyant qu'il sait exactement comment on tient une salle. Un régal, et une leçon d'histoire du théâtre déguisée en comédie musicale.",
     ],
     momentGarde: "Le moment où l'on comprend qu'on ne va pas regarder la claque, mais en faire partie, et que toute la salle s'y met sans se faire prier.",
+    reprise: {
+      lieu: "Théâtre de la Gaîté-Montparnasse, Paris",
+      dates: "Du 11 septembre 2026 au 23 mai 2027",
+      url: 'https://gaite.com/spectacles/la-claque/',
+    },
     sources: [
       'https://gaite.com/spectacles/la-claque/',
       'https://www.bluelineproductions.info/spectacles/la-claque/',

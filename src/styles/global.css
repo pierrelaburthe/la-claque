@@ -133,7 +133,12 @@ img { max-width: 100%; display: block; }
 .frontline b { color: var(--red); font-weight: 700; }
 
 .frontpage { display: grid; grid-template-columns: 1fr 300px; gap: 40px; padding: 30px 0 34px; border-bottom: 3px double var(--ink); }
-.lead-story { display: grid; grid-template-columns: 300px 1fr; gap: 32px; align-items: start; }
+/* La Une est en habillage, pas en colonnes : l'affiche est rarement aussi haute
+   que le texte, et une grille laissait un grand vide sous la photo. Le texte
+   contourne l'image puis reprend toute la largeur. */
+.lead-story { display: block; }
+.lead-story::after { content: ''; display: block; clear: both; }
+.lead-story .lead-frame { float: left; width: 300px; margin: 6px 30px 16px 0; }
 .lead-story .lead-frame { position: relative; display: block; border: 1px solid var(--rule-2); overflow: hidden; background: var(--panel); }
 .lead-story .lead-frame img { width: 100%; height: auto; display: block; }
 .lead-story .lead-frame .corner { position: absolute; top: 0; left: 0; background: var(--red); color: #fff; font-family: var(--sans); font-size: 0.6rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; padding: 5px 10px; }
@@ -147,7 +152,7 @@ img { max-width: 100%; display: block; }
 .lead-story .lead-excerpt { font-family: var(--serif); font-size: 1.04rem; line-height: 1.62; color: var(--ink-2); margin: 0 0 18px; }
 .lead-story .lead-more { font-family: var(--sans); font-size: 0.74rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; color: var(--red); text-decoration: none; margin-left: auto; white-space: nowrap; }
 .lead-story .lead-more:hover { text-decoration: underline; }
-.lead-story .lead-foot { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.lead-story .lead-foot { clear: both; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; padding-top: 14px; border-top: 1px solid var(--rule); }
 .lead-story .lead-foot .stars { font-size: 1.2rem; }
 .lead-story .lead-foot .byl { font-family: var(--sans); font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--ink-3); display: flex; align-items: center; gap: 8px; }
 .lead-body .byl { display: flex; align-items: center; gap: 9px; font-family: var(--sans); font-size: 0.8rem; letter-spacing: 0.02em; color: var(--ink-2); }
@@ -174,8 +179,7 @@ img { max-width: 100%; display: block; }
   .front-side { border-left: 0; padding-left: 0; border-top: 1px solid var(--rule); padding-top: 20px; }
 }
 @media (max-width: 620px) {
-  .lead-story { grid-template-columns: 1fr; gap: 16px; }
-  .lead-story .lead-frame { max-width: 180px; }
+  .lead-story .lead-frame { float: none; width: 100%; max-width: 220px; margin: 0 0 16px; }
   .lead-story h1 { font-size: clamp(2rem, 9vw, 2.6rem); }
 }
 
