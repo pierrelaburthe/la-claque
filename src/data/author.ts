@@ -21,7 +21,7 @@ export interface Author {
 }
 
 export const AUTHOR: Author = {
-  nom: 'Pierre Laburthe-Tolra',
+  nom: 'Pierre L.',
   role: 'Rédacteur',
   ligne: 'Comédien, joue au Festival OFF',
   bio: "Je suis comédien, et j'ai joué au Festival OFF d'Avignon 2026 dans « Le Flan Pâtissier », au Théâtre Tremplin. Je regarde donc les spectacles depuis les deux côtés du plateau : je connais le trac des coulisses autant que le velours des fauteuils. Je rédige toutes les critiques de La Claque, à partir de ce que la bande et moi avons vu ensemble.",
