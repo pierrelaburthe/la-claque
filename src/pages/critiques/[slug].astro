@@ -137,8 +137,8 @@ const jsonld = [
     <p class="breadcrumb"><a href={url('/')}>Accueil</a> › <a href={url('/critiques')}>Critiques</a> › {piece.titre}</p>
     <div class="byline-row">
       <div class="who">
-        <div class="n">Par <a href={url('/equipe#auteur')} rel="author">{AUTHOR.nom}</a></div>
-        <div class="r">{AUTHOR.ligne} · Vu par {seenLabel(seen)} de la bande</div>
+        <div class="n">Vu par {seenLabel(seen)} de la bande</div>
+        <div class="r"><a href={url('/equipe#auteur')} rel="author">Qui écrit ici</a></div>
       </div>
       <div class="crit-topics">
         <a href={url(`/critiques?cat=${encodeURIComponent(categorie)}`)}>{categorie}</a>
