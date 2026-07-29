@@ -1,8 +1,10 @@
 ---
+import { Image, getImage } from 'astro:assets';
 import Base from '../../layouts/Base.astro';
 import Stars from '../../components/Stars.astro';
 import PieceCard from '../../components/PieceCard.astro';
 import RelatedGuides from '../../components/RelatedGuides.astro';
+import { affiche } from '../../lib/images';
 import { PIECES } from '../../data/pieces';
 import { AUTHOR } from '../../data/author';
 import { verdictFor, nbVus, estPlebiscite, starsFor, seenLabel } from '../../lib/rating';
@@ -34,6 +36,14 @@ const guideSlugs = Array.from(new Set([
   ...(estAvignon ? ['off-avignon-mode-demploi'] : ['choisir-sa-place-au-theatre']),
   'lexique-du-theatre',
 ]));
+
+// L'affiche : 208 px à l'écran (150 sur mobile), donc 208 servis en WebP,
+// doublés pour les écrans denses.
+const img = affiche(piece.image);
+// Le fond du bandeau est la même affiche passée à `blur(40px)`. Elle était
+// servie en pleine résolution pour finir illisible : 48 px de large suffisent
+// largement, et le flou masque complètement la perte.
+const fond = img ? await getImage({ src: img, width: 48, format: 'webp' }) : null;
 
 const hostname = (u: string) => {
   try { return new URL(u).hostname.replace(/^www\./, ''); } catch { return u; }
@@ -115,12 +125,22 @@ const jsonld = [
 ---
 <Base title={`${piece.titre} — critique et avis${piece.festival ? ` · ${piece.festival}` : ''} | La Claque`} active="critiques" description={`Notre critique de « ${piece.titre} » : ${piece.chapo}`} jsonld={jsonld} image={ogImage}>
   <div class="art-hero">
-    <div class="art-bg" style={piece.image ? `background-image:url(${url(piece.image)})` : 'background:var(--red)'}></div>
+    <div class="art-bg" style={fond ? `background-image:url(${fond.src})` : 'background:var(--red)'}></div>
     <div class="wrap art-hero-in">
       <a href={url('/critiques')} class="back">← Toutes les critiques</a>
       <div class="art-head">
-        {piece.image && (
-          <div class="art-poster"><img src={url(piece.image)} alt={`Affiche de ${piece.titre}`} /></div>
+        {img && (
+          <div class="art-poster">
+            <Image
+              src={img}
+              alt={`Affiche de ${piece.titre}`}
+              width={208}
+              densities={[1, 2]}
+              format="webp"
+              loading="eager"
+              fetchpriority="high"
+            />
+          </div>
         )}
         <div class="art-title">
           <p class="sub">{piece.style}{piece.salle ? ` · ${piece.salle}` : ''}</p>

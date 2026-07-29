@@ -22,10 +22,14 @@ const ANCIENNES_PLUMES = [
 export default defineConfig({
   site: 'https://la-claque.com',
   base: '/',
-  trailingSlash: 'ignore',
+  // GitHub Pages sert les pages en dossier (/critiques/xxx/) et redirige en 301
+  // la version sans slash. « always » aligne le dev sur la prod et évite de
+  // fabriquer des liens internes qui coûteraient tous une redirection. Le
+  // helper src/lib/url.ts pose le slash sur les liens, jamais sur les fichiers.
+  trailingSlash: 'always',
   build: { format: 'directory' },
   integrations: [sitemap()],
   redirects: Object.fromEntries(
-    ANCIENNES_PLUMES.map((slug) => [`/equipe/${slug}`, '/equipe']),
+    ANCIENNES_PLUMES.map((slug) => [`/equipe/${slug}/`, '/equipe/']),
   ),
 });

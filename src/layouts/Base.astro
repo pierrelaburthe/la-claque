@@ -1,7 +1,10 @@
 ---
 import '../styles/global.css';
 import { url } from '../lib/url';
+import { scriptAnalytics, VERIFICATION } from '../data/analytics';
 import Mark from '../components/Mark.astro';
+
+const analytics = scriptAnalytics();
 
 interface Props {
   title: string;
@@ -70,9 +73,14 @@ const nav = [
     <link rel="icon" href={url('/favicon.svg')} type="image/svg+xml" />
     <link rel="alternate" type="application/rss+xml" title="La Claque — critiques de théâtre" href={url('/rss.xml')} />
     <link rel="stylesheet" href={url('/fonts/fonts.css')} />
+    {VERIFICATION.google && <meta name="google-site-verification" content={VERIFICATION.google} />}
+    {VERIFICATION.bing && <meta name="msvalidate.01" content={VERIFICATION.bing} />}
     {allJsonld.map((data) => (
       <script type="application/ld+json" set:html={JSON.stringify(data)} />
     ))}
+    {/* Mesure d'audience sans cookie : voir src/data/analytics.ts. Chargée en
+        `defer` pour ne jamais retarder l'affichage de la page. */}
+    {analytics && <script defer src={analytics.src} {...analytics.attrs}></script>}
   </head>
   <body>
     <div class="brandbar"></div>

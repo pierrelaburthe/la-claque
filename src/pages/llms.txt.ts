@@ -2,15 +2,13 @@ import type { APIRoute } from 'astro';
 import { PIECES } from '../data/pieces';
 import { verdictFor, nbVus } from '../lib/rating';
 import { AUTHOR } from '../data/author';
+import { url as chemin } from '../lib/url';
 
 // llms.txt : décrit le site pour les moteurs génératifs / assistants IA,
 // afin qu'ils comprennent et citent correctement La Claque. Généré au build,
 // donc toujours à jour quand on ajoute des critiques. Voir llmstxt.org.
-const BASE = import.meta.env.BASE_URL;
-
 export const GET: APIRoute = ({ site }) => {
-  const abs = (p: string) =>
-    new URL(BASE.replace(/\/$/, '') + '/' + p.replace(/^\//, ''), site).href;
+  const abs = (p: string) => new URL(chemin(p), site).href;
 
   const critiques = [...PIECES].sort((a, b) => b.noteMoy - a.noteMoy);
 

@@ -1,12 +1,18 @@
 ---
+import { Image } from 'astro:assets';
 import type { Piece } from '../data/pieces';
 import { verdictFor, nbVus, estPlebiscite, seenLabel } from '../lib/rating';
 import { categorieFor } from '../lib/categories';
+import { affiche } from '../lib/images';
 import Stars from './Stars.astro';
 import { url } from '../lib/url';
 
 interface Props { piece: Piece; }
 const { piece } = Astro.props;
+// La vignette est recadrée en 3/4 par le CSS : la grille descend à 258 px de
+// colonne et monte rarement au-dessus de 340. On sert 300 px, doublés pour les
+// écrans à forte densité.
+const img = affiche(piece.image);
 const seen = nbVus(piece);
 const pleb = estPlebiscite(piece);
 const chef = piece.noteMoy >= 8;
@@ -21,8 +27,8 @@ const searchText = [piece.titre, piece.titreExact, piece.style, categorie, piece
 ---
 <a class="pcard" href={url(`/critiques/${piece.slug}`)} data-cat={categorie} data-text={searchText}>
   <div class="frame">
-    {piece.image
-      ? <img src={url(piece.image)} alt={`Affiche de ${piece.titre}`} loading="lazy" />
+    {img
+      ? <Image src={img} alt={`Affiche de ${piece.titre}`} width={300} densities={[1, 2]} loading="lazy" decoding="async" format="webp" />
       : <div class="fallback">{piece.titre}</div>}
     {chef
       ? <span class="corner">Grosse claque</span>

@@ -1,7 +1,9 @@
 ---
+import { Image } from 'astro:assets';
 import Base from '../layouts/Base.astro';
 import PieceCard from '../components/PieceCard.astro';
 import Stars from '../components/Stars.astro';
+import { affiche } from '../lib/images';
 import { PIECES } from '../data/pieces';
 import { consensusScore, estDecouverteSolo, estPlebiscite, nbVus, verdictFor, seenLabel } from '../lib/rating';
 import { url } from '../lib/url';
@@ -27,6 +29,10 @@ const solos = PIECES.filter((p) => estDecouverteSolo(p) && !featured.has(p.slug)
   .sort((a, b) => b.noteMoy - a.noteMoy);
 
 const ogImage = new URL(url(`/og/${une.slug}.png`), Astro.site).href;
+
+// L'affiche de la Une est l'élément le plus lourd du premier écran : c'est
+// elle qui décide de la LCP. On la charge en priorité, les autres en différé.
+const afficheUne = affiche(une.image);
 ---
 <Base title="La Claque — critiques de théâtre" active="accueil" image={ogImage}>
   <div class="frontline">
@@ -40,7 +46,17 @@ const ogImage = new URL(url(`/og/${une.slug}.png`), Astro.site).href;
     <section class="frontpage">
       <article class="lead-story">
         <a class="lead-frame" href={url(`/critiques/${une.slug}`)}>
-          {une.image && <img src={url(une.image)} alt={`Affiche de ${une.titre}`} />}
+          {afficheUne && (
+            <Image
+              src={afficheUne}
+              alt={`Affiche de ${une.titre}`}
+              width={300}
+              densities={[1, 2]}
+              format="webp"
+              loading="eager"
+              fetchpriority="high"
+            />
+          )}
           <span class="corner">La Une</span>
         </a>
         <div class="lead-body">
@@ -63,7 +79,19 @@ const ogImage = new URL(url(`/og/${une.slug}.png`), Astro.site).href;
             <li>
               <a href={url(`/critiques/${p.slug}`)}>
                 <span class="rk">{i + 2}</span>
-                <span class="th">{p.image && <img src={url(p.image)} alt={`Affiche de ${p.titre}`} loading="lazy" />}</span>
+                <span class="th">
+                  {affiche(p.image) && (
+                    <Image
+                      src={affiche(p.image)!}
+                      alt={`Affiche de ${p.titre}`}
+                      width={46}
+                      densities={[1, 2]}
+                      format="webp"
+                      loading="lazy"
+                      decoding="async"
+                    />
+                  )}
+                </span>
                 <span>
                   <span class="st">{p.titre}</span>
                   <span class="sm">{verdictFor(p.noteMoy)} · {seenLabel(nbVus(p))}</span>

@@ -1,6 +1,8 @@
 ---
+import { Image } from 'astro:assets';
 import Base from '../layouts/Base.astro';
 import Stars from '../components/Stars.astro';
+import { affiche } from '../lib/images';
 import { PIECES } from '../data/pieces';
 import { nbVus, estPlebiscite, verdictFor, seenLabel, consensusScore } from '../lib/rating';
 import { url } from '../lib/url';
@@ -45,8 +47,8 @@ const groupes = GROUPES
             <a href={url(`/critiques/${p.slug}`)}>
               <span class="pos">{i + 1}</span>
               <span class="thumb">
-                {p.image
-                  ? <img src={url(p.image)} alt={`Affiche de ${p.titre}`} loading="lazy" />
+                {affiche(p.image)
+                  ? <Image src={affiche(p.image)!} alt={`Affiche de ${p.titre}`} width={52} densities={[1, 2]} format="webp" loading="lazy" decoding="async" />
                   : <span class="ph"></span>}
               </span>
               <span class="main">

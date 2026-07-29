@@ -1,8 +1,8 @@
 import rss from '@astrojs/rss';
 import { PIECES } from '../data/pieces';
+import { url as path } from '../lib/url';
 
 const BASE = import.meta.env.BASE_URL;
-const path = (p) => BASE.replace(/\/$/, '') + '/' + p.replace(/^\//, '');
 
 export function GET(context) {
   const items = [...PIECES]

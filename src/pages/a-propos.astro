@@ -2,6 +2,7 @@
 import Base from '../layouts/Base.astro';
 import { PIECES } from '../data/pieces';
 import { AUTHOR } from '../data/author';
+import { url } from '../lib/url';
 ---
 <Base title="Notre méthode — La Claque" active="apropos" description="La Claque : une bande d'une dizaine de comédiens voit les spectacles, un seul rédacteur signe les critiques. Notre méthode, notre barème et notre façon de mettre en avant les coups de cœur collectifs.">
   <div class="wrap-narrow" style="padding-top:46px;">
@@ -37,7 +38,7 @@ import { AUTHOR } from '../data/author';
 
       <h2>Une seule signature</h2>
       <p>
-        La bande voit, on en discute à la sortie, et je rédige. Toutes les critiques du site sont écrites et signées par <a href="/equipe#auteur">{AUTHOR.nom}</a>, pour une raison simple : vous savez qui vous lisez. Un texte a besoin d'une voix, et une voix a besoin d'un nom.
+        La bande voit, on en discute à la sortie, et je rédige. Toutes les critiques du site sont écrites et signées par <a href={url('/equipe#auteur')}>{AUTHOR.nom}</a>, pour une raison simple : vous savez qui vous lisez. Un texte a besoin d'une voix, et une voix a besoin d'un nom.
       </p>
       <p>
         Les notes de chacun ne sont jamais publiées individuellement. Elles servent à calculer l'étoile et le classement, rien de plus. Ce qu'on affiche en revanche, c'est le nombre de claqueurs qui ont vu le spectacle avant que la critique ne soit écrite, parce que c'est ça qui fait la valeur de l'avis. Et quand les avis divergent franchement dans la bande, je l'écris dans l'article au lieu de lisser vers une moyenne tiède.
