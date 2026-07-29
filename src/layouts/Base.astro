@@ -78,9 +78,9 @@ const nav = [
     {allJsonld.map((data) => (
       <script type="application/ld+json" set:html={JSON.stringify(data)} />
     ))}
-    {/* Mesure d'audience sans cookie : voir src/data/analytics.ts. Chargée en
-        `defer` pour ne jamais retarder l'affichage de la page. */}
-    {analytics && <script defer src={analytics.src} {...analytics.attrs}></script>}
+    {/* Mesure d'audience sans cookie : voir src/data/analytics.ts. Toujours
+        différée (module ou `defer`), pour ne jamais retarder l'affichage. */}
+    {analytics && <script src={analytics.src} {...analytics.attrs}></script>}
   </head>
   <body>
     <div class="brandbar"></div>

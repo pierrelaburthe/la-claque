@@ -28,37 +28,39 @@ export const ANALYTICS: {
   hote?: string;
 } = {
   fournisseur: 'cloudflare',
-  id: '',
+  id: '46f8a846072d4fd2892b6d999801011e',
 };
 
 /** Vrai quand la mesure est réellement branchée. */
 export const analyticsActif = ANALYTICS.fournisseur !== 'aucun' && ANALYTICS.id.trim() !== '';
 
 /** L'URL du script à charger, selon le fournisseur. */
-export function scriptAnalytics(): { src: string; attrs: Record<string, string> } | null {
+export function scriptAnalytics(): { src: string; attrs: Record<string, string | boolean> } | null {
   if (!analyticsActif) return null;
   const { fournisseur, id, hote } = ANALYTICS;
 
   switch (fournisseur) {
     case 'cloudflare':
+      // Cloudflare sert sa balise en module : c'est déjà différé par nature,
+      // on ne rajoute donc pas `defer` (qui serait ignoré sur un module).
       return {
         src: 'https://static.cloudflareinsights.com/beacon.min.js',
-        attrs: { 'data-cf-beacon': JSON.stringify({ token: id }) },
+        attrs: { type: 'module', 'data-cf-beacon': JSON.stringify({ token: id }) },
       };
     case 'plausible':
       return {
         src: `${hote || 'https://plausible.io'}/js/script.outbound-links.js`,
-        attrs: { 'data-domain': id },
+        attrs: { defer: true, 'data-domain': id },
       };
     case 'umami':
       return {
         src: `${hote || 'https://cloud.umami.is'}/script.js`,
-        attrs: { 'data-website-id': id },
+        attrs: { defer: true, 'data-website-id': id },
       };
     case 'goatcounter':
       return {
         src: '//gc.zgo.at/count.js',
-        attrs: { 'data-goatcounter': `https://${id}.goatcounter.com/count` },
+        attrs: { defer: true, 'data-goatcounter': `https://${id}.goatcounter.com/count` },
       };
     default:
       return null;
