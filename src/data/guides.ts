@@ -51,8 +51,15 @@ export const GUIDES: Guide[] = [
   {
     slug: 'genres-du-theatre',
     k: 'Comprendre le théâtre',
-    titre: 'Les genres du théâtre expliqués',
-    desc: "Tragédie, comédie, drame, vaudeville, seul-en-scène, café-théâtre : reconnaître les grandes familles du spectacle vivant.",
+    titre: 'Les différents genres théâtraux : définitions et exemples',
+    desc: "Tragédie, comédie, drame, vaudeville, boulevard, seul-en-scène, café-théâtre : la définition de chaque genre, avec des exemples.",
+    section: 'spectateur',
+  },
+  {
+    slug: 'la-claque-au-theatre',
+    k: 'Histoire du théâtre',
+    titre: "La claque au théâtre : les applaudisseurs professionnels",
+    desc: "Des spectateurs payés pour applaudir, un chef, des rieurs et des pleureurs : l'histoire du mot qui nous a donné notre nom.",
     section: 'spectateur',
   },
   {

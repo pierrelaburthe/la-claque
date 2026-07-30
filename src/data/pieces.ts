@@ -12,6 +12,15 @@ export interface Piece {
   slug: string;
   titre: string;
   titreExact?: string;
+  /**
+   * Orthographes également valables du titre : espaces, traits d'union,
+   * diacritiques. « Anti-Cocon » se cherche aussi « Anticocon », « Münchhausen »
+   * s'écrit couramment « Munchhausen ». Ces variantes alimentent la recherche
+   * du site et l'`alternateName` du schéma, jamais le texte visible.
+   * On n'y met PAS les fautes de frappe : « Hiper Cut » n'est pas une
+   * orthographe, c'est une erreur, et Google la rattrape déjà tout seul.
+   */
+  alias?: string[];
   style: string;
   salle?: string;
   origine?: string;
@@ -23,12 +32,41 @@ export interface Piece {
   corps: string[];
   momentGarde?: string;
   /**
+   * Dates propres à cette critique, au format ISO. Absentes, la critique fait
+   * partie du dossier initial et porte les dates du dossier (définies dans
+   * critiques/[slug].astro). À renseigner quand une critique paraît plus tard,
+   * ou quand son texte est réellement retouché. On ne remonte jamais une date
+   * de mise à jour pour paraître frais : c'est un chiffre inventé comme un
+   * autre, et les moteurs finissent par le voir.
+   */
+  datePubli?: string;
+  dateMaj?: string;
+  /**
    * Où voir le spectacle MAINTENANT. Rempli uniquement quand des dates à venir
    * ont été vérifiées sur le site du théâtre ou une billetterie officielle.
    * Absent = aucune date repérée, et surtout pas « ça ne se joue plus » : on ne
    * peut pas prouver une absence. L'article le dit dans ces termes.
    */
-  reprise?: { lieu: string; dates: string; url: string };
+  reprise?: {
+    lieu: string;
+    dates: string;
+    url: string;
+    /**
+     * Les mêmes dates en ISO, et la salle décomposée, uniquement quand
+     * l'annonce donne un jour précis et un lieu nommé. Elles servent à décrire
+     * la reprise en `TheaterEvent` pour les moteurs, ce qui rend la critique
+     * éligible aux étoiles dans les résultats de recherche.
+     *
+     * Règle : on ne déduit jamais un jour d'un mois ou d'une saison.
+     * « En septembre 2026 » et « saison 2026-2027 » restent sans `debut`, et la
+     * critique retombe alors sur une description d'œuvre. Une date inventée
+     * pour gagner une étoile serait exactement ce que le site s'interdit.
+     */
+    debut?: string;
+    fin?: string;
+    salle?: string;
+    ville?: string;
+  };
   sources: string[];
 }
 
@@ -179,6 +217,7 @@ export const PIECES: Piece[] = [
     slug: 'munchausen',
     titre: 'Munchausen ?',
     titreExact: 'Münchhausen ?',
+    alias: ['Munchhausen'],
     style: 'Théâtre',
     salle: 'Présence Pasteur',
     origine: 'Texte de Fabrice Melquiot, compagnie MIJOTE (Cours Florent Montpellier)',
@@ -241,6 +280,8 @@ export const PIECES: Piece[] = [
     reprise: {
       lieu: "Théâtre La Dolce Vita, et en tournée",
       dates: "Le 12 février 2027",
+      debut: '2027-02-12',
+      salle: 'Théâtre La Dolce Vita',
       url: 'https://www.theatreladolcevita.fr/agenda/tout-contre-la-terre/',
     },
     sources: [
@@ -546,6 +587,7 @@ export const PIECES: Piece[] = [
   {
     slug: 'anti-cocon',
     titre: 'Anti-Cocon',
+    alias: ['Anticocon', 'Anti Cocon'],
     style: 'Théâtre et stand-up',
     salle: 'Théâtre du Tremplin',
     origine: 'Création, avec Faustine Astruc et Esther Coudreau',
@@ -771,6 +813,7 @@ export const PIECES: Piece[] = [
   {
     slug: 'hyper-cut',
     titre: 'Hyper Cut',
+    alias: ['Hypercut'],
     style: 'Improvisation',
     salle: "Impro Club d'Avignon",
     origine: "Spectacle d'impro de la troupe Sobre",
@@ -834,6 +877,10 @@ export const PIECES: Piece[] = [
     reprise: {
       lieu: "La Pépinière Théâtre, Paris",
       dates: "Du 20 septembre 2026 au 4 avril 2027",
+      debut: '2026-09-20',
+      fin: '2027-04-04',
+      salle: 'La Pépinière Théâtre',
+      ville: 'Paris',
       url: 'https://theatrelapepiniere.com/',
     },
     sources: [
@@ -912,6 +959,11 @@ export const PIECES: Piece[] = [
     reprise: {
       lieu: "En tournée, puis Théâtre de l'Atelier, Paris",
       dates: "Tournée à l'automne 2026, Paris le 9 janvier 2027",
+      // Seule la date parisienne est annoncée au jour près ; la tournée
+      // d'automne reste sans calendrier public.
+      debut: '2027-01-09',
+      salle: "Théâtre de l'Atelier",
+      ville: 'Paris',
       url: 'https://evarami.fr/billetterie/',
     },
     sources: [
@@ -1148,6 +1200,10 @@ export const PIECES: Piece[] = [
     reprise: {
       lieu: "Théâtre Lepic, Paris",
       dates: "Du 10 septembre au 18 octobre 2026",
+      debut: '2026-09-10',
+      fin: '2026-10-18',
+      salle: 'Théâtre Lepic',
+      ville: 'Paris',
       url: 'https://billetterie-lepic.mapado.com/en/event/584585-fin-fin-et-fin',
     },
     sources: [
@@ -1199,6 +1255,10 @@ export const PIECES: Piece[] = [
     reprise: {
       lieu: "Théâtre de la Gaîté-Montparnasse, Paris",
       dates: "Du 11 septembre 2026 au 23 mai 2027",
+      debut: '2026-09-11',
+      fin: '2027-05-23',
+      salle: 'Théâtre de la Gaîté-Montparnasse',
+      ville: 'Paris',
       url: 'https://gaite.com/spectacles/la-claque/',
     },
     sources: [
@@ -1298,6 +1358,9 @@ export const PIECES: Piece[] = [
     reprise: {
       lieu: "Théâtre des Variétés, Paris",
       dates: "À partir du 27 août 2026",
+      debut: '2026-08-27',
+      salle: 'Théâtre des Variétés',
+      ville: 'Paris',
       url: 'https://www.uneideegeniale.com/ou-nous-voir',
     },
     sources: [
@@ -1325,6 +1388,9 @@ export const PIECES: Piece[] = [
     reprise: {
       lieu: "En tournée",
       dates: "Digne-les-Bains le 28 janvier 2027",
+      // La salle n'est pas nommée dans l'annonce : on ne garde que la ville.
+      debut: '2027-01-28',
+      ville: 'Digne-les-Bains',
       url: 'https://04.agendaculturel.fr/theatre/digne-les-bains/madame-bovary-en-plus-drole-madame-bovary-en-plus-drole-et-m.html',
     },
     sources: [

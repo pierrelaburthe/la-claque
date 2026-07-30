@@ -29,7 +29,7 @@ const jsonld = [
 ];
 ---
 <Base
-  title="Un mois au OFF, le jeu — La Claque"
+  title="Un mois au OFF, le jeu | La Claque"
   description="Dirigez une compagnie au Festival OFF d'Avignon dans ce jeu de cartes à la Reigns : chaque décision fait pencher votre trésorerie, votre public, le moral de la troupe et la presse. Tiendrez-vous tout le mois ?"
   active="jouer"
   jsonld={jsonld}
@@ -440,7 +440,7 @@ const jsonld = [
   setMute(muted);
   $('share').addEventListener('click', async () => {
     if (!shareText) return;
-    const data = { title: 'Un mois au OFF — La Claque', text: shareText };
+    const data = { title: 'Un mois au OFF, le jeu de La Claque', text: shareText };
     try {
       if (navigator.share) { await navigator.share(data); return; }
     } catch (e) { if (e && e.name === 'AbortError') return; }

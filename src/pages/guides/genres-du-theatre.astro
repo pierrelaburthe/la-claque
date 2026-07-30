@@ -6,6 +6,14 @@ const abs = (p: string) => new URL(url(p), Astro.site).href;
 
 const faqs = [
   {
+    q: "Quels sont les différents genres théâtraux et leur définition ?",
+    r: "Les genres théâtraux se répartissent en trois familles. Les genres historiques d'abord : la tragédie, qui mène des personnages illustres à une fin funeste ; la comédie, qui fait rire des travers de son époque ; le drame, qui mêle les deux depuis le XVIIIᵉ siècle. Les formes comiques codifiées ensuite : le vaudeville, mécanique de quiproquos, et le théâtre de boulevard, divertissement des grandes salles privées. Les formes contemporaines enfin : le seul-en-scène, le café-théâtre, le stand-up, le théâtre musical, la marionnette et le théâtre d'objet.",
+  },
+  {
+    q: "Quelle est la différence entre le théâtre de boulevard et le vaudeville ?",
+    r: "Le vaudeville est un genre d'écriture, le boulevard est un lieu devenu un genre. Le vaudeville désigne une mécanique précise, codifiée au XIXᵉ siècle : quiproquos, portes qui claquent, secret à cacher, rythme effréné. Le théâtre de boulevard désigne d'abord le répertoire des grandes salles privées parisiennes, une comédie de divertissement sur les couples et la bourgeoisie. Beaucoup de vaudevilles se jouent sur les boulevards, mais tout le boulevard n'est pas du vaudeville.",
+  },
+  {
     q: "Quels sont les grands genres du théâtre ?",
     r: "On distingue traditionnellement la tragédie et la comédie, héritées de l'Antiquité, puis le drame, né au XVIIIᵉ siècle, qui mêle les deux. À côté de ces genres historiques, la scène d'aujourd'hui fait cohabiter le vaudeville et le théâtre de boulevard, le seul-en-scène, le café-théâtre, le stand-up, le théâtre musical, la marionnette ou encore le théâtre d'objet.",
   },
@@ -40,8 +48,8 @@ const jsonld = [
   {
     '@context': 'https://schema.org',
     '@type': 'Article',
-    headline: 'Les genres du théâtre expliqués',
-    description: "Tragédie, comédie, drame, vaudeville, seul-en-scène, café-théâtre, stand-up : reconnaître les grandes familles du spectacle vivant, avec des exemples.",
+    headline: 'Les différents genres théâtraux : définitions et exemples',
+    description: "Tragédie, comédie, drame, vaudeville, boulevard, seul-en-scène, café-théâtre, stand-up : la définition de chaque genre théâtral, avec des exemples.",
     author: { '@type': 'Organization', name: 'La Claque' },
     publisher: { '@type': 'Organization', name: 'La Claque' },
     mainEntityOfPage: abs('/guides/genres-du-theatre'),
@@ -62,28 +70,28 @@ const jsonld = [
     itemListElement: [
       { '@type': 'ListItem', position: 1, name: 'Accueil', item: abs('/') },
       { '@type': 'ListItem', position: 2, name: 'Guides', item: abs('/guides') },
-      { '@type': 'ListItem', position: 3, name: 'Les genres du théâtre', item: abs('/guides/genres-du-theatre') },
+      { '@type': 'ListItem', position: 3, name: 'Les genres théâtraux', item: abs('/guides/genres-du-theatre') },
     ],
   },
 ];
 ---
 <Base
-  title="Les genres du théâtre expliqués — La Claque"
-  description="Tragédie, comédie, drame, vaudeville, seul-en-scène, café-théâtre, stand-up : reconnaître les grandes familles du spectacle vivant, simplement et avec des exemples."
+  title="Les différents genres théâtraux : définitions et exemples | La Claque"
+  description="Tragédie, comédie, drame, vaudeville, boulevard, seul-en-scène, café-théâtre, stand-up : la définition de chaque genre théâtral, avec des exemples et un tableau récapitulatif."
   active="guides"
   jsonld={jsonld}
 >
   <article class="wrap-narrow guide">
-    <p class="breadcrumb"><a href={url('/')}>Accueil</a> › <a href={url('/guides')}>Guides</a> › Les genres du théâtre</p>
+    <p class="breadcrumb"><a href={url('/')}>Accueil</a> › <a href={url('/guides')}>Guides</a> › Les genres théâtraux</p>
     <div class="guide-head">
       <p class="kicker">Comprendre le théâtre</p>
-      <h1>Les genres du théâtre expliqués</h1>
-      <p class="stand">Sur une affiche, on lit « comédie », « seul-en-scène », « drame »… mais que promettent vraiment ces mots ? Voici les grandes familles du théâtre, pour savoir dans quoi vous mettez les pieds avant d'entrer en salle.</p>
+      <h1>Les différents genres théâtraux : définitions et exemples</h1>
+      <p class="stand">Sur une affiche, on lit « comédie », « seul-en-scène », « drame »… mais que promettent vraiment ces mots ? Voici la définition de chaque genre théâtral, pour savoir dans quoi vous mettez les pieds avant d'entrer en salle.</p>
     </div>
 
     <div class="prose">
       <p>
-        Le théâtre ne se range pas dans une seule case. Depuis l'Antiquité, il s'est ramifié en une multitude de <strong>genres</strong>, chacun avec ses codes, son rythme et sa promesse faite au public. Connaître ces familles, c'est mieux choisir ses soirées : on ne va pas voir un vaudeville comme on va voir une tragédie.
+        Le théâtre ne se range pas dans une seule case. Depuis l'Antiquité, il s'est ramifié en une multitude de <strong>genres théâtraux</strong>, chacun avec ses codes, son rythme et sa promesse faite au public. On en distingue une dizaine aujourd'hui : la tragédie, la comédie, le drame, le vaudeville, le théâtre de boulevard, le seul-en-scène, le café-théâtre, le stand-up, le théâtre musical et la marionnette. Connaître ces familles, c'est mieux choisir ses soirées, parce qu'on ne va pas voir un vaudeville comme on va voir une tragédie.
       </p>
 
       <h2>Les genres historiques : tragédie, comédie, drame</h2>
@@ -101,7 +109,7 @@ const jsonld = [
         Le <strong>seul-en-scène</strong> est sans doute la forme la plus emblématique du <a href={url('/guides/off-avignon-mode-demploi')}>OFF d'Avignon</a> : un interprète unique, un récit, et le jeu au premier plan. Le <strong>café-théâtre</strong> et le <strong>stand-up</strong> jouent eux aussi la carte de la proximité et de l'énergie, souvent dans de petites salles où l'on rit à quelques mètres des comédiens.
       </p>
 
-      <h2>Le tableau des genres</h2>
+      <h2>Le tableau des genres théâtraux</h2>
       <div class="gtable-wrap">
         <table class="gtable">
           <caption>Les grandes familles du théâtre en un coup d'œil</caption>

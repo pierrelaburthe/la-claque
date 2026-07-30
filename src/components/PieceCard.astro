@@ -20,7 +20,7 @@ const categorie = categorieFor(piece.style);
 // La signature est la même partout depuis qu'un seul rédacteur signe : sur une
 // grille de cartes, elle n'apporte rien. On affiche la salle à la place, qui
 // aide vraiment à choisir, et on la garde dans l'index de recherche.
-const searchText = [piece.titre, piece.titreExact, piece.style, categorie, piece.salle, piece.chapo]
+const searchText = [piece.titre, piece.titreExact, ...(piece.alias ?? []), piece.style, categorie, piece.salle, piece.chapo]
   .filter(Boolean)
   .join(' ')
   .toLowerCase();

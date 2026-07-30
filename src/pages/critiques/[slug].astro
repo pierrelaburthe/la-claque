@@ -54,8 +54,12 @@ const ogImage = abs(`/og/${piece.slug}.png`);
 const critiqueUrl = abs(`/critiques/${piece.slug}`);
 
 // Dates : publication du dossier, et dernière mise à jour (resync du tableur).
+// Une critique publiée plus tard, ou vraiment retouchée, porte les siennes
+// (champs `datePubli` / `dateMaj` de la pièce).
 const DATE_PUBLI = '2026-07-24';
 const DATE_MAJ = '2026-07-25';
+const datePubli = piece.datePubli ?? DATE_PUBLI;
+const dateMaj = piece.dateMaj ?? piece.datePubli ?? DATE_MAJ;
 
 // Réservation. Le OFF d'Avignon 2026 est terminé : renvoyer vers sa billetterie
 // en promettant « Trouver les billets » induirait le lecteur en erreur. On ne
@@ -64,9 +68,15 @@ const DATE_MAJ = '2026-07-25';
 const DATE_VERIF = '28 juillet 2026';
 const ficheUrl = piece.sources.find((u) => /billetreduc|ticketoff|festivaloffavignon/.test(u)) || piece.sources[0];
 
+// Meta description : on met en tête ce qu'aucune billetterie n'affiche, la note
+// et le nombre de claqueurs qui l'ont portée. Sur une requête « titre + avis »,
+// c'est le seul argument qui puisse nous faire préférer à Ticket'Off ou
+// BilletReduc, qui sortent sur les mêmes mots avec la seule fiche du spectacle.
+const descriptionSerp = `${starsFor(piece.noteMoy)} étoiles sur 5, vu et noté par ${seen > 1 ? seenLabel(seen) : 'un claqueur'}. ${piece.chapo}`;
+
 // Partage social (liens construits côté serveur, un seul bouton en JS pour la copie).
 const enc = encodeURIComponent;
-const shareTitle = `${piece.titre} — la critique de La Claque`;
+const shareTitle = `${piece.titre} : la critique de La Claque`;
 const share = {
   x: `https://twitter.com/intent/tweet?text=${enc(shareTitle)}&url=${enc(critiqueUrl)}`,
   facebook: `https://www.facebook.com/sharer/sharer.php?u=${enc(critiqueUrl)}`,
@@ -74,20 +84,85 @@ const share = {
   email: `mailto:?subject=${enc(shareTitle)}&body=${enc('À voir : ' + critiqueUrl)}`,
 };
 
+// Le spectacle noté, décrit pour les moteurs. Le choix du type n'est pas
+// cosmétique : Google n'affiche d'étoiles d'avis que si l'objet noté appartient
+// à une liste de types précise, où `CreativeWork` ne figure pas et `Event` si.
+// Or un spectacle EST un événement. Quand une reprise est datée au jour près et
+// localisée, on le dit en `TheaterEvent` et la critique redevient éligible aux
+// étoiles ; sans date exacte, l'événement serait incomplet (`startDate` est
+// obligatoire) donc invalide, et on retombe sur la description d'œuvre.
+const rep = piece.reprise;
+
+// Les autres écritures du titre : le titre complet quand il diffère de celui
+// qu'on affiche, plus les variantes d'orthographe. Rien de tout ça n'est
+// visible ; ça sert à rapprocher la page des recherches « anticocon » ou
+// « munchhausen », qui sont les mêmes spectacles.
+const alternateName = Array.from(new Set([
+  ...(piece.titreExact && piece.titreExact !== piece.titre ? [piece.titreExact] : []),
+  ...(piece.alias ?? []),
+]));
+
+// La note agrégée. `ratingValue` reprend exactement les étoiles affichées par
+// le composant Stars : la moyenne sur 10 ne sort jamais à l'écran, elle n'a
+// donc rien à faire dans le balisage. `ratingCount`, c'est le nombre de
+// claqueurs qui ont vu et noté, celui-là même qu'annonce la page. C'est ce que
+// les billetteries n'ont pas : un avis porté par plusieurs regards.
+const aggregateRating = {
+  '@type': 'AggregateRating',
+  ratingValue: starsFor(piece.noteMoy),
+  bestRating: 5,
+  worstRating: 1,
+  ratingCount: seen,
+};
+
+const lieuReprise = rep?.salle
+  ? {
+      '@type': 'PerformingArtsTheater',
+      name: rep.salle,
+      ...(rep.ville
+        ? { address: { '@type': 'PostalAddress', addressLocality: rep.ville, addressCountry: 'FR' } }
+        : {}),
+    }
+  : rep?.ville
+    ? {
+        '@type': 'Place',
+        name: rep.ville,
+        address: { '@type': 'PostalAddress', addressLocality: rep.ville, addressCountry: 'FR' },
+      }
+    : null;
+
+const itemReviewed = rep?.debut && lieuReprise
+  ? {
+      '@type': 'TheaterEvent',
+      name: piece.titre,
+      ...(alternateName.length ? { alternateName } : {}),
+      url: rep.url,
+      startDate: rep.debut,
+      ...(rep.fin ? { endDate: rep.fin } : {}),
+      eventStatus: 'https://schema.org/EventScheduled',
+      eventAttendanceMode: 'https://schema.org/OfflineEventAttendanceMode',
+      location: lieuReprise,
+      ...(piece.origine ? { description: piece.origine } : {}),
+      aggregateRating,
+    }
+  : {
+      '@type': 'CreativeWork',
+      name: piece.titre,
+      ...(alternateName.length ? { alternateName } : {}),
+      genre: piece.style,
+      ...(piece.origine ? { description: piece.origine } : {}),
+      aggregateRating,
+    };
+
 const jsonld = [
   {
     '@context': 'https://schema.org',
     '@type': 'Review',
     name: `Critique : ${piece.titre}`,
     reviewBody: piece.chapo,
-    datePublished: DATE_PUBLI,
-    dateModified: DATE_MAJ,
-    itemReviewed: {
-      '@type': 'CreativeWork',
-      name: piece.titre,
-      genre: piece.style,
-      ...(piece.origine ? { description: piece.origine } : {}),
-    },
+    datePublished: datePubli,
+    dateModified: dateMaj,
+    itemReviewed,
     reviewRating: {
       '@type': 'Rating',
       ratingValue: starsFor(piece.noteMoy),
@@ -108,8 +183,8 @@ const jsonld = [
     '@context': 'https://schema.org',
     '@type': 'WebPage',
     url: critiqueUrl,
-    datePublished: DATE_PUBLI,
-    dateModified: DATE_MAJ,
+    datePublished: datePubli,
+    dateModified: dateMaj,
     speakable: { '@type': 'SpeakableSpecification', cssSelector: ['h1', '.stand'] },
   },
   {
@@ -123,7 +198,7 @@ const jsonld = [
   },
 ];
 ---
-<Base title={`${piece.titre} — critique et avis${piece.festival ? ` · ${piece.festival}` : ''} | La Claque`} active="critiques" description={`Notre critique de « ${piece.titre} » : ${piece.chapo}`} jsonld={jsonld} image={ogImage}>
+<Base title={`${piece.titre} : critique et avis${piece.festival ? ` (${piece.festival})` : ''} | La Claque`} active="critiques" description={descriptionSerp} jsonld={jsonld} image={ogImage}>
   <div class="art-hero">
     <div class="art-bg" style={fond ? `background-image:url(${fond.src})` : 'background:var(--red)'}></div>
     <div class="wrap art-hero-in">

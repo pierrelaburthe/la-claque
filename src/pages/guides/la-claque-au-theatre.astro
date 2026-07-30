@@ -1,0 +1,163 @@
+---
+import Base from '../../layouts/Base.astro';
+import { url } from '../../lib/url';
+
+const abs = (p: string) => new URL(url(p), Astro.site).href;
+
+// Ce guide porte le nom du site, et ce n'est pas un hasard : « la claque »
+// est un vrai mot de théâtre avant d'être notre enseigne. Raconter d'où il
+// vient, c'est à la fois rendre service au lecteur qui cherche le terme et
+// expliquer pourquoi une bande d'ami·es qui note des spectacles s'appelle
+// comme ça.
+
+const faqs = [
+  {
+    q: "Qu'est-ce que la claque au théâtre ?",
+    r: "La claque est un groupe de spectateurs chargés d'applaudir un spectacle, placés dans la salle pour entraîner le reste du public. Le mot vient de « claquer », c'est-à-dire frapper des mains. Pendant tout le XIXᵉ siècle, ces applaudisseurs étaient recrutés et rémunérés, le plus souvent en places gratuites qu'ils pouvaient revendre.",
+  },
+  {
+    q: "Qui était le chef de claque ?",
+    r: "Le chef de claque dirigeait la troupe des applaudisseurs. Il négociait avec le directeur du théâtre ou avec les comédiens un lot de places, répartissait ses hommes dans la salle et réglait le spectacle des réactions : où rire, où pleurer, quand réclamer un bis. C'était un métier, avec ses tarifs et sa réputation.",
+  },
+  {
+    q: "La claque existe-t-elle encore aujourd'hui ?",
+    r: "Plus sous sa forme organisée et rémunérée, qui s'est éteinte au cours du XXᵉ siècle. Mais l'idée survit ailleurs : les rires enregistrés des sitcoms, les applaudissements déclenchés en plateau de télévision et les faux avis achetés en ligne poursuivent la même logique, celle de fabriquer un enthousiasme que le public n'a pas encore.",
+  },
+  {
+    q: "Pourquoi ce site s'appelle-t-il La Claque ?",
+    r: "Parce que le mot dit les deux choses à la fois. La claque, c'est le groupe placé dans la salle, et nous sommes bien une bande qui va voir les mêmes spectacles ensemble. Et prendre une claque, c'est recevoir un choc : c'est ce qu'on cherche en entrant dans une salle. Nos claqueurs paient leurs places et personne ne les paie pour applaudir, ce qui est exactement la différence avec la claque historique.",
+  },
+];
+
+const metiers = [
+  { t: 'Le chef de claque', d: "Il dirige la troupe. Il obtient les places auprès du théâtre, choisit ses hommes, les répartit dans la salle et donne les signaux. Rien ne part au hasard." },
+  { t: 'Les commissaires', d: "Ils connaissent la pièce par cœur et se placent au milieu du public pour en vanter les beautés à voix haute, entre voisins, comme s'ils découvraient le spectacle." },
+  { t: 'Les rieurs', d: "Ils rient aux bons moments. Un rire lancé au bon endroit en entraîne dix autres, et c'est toute la salle qui bascule dans la comédie." },
+  { t: 'Les pleureurs', d: "Souvent des femmes, chargées de s'émouvoir aux passages tragiques. Le mouchoir sorti au premier rang autorise le reste de la salle à se laisser aller." },
+  { t: 'Les chatouilleurs', d: "Ils entretiennent la bonne humeur autour d'eux, par une remarque ou un mot d'esprit, pour qu'une salle froide ne le reste pas." },
+  { t: 'Les bisseurs', d: "Ils réclament les bis et relancent les applaudissements au moment des saluts, quand la salle hésite à se lever." },
+];
+
+const jsonld = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: "La claque au théâtre : l'histoire des applaudisseurs professionnels",
+    description: "D'où vient la claque, ce groupe payé pour applaudir dans les salles : son origine antique, son organisation au XIXᵉ siècle, ses métiers et sa disparition.",
+    author: { '@type': 'Organization', name: 'La Claque' },
+    publisher: { '@type': 'Organization', name: 'La Claque' },
+    mainEntityOfPage: abs('/guides/la-claque-au-theatre'),
+    about: {
+      '@type': 'DefinedTerm',
+      name: 'Claque',
+      description: "Groupe de spectateurs placés dans une salle de théâtre pour applaudir un spectacle et entraîner le reste du public.",
+      inDefinedTermSet: abs('/guides/lexique-du-theatre'),
+    },
+    inLanguage: 'fr',
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqs.map((f) => ({
+      '@type': 'Question',
+      name: f.q,
+      acceptedAnswer: { '@type': 'Answer', text: f.r },
+    })),
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Accueil', item: abs('/') },
+      { '@type': 'ListItem', position: 2, name: 'Guides', item: abs('/guides') },
+      { '@type': 'ListItem', position: 3, name: 'La claque au théâtre', item: abs('/guides/la-claque-au-theatre') },
+    ],
+  },
+];
+---
+<Base
+  title="La claque au théâtre : l'histoire des applaudisseurs professionnels | La Claque"
+  description="La claque, c'est le groupe payé pour applaudir dans les salles. Son origine antique, son organisation au XIXᵉ siècle, ses métiers et ce qu'il en reste aujourd'hui."
+  active="guides"
+  jsonld={jsonld}
+>
+  <article class="wrap-narrow guide">
+    <p class="breadcrumb"><a href={url('/')}>Accueil</a> › <a href={url('/guides')}>Guides</a> › La claque au théâtre</p>
+    <div class="guide-head">
+      <p class="kicker">Histoire du théâtre</p>
+      <h1>La claque au théâtre : l'histoire des applaudisseurs professionnels</h1>
+      <p class="stand">Pendant plus d'un siècle, les salles européennes ont employé des spectateurs dont le métier était d'applaudir. Ils avaient un chef, des spécialités et des tarifs. Voici l'histoire du mot qui nous a donné notre nom.</p>
+    </div>
+
+    <div class="prose">
+      <p>
+        Une <strong>claque</strong>, au théâtre, c'est un groupe de spectateurs placés dans la salle pour applaudir. Le mot vient tout simplement de « claquer », frapper des mains. Ces spectateurs ne sont pas là par hasard et ne réagissent pas au spectacle : ils exécutent un travail, et ils sont payés pour ça, le plus souvent en places gratuites qu'ils revendent ensuite à l'entrée.
+      </p>
+      <p>
+        L'affaire paraît folle aujourd'hui. Elle était pourtant si banale au XIXᵉ siècle que les directeurs de salle la budgétaient comme le chauffage ou l'éclairage.
+      </p>
+
+      <h2>De Néron aux boulevards parisiens</h2>
+      <p>
+        L'idée est très ancienne. L'empereur Néron, qui montait lui-même sur scène, entretenait un corps de jeunes gens chargés de saluer ses prestations avec enthousiasme, et les historiens romains ont raconté leurs rythmes d'applaudissements réglés comme une partition.
+      </p>
+      <p>
+        Mais c'est au XIXᵉ siècle, dans les théâtres et les opéras d'Europe, que la claque devient une véritable institution commerciale. À Paris, le recrutement des applaudisseurs se professionnalise au point de passer par des bureaux spécialisés, qui fournissent aux salles le nombre d'hommes voulu pour la première. Un auteur inquiet, un comédien qui craint pour son accueil ou un directeur qui veut lancer une pièce s'adressent au chef de claque comme on s'adresse à un fournisseur.
+      </p>
+
+      <h2>Les métiers de la claque</h2>
+      <p>
+        Une claque n'est pas une masse indistincte qui tape dans ses mains. C'est une petite entreprise avec ses spécialités, et la tradition leur a donné des noms.
+      </p>
+      <div class="gtable-wrap">
+        <table class="gtable">
+          <caption>Qui fait quoi dans une claque</caption>
+          <thead>
+            <tr><th>Rôle</th><th>Sa mission dans la salle</th></tr>
+          </thead>
+          <tbody>
+            {metiers.map((m) => (
+              <tr><th>{m.t}</th><td>{m.d}</td></tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <p>
+        Le principe est toujours le même : une salle est un animal grégaire. Personne n'ose rire le premier, ni pleurer le premier, ni se lever le premier. La claque fournit ce premier geste, et le public suit.
+      </p>
+
+      <h2>Pourquoi la claque a disparu</h2>
+      <p>
+        Elle s'est éteinte au cours du XXᵉ siècle, à mesure que la critique de presse gagnait en autorité et que le public acceptait de moins en moins d'être manœuvré. Le procédé était devenu trop voyant, et la réputation d'un spectacle se jouait désormais ailleurs que dans la salle, dans les colonnes des journaux puis sur les écrans.
+      </p>
+      <p>
+        L'idée, elle, n'est jamais morte. Les rires enregistrés des sitcoms, les applaudissements déclenchés sur les plateaux de télévision et les faux avis achetés en ligne font exactement le travail des commissaires et des rieurs d'autrefois : fabriquer un enthousiasme que le public n'a pas encore, en espérant qu'il finisse par y croire.
+      </p>
+
+      <h2>Et nos claqueurs à nous ?</h2>
+      <p>
+        Le site s'appelle <a href={url('/a-propos')}>La Claque</a> parce que le mot dit deux choses à la fois. C'est ce groupe placé dans la salle, et nous sommes bien une bande qui va voir les mêmes spectacles ensemble. Et prendre une claque, c'est recevoir un choc, ce qu'on va chercher chaque fois qu'on entre dans un théâtre.
+      </p>
+      <p>
+        La différence tient en une phrase, et elle est essentielle : nos <strong>claqueurs</strong> paient leurs places, personne ne les rémunère, et chacun note de son côté avant qu'on en discute. Une critique de La Claque indique d'ailleurs toujours combien d'entre nous ont vu le spectacle, parce qu'un avis porté par cinq regards ne vaut pas la même chose qu'un avis solitaire. C'est l'inverse exact de la claque historique, qui vendait un avis unique à qui pouvait le payer. Notre <a href={url('/a-propos')}>méthode de notation</a> détaille comment on s'y prend.
+      </p>
+
+      <h2>Questions fréquentes</h2>
+      <div class="faq">
+        {faqs.map((f) => (
+          <details>
+            <summary>{f.q}</summary>
+            <p>{f.r}</p>
+          </details>
+        ))}
+      </div>
+    </div>
+
+    <div class="related">
+      <h2>À lire aussi</h2>
+      <a href={url('/guides/lexique-du-theatre')}>Le lexique du théâtre</a>
+      <a href={url('/guides/etiquette-au-theatre')}>Quand applaudir : le savoir-vivre au théâtre</a>
+      <a href={url('/critiques')}>Toutes nos critiques</a>
+    </div>
+  </article>
+</Base>

@@ -25,6 +25,7 @@ export const GET: APIRoute = ({ site }) => {
   L.push(`- [Le OFF d’Avignon, mode d’emploi](${abs('/guides/off-avignon-mode-demploi')}) : choisir ses spectacles, la carte OFF, le tractage.`);
   L.push(`- [Les salles du OFF d’Avignon](${abs('/guides/salles-du-off-avignon')}) : quartier, jauge et ligne artistique des principaux théâtres.`);
   L.push(`- [Lexique du théâtre](${abs('/guides/lexique-du-theatre')}) : le vocabulaire des plateaux expliqué.`);
+  L.push(`- [La claque au théâtre](${abs('/guides/la-claque-au-theatre')}) : les applaudisseurs payés du XIXᵉ siècle, le chef de claque, les rieurs et les pleureurs, et d'où vient le nom du site.`);
   L.push(`- [L'intermittence du spectacle, expliquée simplement](${abs('/guides/intermittence-spectacle')}) : annexes 8 et 10, seuil de 507 heures, cachet, date anniversaire.`);
   L.push(`- [Comment obtenir son intermittence](${abs('/guides/obtenir-son-intermittence')}) : 507 heures, AEM, inscription France Travail, actualisation.`);
   L.push(`- [Le cachet et le décompte des heures](${abs('/guides/le-cachet-et-le-decompte-des-heures')}) : cachet = 12 h, plafonds mensuels, heures d'enseignement.`);
