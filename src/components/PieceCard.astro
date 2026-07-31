@@ -1,7 +1,7 @@
 ---
 import { Image } from 'astro:assets';
 import type { Piece } from '../data/pieces';
-import { verdictFor, nbVus, estPlebiscite, seenLabel } from '../lib/rating';
+import { nbVus, estPlebiscite, seenLabel } from '../lib/rating';
 import { categorieFor } from '../lib/categories';
 import { affiche } from '../lib/images';
 import Stars from './Stars.astro';
@@ -42,11 +42,13 @@ const searchText = [piece.titre, piece.titreExact, ...(piece.alias ?? []), piece
     {piece.reprise && <span class="a-laffiche">À l'affiche</span>}
     {/* Quand le spectacle se rejoue, la salle utile est celle de la reprise,
         pas celle où on l'a vu il y a des mois. */}
-    {piece.reprise ? piece.reprise.lieu : piece.salle}
+    <span class="salle">{piece.reprise ? piece.reprise.lieu : piece.salle}</span>
   </div>
+  {/* Le verdict n'est plus répété ici : la pastille sur l'affiche le donne déjà,
+      et les étoiles le disent une troisième fois. Restent la note et le nombre
+      de claqueurs, qui sont les deux seules choses que la pastille ne dit pas. */}
   <div class="foot">
     <Stars note={piece.noteMoy} />
-    <span class="verdict">{verdictFor(piece.noteMoy)}</span>
     <span class="seen">{seenLabel(seen)}</span>
   </div>
 </a>
@@ -54,8 +56,13 @@ const searchText = [piece.titre, piece.titreExact, ...(piece.alias ?? []), piece
 <style>
   /* L'affiche manquante retombe sur le rouge de rideau du site. */
   .pcard .frame .fallback { background: var(--red); }
-  /* Signale les spectacles dont on a vérifié qu'ils se jouent encore. */
-  .pcard .byline { align-items: flex-start; }
+  /* Signale les spectacles dont on a vérifié qu'ils se jouent encore.
+     La salle tient sur une ligne et se coupe au besoin : sur quatre colonnes,
+     « Théâtre du Petit Saint-Martin, Paris » passait sur deux lignes et
+     déséquilibrait toute la rangée. Le nom complet reste sur la critique. */
+  .pcard .byline { align-items: center; flex-wrap: nowrap; min-width: 0; }
+  .pcard .byline .salle { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; }
+  .pcard .foot .seen { white-space: nowrap; }
   .a-laffiche {
     display: inline-block; background: var(--red); color: #fff; border-radius: 2px;
     font-size: 0.58rem; font-weight: 800; letter-spacing: 0.08em; padding: 2px 6px;

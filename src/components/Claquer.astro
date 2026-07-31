@@ -74,9 +74,11 @@ const { slug, titre } = Astro.props;
 
 <script>
   const LABELS = {
+    action: 'Claquer',
     fait: 'Claqué',
-    merci: 'Merci, votre claque est comptée.',
-    sansCompteur: 'Merci, votre claque est notée.',
+    aide: "Vous avez vu ce spectacle ? Applaudissez-le d'ici.",
+    merci: 'Merci, votre claque est comptée. Recliquez pour la retirer.',
+    sansCompteur: 'Merci, votre claque est notée. Recliquez pour la retirer.',
   };
 
   document.querySelectorAll<HTMLElement>('.claquer').forEach((bloc) => {
@@ -89,23 +91,35 @@ const { slug, titre } = Astro.props;
     if (!btn || !slug) return;
 
     const cle = `claque:${slug}`;
-    let dejaFait = false;
-    try {
-      dejaFait = localStorage.getItem(cle) === '1';
-    } catch {
-      // Navigation privée ou stockage refusé : on laisse simplement claquer.
+
+    function lire(): boolean {
+      try {
+        return localStorage.getItem(cle) === '1';
+      } catch {
+        return false; // Navigation privée : on laisse simplement claquer.
+      }
+    }
+    function ecrire(valeur: boolean) {
+      try {
+        if (valeur) localStorage.setItem(cle, '1');
+        else localStorage.removeItem(cle);
+      } catch {
+        // Sans stockage, l'état ne survit pas à la visite. Ce n'est pas grave.
+      }
     }
 
-    function afficherCompte(n: number) {
+    function afficherCompte(n: unknown) {
       if (!compteur || typeof n !== 'number' || Number.isNaN(n)) return;
       compteur.textContent = String(n);
       compteur.hidden = false;
     }
 
-    function marquerFait() {
-      btn!.setAttribute('aria-pressed', 'true');
-      if (txt) txt.textContent = LABELS.fait;
-      if (aide) aide.textContent = endpoint ? LABELS.merci : LABELS.sansCompteur;
+    function peindre(actif: boolean) {
+      btn!.setAttribute('aria-pressed', String(actif));
+      if (txt) txt.textContent = actif ? LABELS.fait : LABELS.action;
+      if (aide) {
+        aide.textContent = actif ? (endpoint ? LABELS.merci : LABELS.sansCompteur) : LABELS.aide;
+      }
     }
 
     // Sans compteur configuré, on n'affiche aucun nombre : un total local
@@ -117,23 +131,35 @@ const { slug, titre } = Astro.props;
         .catch(() => {});
     }
 
-    if (dejaFait) marquerFait();
+    peindre(lire());
 
+    let enVol = false;
     btn.addEventListener('click', () => {
-      if (btn.getAttribute('aria-pressed') === 'true') return;
-      marquerFait();
-      btn.classList.add('cl-boum');
-      setTimeout(() => btn.classList.remove('cl-boum'), 500);
-      try {
-        localStorage.setItem(cle, '1');
-      } catch {
-        // Sans stockage, le visiteur pourra re-claquer à la prochaine visite.
+      if (enVol) return;
+      const actifAvant = btn.getAttribute('aria-pressed') === 'true';
+      const actif = !actifAvant;
+
+      peindre(actif);
+      ecrire(actif);
+      if (actif) {
+        btn.classList.add('cl-boum');
+        setTimeout(() => btn.classList.remove('cl-boum'), 500);
       }
       if (!endpoint) return;
-      fetch(`${endpoint}?slug=${encodeURIComponent(slug)}`, { method: 'POST' })
-        .then((r) => (r.ok ? r.json() : null))
-        .then((d) => d && afficherCompte(d.claques))
-        .catch(() => {});
+
+      // On retire la claque avec DELETE, on l'ajoute avec POST. En cas d'échec
+      // réseau, le bouton revient à son état d'avant plutôt que de mentir.
+      enVol = true;
+      fetch(`${endpoint}?slug=${encodeURIComponent(slug)}`, { method: actif ? 'POST' : 'DELETE' })
+        .then((r) => (r.ok ? r.json() : Promise.reject(new Error('refus'))))
+        .then((d) => afficherCompte(d.claques))
+        .catch(() => {
+          peindre(actifAvant);
+          ecrire(actifAvant);
+        })
+        .finally(() => {
+          enVol = false;
+        });
     });
   });
 </script>

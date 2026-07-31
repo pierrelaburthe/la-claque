@@ -14,10 +14,13 @@ export const CLAQUES_ENDPOINT = '';
 // Les claques du public ne rejoignent jamais la note de la bande, ni le schéma
 // `Review` envoyé aux moteurs. Ce sont deux mesures différentes, et les
 // confondre reviendrait à faire noter le site par ses lecteurs sans le dire.
+// Le bouton est un interrupteur : on claque, on peut retirer sa claque. Ces
+// libellés servent au rendu initial ; le script du composant reprend les mêmes
+// pour les états suivants.
 export const CLAQUES_LABEL = {
   action: 'Claquer',
   fait: 'Claqué',
   aide: "Vous avez vu ce spectacle ? Applaudissez-le d'ici.",
-  merci: 'Merci, votre claque est comptée.',
-  sansCompteur: 'Merci, votre claque est notée.',
+  merci: 'Merci, votre claque est comptée. Recliquez pour la retirer.',
+  sansCompteur: 'Merci, votre claque est notée. Recliquez pour la retirer.',
 };

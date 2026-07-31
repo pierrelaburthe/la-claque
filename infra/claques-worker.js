@@ -14,8 +14,13 @@
  *   5. coller l'URL du Worker dans CLAQUES_ENDPOINT (src/data/claques.ts)
  *
  * ROUTES
- *   GET  /?slug=xxx   -> { slug, claques }
- *   POST /?slug=xxx   -> incrémente puis renvoie { slug, claques }
+ *   GET    /?slug=xxx -> { slug, claques }
+ *   POST   /?slug=xxx -> incrémente puis renvoie { slug, claques }
+ *   DELETE /?slug=xxx -> décrémente (plancher à zéro) et renvoie { slug, claques }
+ *
+ * Une claque se retire : le bouton du site est un interrupteur, pas un aller
+ * simple. Le compteur ne descend jamais sous zéro, sans quoi quelques appels
+ * DELETE répétés le feraient passer en négatif.
  */
 
 const ORIGINES = ['https://la-claque.com', 'https://www.la-claque.com'];
@@ -26,7 +31,7 @@ function entetes(request) {
   const autorisee = ORIGINES.includes(origine) ? origine : ORIGINES[0];
   return {
     'Access-Control-Allow-Origin': autorisee,
-    'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+    'Access-Control-Allow-Methods': 'GET, POST, DELETE, OPTIONS',
     'Access-Control-Max-Age': '86400',
     'Content-Type': 'application/json; charset=utf-8',
     'Cache-Control': 'no-store',
@@ -55,12 +60,12 @@ export default {
       return json(request, { slug, claques: Number(valeur) || 0 });
     }
 
-    if (request.method === 'POST') {
+    if (request.method === 'POST' || request.method === 'DELETE') {
       // Le compteur n'a pas besoin d'être transactionnel : deux claques
       // simultanées sur la même critique sont assez rares pour qu'une collision
       // perdue soit sans conséquence, et cela évite une base de données.
       const actuel = Number(await env.CLAQUES.get(cle)) || 0;
-      const suivant = actuel + 1;
+      const suivant = request.method === 'POST' ? actuel + 1 : Math.max(0, actuel - 1);
       await env.CLAQUES.put(cle, String(suivant));
       return json(request, { slug, claques: suivant });
     }
