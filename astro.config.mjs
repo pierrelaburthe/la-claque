@@ -29,7 +29,11 @@ export default defineConfig({
   trailingSlash: 'always',
   build: { format: 'directory' },
   integrations: [sitemap()],
-  redirects: Object.fromEntries(
-    ANCIENNES_PLUMES.map((slug) => [`/equipe/${slug}/`, '/equipe/']),
-  ),
+  redirects: {
+    ...Object.fromEntries(ANCIENNES_PLUMES.map((slug) => [`/equipe/${slug}/`, '/equipe/'])),
+    // « La rédaction va voir » a été absorbée par l'agenda : les deux pages
+    // répondaient à « qu'est-ce que je vais voir ? ». Garder les deux aurait
+    // produit deux fois le même contenu.
+    '/la-redaction-va-voir/': '/agenda/',
+  },
 });

@@ -12,6 +12,7 @@
 import Base from '../layouts/Base.astro';
 import { Image } from 'astro:assets';
 import { PIECES } from '../data/pieces';
+import { PROGRAMME } from '../data/programme';
 import { starsFor, verdictFor, nbVus, seenLabel, consensusScore } from '../lib/rating';
 import { affiche } from '../lib/images';
 import { url } from '../lib/url';
@@ -34,6 +35,13 @@ const liste = [...dates, ...flou];
 const VERDICTS = ['Grosse claque', 'Belle claque', 'Petite claque'] as const;
 const presents = VERDICTS.filter((v) => liste.some((p) => verdictFor(p.noteMoy) === v));
 
+// « À venir » était un onglet à part alors qu'il répondait à la même question
+// que l'agenda : qu'est-ce que je peux aller voir ? La différence tient en une
+// chose, qu'on affiche clairement : ici on a vu et on raconte, là on n'a pas
+// encore vu et on guette.
+const rentree = PROGRAMME.filter((r) => r.contexte === 'rentree');
+const reperes = PROGRAMME.filter((r) => r.contexte !== 'rentree');
+
 const host = (u: string) => {
   try {
     return new URL(u).hostname.replace(/^www\./, '');
@@ -42,7 +50,7 @@ const host = (u: string) => {
   }
 };
 
-const description = `Où voir maintenant les ${liste.length} spectacles qu'on a vus et aimés : salles, dates et réservation, triables par taille de claque.`;
+const description = `Où voir maintenant les ${liste.length} spectacles qu'on a vus et aimés : salles, dates et réservation, triables par taille de claque. Plus ${PROGRAMME.length} spectacles repérés qu'on ira voir.`;
 
 const jsonld = [
   {
@@ -91,6 +99,29 @@ const jsonld = [
       },
       url: p.reprise!.url,
     })),
+  // Les repérages dont la représentation est confirmée et datée.
+  ...PROGRAMME.filter((r) => r.event).map((r) => ({
+    '@context': 'https://schema.org',
+    '@type': 'TheaterEvent',
+    name: r.titre,
+    startDate: r.event!.debut,
+    endDate: r.event!.fin,
+    eventStatus: 'https://schema.org/EventScheduled',
+    eventAttendanceMode: 'https://schema.org/OfflineEventAttendanceMode',
+    location: {
+      '@type': 'Place',
+      name: r.event!.salle,
+      address: {
+        '@type': 'PostalAddress',
+        streetAddress: r.event!.adresse,
+        postalCode: r.event!.codePostal,
+        addressLocality: r.event!.ville,
+        addressCountry: 'FR',
+      },
+    },
+    ...(r.event!.auteur ? { performer: { '@type': 'Person', name: r.event!.auteur } } : {}),
+    ...(r.lien ? { url: r.lien } : {}),
+  })),
 ];
 ---
 
@@ -154,9 +185,50 @@ const jsonld = [
       date à vous donner. Les autres critiques sont <a href={url('/critiques')}>dans la liste complète</a>.
     </p>
 
+    <div class="rubric" id="a-venir"><h2>Ce qu'on ira voir</h2><span class="line"></span><span class="note">Carnet de repérage</span></div>
+    <p class="rubric-intro">
+      Les spectacles qu'on a cochés et qu'on n'a pas encore vus. Pas de critique ici, pas d'étoiles :
+      juste ce qui nous donne envie avant le lever de rideau. La critique arrive dès qu'on est sortis de la salle.
+    </p>
+
+    {rentree.length > 0 && (
+      <div class="prog-grid">
+        {rentree.map((r) => (
+          <article class="prog-card">
+            <div class="pc-top">
+              <span class="pc-genre">{r.genre}</span>
+              <span class="pc-badge">Pas encore vu</span>
+            </div>
+            <h3>{r.titre}</h3>
+            <p class="pc-meta">{[r.lieu, r.ville].filter(Boolean).join(' \u00b7 ')}</p>
+            {r.periode && <p class="pc-dates">{r.periode}</p>}
+            <p class="pc-note">{r.note}</p>
+            {r.lien && <a class="pc-link" href={r.lien} rel="noopener nofollow">Réserver sur {host(r.lien)} &rarr;</a>}
+          </article>
+        ))}
+      </div>
+    )}
+
+    {reperes.length > 0 && (
+      <div class="prog-grid">
+        {reperes.map((r) => (
+          <article class="prog-card">
+            <div class="pc-top">
+              <span class="pc-genre">{r.genre}</span>
+              <span class="pc-badge">Pas encore vu</span>
+            </div>
+            <h3>{r.titre}</h3>
+            {r.lieu && <p class="pc-meta">{r.lieu}</p>}
+            <p class="pc-note">{r.note}</p>
+            {r.lien && <a class="pc-link" href={r.lien} rel="noopener nofollow">Voir sur {host(r.lien)} &rarr;</a>}
+          </article>
+        ))}
+      </div>
+    )}
+
     <div class="center" style="margin:44px 0 60px; display:flex; gap:12px; justify-content:center; flex-wrap:wrap;">
       <a class="btn" href={url('/palmares')}>Le palmarès</a>
-      <a class="btn btn-ghost" href={url('/la-redaction-va-voir')}>Ce qu'on va voir</a>
+      <a class="btn btn-ghost" href={url('/critiques')}>Toutes les critiques</a>
     </div>
   </div>
 </Base>
@@ -173,6 +245,19 @@ const jsonld = [
   .chip:hover { border-color: var(--ink-3); color: var(--ink); }
   .chip.active { background: var(--ink); color: var(--paper); border-color: var(--ink); }
   .chips .count { font-family: var(--sans); font-size: 0.75rem; color: var(--ink-3); margin-left: auto; }
+  /* Cartes de repérage, reprises de l'ancienne page « La rédaction va voir ». */
+  .prog-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 16px; margin-bottom: 12px; }
+  .prog-card { background: var(--card); border: 1px solid var(--rule-2); border-left: 4px solid var(--ink-3); padding: 20px 22px; display: flex; flex-direction: column; }
+  .prog-card .pc-top { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; margin-bottom: 6px; }
+  .prog-card .pc-genre { font-family: var(--sans); font-size: 0.66rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--red); }
+  .prog-card .pc-badge { font-family: var(--sans); font-size: 0.6rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--ink-3); border: 1px solid var(--rule-2); border-radius: 999px; padding: 3px 9px; white-space: nowrap; }
+  .prog-card h3 { font-family: var(--display); font-weight: 700; font-size: 1.4rem; margin: 0 0 6px; }
+  .prog-card .pc-meta { font-family: var(--sans); font-size: 0.74rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--ink-3); margin: 0 0 6px; }
+  .prog-card .pc-dates { display: inline-flex; align-self: flex-start; font-family: var(--sans); font-size: 0.72rem; font-weight: 700; color: var(--red); background: color-mix(in srgb, var(--red) 8%, transparent); border: 1px solid color-mix(in srgb, var(--red) 22%, transparent); border-radius: 3px; padding: 4px 9px; margin: 0 0 12px; }
+  .prog-card .pc-note { font-family: var(--serif); font-size: 1rem; line-height: 1.5; color: var(--ink-2); margin: 0 0 14px; flex: 1; }
+  .prog-card .pc-link { font-family: var(--sans); font-size: 0.78rem; font-weight: 700; color: var(--red); text-decoration: none; margin-top: auto; }
+  .prog-card .pc-link:hover { text-decoration: underline; }
+
   @media (max-width: 640px) {
     .chips .count { margin-left: 0; width: 100%; }
   }
