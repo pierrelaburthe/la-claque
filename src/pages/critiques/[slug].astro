@@ -4,6 +4,7 @@ import Base from '../../layouts/Base.astro';
 import Stars from '../../components/Stars.astro';
 import PieceCard from '../../components/PieceCard.astro';
 import RelatedGuides from '../../components/RelatedGuides.astro';
+import Claquer from '../../components/Claquer.astro';
 import { affiche } from '../../lib/images';
 import { PIECES } from '../../data/pieces';
 import { AUTHOR } from '../../data/author';
@@ -267,6 +268,8 @@ const jsonld = [
       <Stars note={piece.noteMoy} />
       <span class="big">{verdictFor(piece.noteMoy)}</span>
     </div>
+
+    <Claquer slug={piece.slug} titre={piece.titre} />
 
     <aside class="pratique" class:list={['pratique', piece.reprise && 'pratique-on']}>
       <p class="pr-lbl">{piece.reprise ? `Où voir « ${piece.titre} » en ce moment` : `Où nous avons vu « ${piece.titre} »`}</p>

@@ -1,0 +1,139 @@
+---
+// Le bouton « Claquer » : l'applaudissement du public, sans texte libre.
+//
+// Choix assumé : pas d'avis écrit du public sur ce site. Un compteur ne peut
+// blesser personne, ne demande aucune modération, et n'engage pas la
+// responsabilité du directeur de publication. Voir src/data/claques.ts.
+//
+// Aucune donnée personnelle n'est collectée : le bouton envoie un slug, rien
+// d'autre. L'état « déjà claqué » vit dans le localStorage du visiteur.
+import Mark from './Mark.astro';
+import { CLAQUES_ENDPOINT, CLAQUES_LABEL } from '../data/claques';
+
+interface Props {
+  slug: string;
+  titre: string;
+}
+const { slug, titre } = Astro.props;
+---
+
+<div class="claquer" data-slug={slug} data-endpoint={CLAQUES_ENDPOINT}>
+  <button
+    type="button"
+    class="cl-btn"
+    aria-pressed="false"
+    aria-label={`Claquer pour « ${titre} »`}
+  >
+    <span class="cl-mark" aria-hidden="true"><Mark size={22} color="currentColor" /></span>
+    <span class="cl-txt">{CLAQUES_LABEL.action}</span>
+    <span class="cl-count" hidden></span>
+  </button>
+  <p class="cl-aide" role="status">{CLAQUES_LABEL.aide}</p>
+</div>
+
+<style>
+  .claquer {
+    display: flex; align-items: center; gap: 14px; flex-wrap: wrap;
+    margin: 26px 0 6px; padding: 16px 0; border-top: 1px solid var(--rule-2);
+  }
+
+  .cl-btn {
+    display: inline-flex; align-items: center; gap: 9px; cursor: pointer;
+    font-family: var(--sans); font-size: 0.8rem; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 0.06em;
+    padding: 10px 20px; border-radius: 999px;
+    color: var(--red); background: transparent;
+    border: 1px solid color-mix(in srgb, var(--red) 40%, transparent);
+    transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+  }
+  .cl-btn:hover { background: color-mix(in srgb, var(--red) 8%, transparent); border-color: var(--red); }
+  .cl-btn:focus-visible { outline: 2px solid var(--red); outline-offset: 3px; }
+  .cl-btn[aria-pressed='true'] { background: var(--red); color: var(--paper); border-color: var(--red); }
+
+  .cl-mark { display: inline-flex; line-height: 0; }
+  .cl-count {
+    font-variant-numeric: tabular-nums;
+    padding-left: 9px; margin-left: 2px;
+    border-left: 1px solid currentColor; opacity: 0.85;
+  }
+  .cl-aide { font-family: var(--sans); font-size: 0.78rem; color: var(--ink-3); margin: 0; }
+
+  /* L'éclat part quand on applaudit. */
+  @keyframes cl-eclat {
+    0% { transform: scale(1) rotate(0deg); }
+    40% { transform: scale(1.35) rotate(22deg); }
+    100% { transform: scale(1) rotate(45deg); }
+  }
+  .cl-btn.cl-boum .cl-mark { animation: cl-eclat 0.45s ease-out; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .cl-btn.cl-boum .cl-mark { animation: none; }
+    .cl-btn { transition: none; }
+  }
+</style>
+
+<script>
+  const LABELS = {
+    fait: 'Claqué',
+    merci: 'Merci, votre claque est comptée.',
+    sansCompteur: 'Merci, votre claque est notée.',
+  };
+
+  document.querySelectorAll<HTMLElement>('.claquer').forEach((bloc) => {
+    const slug = bloc.dataset.slug || '';
+    const endpoint = (bloc.dataset.endpoint || '').replace(/\/$/, '');
+    const btn = bloc.querySelector<HTMLButtonElement>('.cl-btn');
+    const txt = bloc.querySelector<HTMLElement>('.cl-txt');
+    const compteur = bloc.querySelector<HTMLElement>('.cl-count');
+    const aide = bloc.querySelector<HTMLElement>('.cl-aide');
+    if (!btn || !slug) return;
+
+    const cle = `claque:${slug}`;
+    let dejaFait = false;
+    try {
+      dejaFait = localStorage.getItem(cle) === '1';
+    } catch {
+      // Navigation privée ou stockage refusé : on laisse simplement claquer.
+    }
+
+    function afficherCompte(n: number) {
+      if (!compteur || typeof n !== 'number' || Number.isNaN(n)) return;
+      compteur.textContent = String(n);
+      compteur.hidden = false;
+    }
+
+    function marquerFait() {
+      btn!.setAttribute('aria-pressed', 'true');
+      if (txt) txt.textContent = LABELS.fait;
+      if (aide) aide.textContent = endpoint ? LABELS.merci : LABELS.sansCompteur;
+    }
+
+    // Sans compteur configuré, on n'affiche aucun nombre : un total local
+    // n'aurait aucune valeur et laisserait croire à une audience.
+    if (endpoint) {
+      fetch(`${endpoint}?slug=${encodeURIComponent(slug)}`, { method: 'GET' })
+        .then((r) => (r.ok ? r.json() : null))
+        .then((d) => d && afficherCompte(d.claques))
+        .catch(() => {});
+    }
+
+    if (dejaFait) marquerFait();
+
+    btn.addEventListener('click', () => {
+      if (btn.getAttribute('aria-pressed') === 'true') return;
+      marquerFait();
+      btn.classList.add('cl-boum');
+      setTimeout(() => btn.classList.remove('cl-boum'), 500);
+      try {
+        localStorage.setItem(cle, '1');
+      } catch {
+        // Sans stockage, le visiteur pourra re-claquer à la prochaine visite.
+      }
+      if (!endpoint) return;
+      fetch(`${endpoint}?slug=${encodeURIComponent(slug)}`, { method: 'POST' })
+        .then((r) => (r.ok ? r.json() : null))
+        .then((d) => d && afficherCompte(d.claques))
+        .catch(() => {});
+    });
+  });
+</script>

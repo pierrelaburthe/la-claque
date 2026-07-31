@@ -1,0 +1,17 @@
+name = "la-claque-claques"
+main = "claques-worker.js"
+compatibility_date = "2026-07-31"
+
+# Créer le namespace avec : wrangler kv namespace create CLAQUES
+# puis coller l'identifiant renvoyé ci-dessous.
+[[kv_namespaces]]
+binding = "CLAQUES"
+id = "À_REMPLIR"
+
+# Garde-fou anti-emballement : au-delà de ce rythme, Cloudflare répond 429 sans
+# que le Worker soit exécuté. Le bouton du site ne fait qu'un appel par clic.
+[[unsafe.bindings]]
+name = "LIMITEUR"
+type = "ratelimit"
+namespace_id = "1001"
+simple = { limit = 30, period = 60 }
