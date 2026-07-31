@@ -16,7 +16,7 @@ const classement = [...PIECES].sort((a, b) => consensusScore(b) - consensusScore
 const GROUPES = [
   { verdict: 'Grosse claque', note: 'Cinq étoiles', intro: "Le haut du panier. Ceux dont on parlera encore l'an prochain." },
   { verdict: 'Belle claque', note: 'Quatre étoiles', intro: 'Les valeurs sûres, celles qu\'on recommande sans hésiter.' },
-  { verdict: 'Petite claque', note: 'Trois étoiles', intro: "Notre plancher. Même là, on a trouvé de quoi applaudir." },
+  { verdict: 'Petite claque', note: 'Trois étoiles', intro: "Des spectacles plus singuliers, à choisir selon ses goûts. Chacun nous a donné une raison d'applaudir." },
 ];
 const groupes = GROUPES
   .map((g) => ({ ...g, pieces: classement.filter((p) => verdictFor(p.noteMoy) === g.verdict) }))

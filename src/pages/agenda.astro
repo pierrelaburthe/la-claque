@@ -1,0 +1,223 @@
+---
+// L'agenda : où revoir, maintenant, ce qu'on a déjà vu et aimé.
+//
+// La page ne liste QUE les pièces dont une reprise a été vérifiée sur le site
+// du théâtre ou une billetterie officielle (champ `reprise` de pieces.ts). Une
+// pièce sans date n'apparaît pas : on ne peut pas prouver qu'un spectacle ne se
+// joue plus, donc on ne raconte rien à sa place.
+//
+// Les dates passées sont écartées au moment du build, en comparant `reprise.fin`
+// à la date de compilation. Une reprise sans `fin` (« en tournée », « saison
+// 2026-2027 ») reste affichée, faute de mieux, mais passe après les autres.
+import Base from '../layouts/Base.astro';
+import { Image } from 'astro:assets';
+import { PIECES } from '../data/pieces';
+import { starsFor, verdictFor, nbVus, seenLabel, consensusScore } from '../lib/rating';
+import { affiche } from '../lib/images';
+import { url } from '../lib/url';
+
+const abs = (p: string) => new URL(url(p), Astro.site).href;
+const aujourdhui = new Date().toISOString().slice(0, 10);
+
+const encore = PIECES.filter((p) => p.reprise && (!p.reprise.fin || p.reprise.fin >= aujourdhui));
+
+// D'abord ce qui a une date de début connue, du plus proche au plus lointain.
+// Ensuite les tournées et les saisons, classées par taille de claque.
+const dates = encore
+  .filter((p) => p.reprise!.debut)
+  .sort((a, b) => (a.reprise!.debut! < b.reprise!.debut! ? -1 : 1));
+const flou = encore
+  .filter((p) => !p.reprise!.debut)
+  .sort((a, b) => consensusScore(b) - consensusScore(a));
+const liste = [...dates, ...flou];
+
+const VERDICTS = ['Grosse claque', 'Belle claque', 'Petite claque'] as const;
+const presents = VERDICTS.filter((v) => liste.some((p) => verdictFor(p.noteMoy) === v));
+
+const host = (u: string) => {
+  try {
+    return new URL(u).hostname.replace(/^www\./, '');
+  } catch {
+    return 'la billetterie';
+  }
+};
+
+const description = `Où voir maintenant les ${liste.length} spectacles qu'on a vus et aimés : salles, dates et réservation, triables par taille de claque.`;
+
+const jsonld = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'CollectionPage',
+    name: "L'agenda de La Claque",
+    url: abs('/agenda'),
+    description,
+    inLanguage: 'fr',
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'ItemList',
+    name: 'Spectacles recommandés par La Claque encore à l’affiche',
+    itemListElement: liste.map((p, i) => ({
+      '@type': 'ListItem',
+      position: i + 1,
+      name: p.titre,
+      url: abs(`/critiques/${p.slug}`),
+    })),
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Accueil', item: abs('/') },
+      { '@type': 'ListItem', position: 2, name: 'Agenda', item: abs('/agenda') },
+    ],
+  },
+  // Seules les reprises dont on connaît le jour et la salle deviennent un
+  // TheaterEvent : le reste resterait une date inventée.
+  ...liste
+    .filter((p) => p.reprise!.debut && p.reprise!.salle)
+    .map((p) => ({
+      '@context': 'https://schema.org',
+      '@type': 'TheaterEvent',
+      name: p.titre,
+      startDate: p.reprise!.debut,
+      ...(p.reprise!.fin ? { endDate: p.reprise!.fin } : {}),
+      eventStatus: 'https://schema.org/EventScheduled',
+      eventAttendanceMode: 'https://schema.org/OfflineEventAttendanceMode',
+      location: {
+        '@type': 'Place',
+        name: p.reprise!.salle,
+        address: { '@type': 'PostalAddress', addressLocality: p.reprise!.ville ?? 'France', addressCountry: 'FR' },
+      },
+      url: p.reprise!.url,
+    })),
+];
+---
+
+<Base title="Agenda : où voir les spectacles qu'on a aimés | La Claque" active="agenda" description={description} jsonld={jsonld}>
+  <div class="wrap-narrow">
+    <p class="breadcrumb"><a href={url('/')}>Accueil</a> › Agenda</p>
+    <div class="guide-head">
+      <p class="kicker">Où réserver</p>
+      <h1>L'agenda</h1>
+      <p class="stand">
+        Vous avez lu une critique et vous voulez y aller. Voici, parmi tout ce qu'on a vu, ce qui se joue
+        encore quelque part, avec la salle, les dates et le lien de réservation. Filtrez par taille de claque
+        si vous voulez aller droit au meilleur.
+      </p>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <div class="chips" role="group" aria-label="Filtrer par verdict">
+      <button class="chip active" data-verdict="" type="button">Tout</button>
+      {presents.map((v) => <button class="chip" data-verdict={v} type="button">{v}</button>)}
+      <span class="count" id="count"></span>
+    </div>
+
+    <ul class="ag" id="ag">
+      {liste.map((p) => {
+        const img = affiche(p.image);
+        const etoiles = starsFor(p.noteMoy);
+        const verdict = verdictFor(p.noteMoy);
+        const lieu = [p.reprise!.salle ?? p.reprise!.lieu, p.reprise!.ville].filter(Boolean).join(', ');
+        return (
+          <li class="ag-row" data-verdict={verdict}>
+            <a class="ag-vis" href={url(`/critiques/${p.slug}`)} aria-hidden="true" tabindex="-1">
+              {img ? (
+                <Image src={img} alt="" width={70} height={99} />
+              ) : (
+                <span class="ag-noimg">{p.titre.slice(0, 1)}</span>
+              )}
+            </a>
+            <div class="ag-main">
+              <h2><a href={url(`/critiques/${p.slug}`)}>{p.titre}</a></h2>
+              <p class="ag-meta">{p.style}{p.salle ? ` · ${p.salle}` : ''} · {seenLabel(nbVus(p))}</p>
+              <p class="ag-where">{lieu || p.reprise!.lieu}</p>
+            </div>
+            <div class="ag-side">
+              <span class="ag-stars" title={`${etoiles} étoiles sur 5`}>{'★'.repeat(etoiles)}</span>
+              <span class="ag-verdict">{verdict}</span>
+              <span class="ag-dates">{p.reprise!.dates}</span>
+              <a class="ag-book" href={p.reprise!.url} rel="noopener nofollow">Réserver sur {host(p.reprise!.url)} →</a>
+            </div>
+          </li>
+        );
+      })}
+    </ul>
+
+    <p class="ag-none" id="noresult" hidden>Rien dans cette catégorie pour l'instant. Essayez un autre filtre.</p>
+
+    <p class="ag-foot">
+      On ne fait figurer ici qu'une date vérifiée sur le site du théâtre ou une billetterie officielle. Un
+      spectacle absent de cette liste n'a pas forcément disparu : c'est simplement qu'on n'a pas trouvé de
+      date à vous donner. Les autres critiques sont <a href={url('/critiques')}>dans la liste complète</a>.
+    </p>
+
+    <div class="center" style="margin:44px 0 60px; display:flex; gap:12px; justify-content:center; flex-wrap:wrap;">
+      <a class="btn" href={url('/palmares')}>Le palmarès</a>
+      <a class="btn btn-ghost" href={url('/la-redaction-va-voir')}>Ce qu'on va voir</a>
+    </div>
+  </div>
+</Base>
+
+<style>
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin: 0 0 22px; }
+  .chips .count { font-family: var(--sans); font-size: 0.75rem; color: var(--ink-3); margin-left: auto; }
+
+  .ag { list-style: none; margin: 0 0 26px; padding: 0; border-top: 2px solid var(--ink); }
+  .ag-row { display: grid; grid-template-columns: 70px 1fr auto; gap: 18px; align-items: center; padding: 16px 0; border-bottom: 1px solid var(--rule-2); }
+  .ag-vis { display: block; line-height: 0; }
+  .ag-vis :global(img) { width: 70px; height: 99px; object-fit: cover; border: 1px solid var(--rule-2); }
+  .ag-noimg { display: flex; width: 70px; height: 99px; align-items: center; justify-content: center; background: var(--card); border: 1px solid var(--rule-2); font-family: var(--display); font-size: 1.6rem; color: var(--ink-3); }
+
+  .ag-main h2 { font-family: var(--display); font-weight: 700; font-size: 1.35rem; margin: 0 0 4px; line-height: 1.15; }
+  .ag-main h2 a { color: inherit; text-decoration: none; }
+  .ag-main h2 a:hover { color: var(--red); }
+  .ag-meta { font-family: var(--sans); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--ink-3); margin: 0 0 4px; }
+  .ag-where { font-family: var(--serif); font-size: 1rem; color: var(--ink-2); margin: 0; }
+
+  .ag-side { display: flex; flex-direction: column; align-items: flex-end; gap: 3px; text-align: right; }
+  .ag-stars { color: var(--gold, #d9a441); font-size: 0.95rem; letter-spacing: 0.06em; }
+  .ag-verdict { font-family: var(--sans); font-size: 0.63rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.07em; color: var(--ink-3); }
+  .ag-dates { font-family: var(--sans); font-size: 0.74rem; font-weight: 700; color: var(--red); background: color-mix(in srgb, var(--red) 8%, transparent); border: 1px solid color-mix(in srgb, var(--red) 22%, transparent); border-radius: 3px; padding: 3px 8px; margin-top: 3px; }
+  .ag-book { font-family: var(--sans); font-size: 0.76rem; font-weight: 700; color: var(--red); text-decoration: none; margin-top: 5px; }
+  .ag-book:hover { text-decoration: underline; }
+
+  .ag-none { font-family: var(--serif); color: var(--ink-2); }
+  .ag-foot { font-family: var(--sans); font-size: 0.82rem; line-height: 1.6; color: var(--ink-3); border-top: 1px solid var(--rule-2); padding-top: 14px; }
+
+  @media (max-width: 640px) {
+    .ag-row { grid-template-columns: 54px 1fr; gap: 12px; }
+    .ag-vis :global(img), .ag-noimg { width: 54px; height: 76px; }
+    .ag-side { grid-column: 1 / -1; align-items: flex-start; text-align: left; }
+  }
+</style>
+
+<script>
+  const rows = Array.from(document.querySelectorAll('#ag .ag-row')) as HTMLElement[];
+  const chips = Array.from(document.querySelectorAll('.chip')) as HTMLElement[];
+  const count = document.getElementById('count');
+  const noresult = document.getElementById('noresult');
+
+  function apply(verdict: string) {
+    let shown = 0;
+    for (const r of rows) {
+      const ok = !verdict || r.dataset.verdict === verdict;
+      r.style.display = ok ? '' : 'none';
+      if (ok) shown++;
+    }
+    if (noresult) (noresult as HTMLElement).hidden = shown > 0;
+    if (count) count.textContent = `${shown} spectacle${shown > 1 ? 's' : ''} à l'affiche`;
+  }
+
+  chips.forEach((ch) =>
+    ch.addEventListener('click', () => {
+      chips.forEach((x) => x.classList.remove('active'));
+      ch.classList.add('active');
+      apply(ch.dataset.verdict || '');
+    }),
+  );
+
+  apply('');
+</script>
