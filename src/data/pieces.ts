@@ -2318,6 +2318,15 @@ export const PIECES: Piece[] = [
       "Une belle production sur laquelle on ne s'est pas entendus. C'est aussi pour ça qu'on est huit.",
     ],
     momentGarde: "Le décor qui bascule d'une pièce du château à l'autre sans qu'on perde le fil de la course-poursuite.",
+    reprise: {
+      lieu: 'En tournée en France',
+      dates: 'Décines le 3 février, Bourgoin-Jallieu le 6, Cesson-Sévigné le 13 février 2027',
+      debut: '2027-02-03',
+      fin: '2027-02-13',
+      salle: 'Le Toboggan',
+      ville: 'Décines-Charpieu',
+      url: 'https://69.agendaculturel.fr/theatre/decines-charpieu/la-folle-journee-ou-le-mariage-de-figaro-1.html',
+    },
     sources: [
       'https://lascala-paris.fr/programmation/le-mariage-de-figaro/',
       'https://www.offi.fr/theatre/la-scala-6688/le-mariage-de-figaro-101163.html',
@@ -2453,6 +2462,15 @@ export const PIECES: Piece[] = [
       "On y retournerait sur une autre proposition. Le texte, lui, n'a pas pris une ride, et c'est ce qui inquiète.",
     ],
     momentGarde: "La scène du couple qui se déchire à voix basse en surveillant les murs, et l'idéologie qui entre par la conversation domestique.",
+    reprise: {
+      lieu: 'En tournée, Théâtre de Sartrouville et des Yvelines',
+      dates: 'Les 18 et 19 mars 2027',
+      debut: '2027-03-18',
+      fin: '2027-03-19',
+      salle: 'Théâtre de Sartrouville et des Yvelines',
+      ville: 'Sartrouville',
+      url: 'https://www.artcena.fr/agendas/spectacles/grand-peur-et-misere-du-iiie-reich-1',
+    },
     sources: [
       'https://unfauteuilpourlorchestre.com/grand-peur-et-misere-du-iiie-reich-de-bertolt-brecht-mise-en-scene-de-julie-duclos-a-lodeon-theatre-de-leurope-paris/',
       'https://www.lesgemeaux.com/spectacles/grand-peur-et-misere-du-iiieme-reich/',
