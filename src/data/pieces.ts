@@ -1670,6 +1670,15 @@ export const PIECES: Piece[] = [
       "Deux claqueurs, deux notes hautes, et une discussion de trottoir qui a duré plus longtemps que d'habitude après la sortie.",
     ],
     momentGarde: "Le moment où la fratrie se comprend d'un regard, pendant que les pièces rapportées cherchent encore de quoi on parle.",
+    reprise: {
+      lieu: 'En tournée, Théâtre des Salins à Martigues',
+      dates: 'Les 12 et 13 octobre 2026',
+      debut: '2026-10-12',
+      fin: '2026-10-13',
+      salle: 'Théâtre des Salins',
+      ville: 'Martigues',
+      url: 'https://www.jds.fr/artistes/fete-des-meres-20163_N',
+    },
     sources: [
       'https://www.offi.fr/theatre/theatre-lepic-1813/fete-des-meres-99850.html',
       'https://www.theatredegrasse.com/la-saison/theatre/fete-des-meres-2526',
@@ -1825,6 +1834,15 @@ export const PIECES: Piece[] = [
       "Une claqueuse, une note nette. Et la curiosité, chez moi, de savoir combien de versions du texte il a fallu écrire avant celle-là.",
     ],
     momentGarde: "Le tour de boucle où la même réplique, dite par le même personnage, ne veut plus du tout dire la même chose.",
+    reprise: {
+      lieu: 'Théâtre Saint-Georges, Paris',
+      dates: 'Du 17 juillet au 29 août 2026, puis en tournée',
+      debut: '2026-07-17',
+      fin: '2026-08-29',
+      salle: 'Théâtre Saint-Georges',
+      ville: 'Paris',
+      url: 'https://theatre-saint-georges.com/the-loop/',
+    },
     sources: [
       'https://theatre-saint-georges.com/the-loop/',
       'https://www.theatredesbeliersparisiens.com/spectacle/the-loop/',
@@ -1984,6 +2002,11 @@ export const PIECES: Piece[] = [
       "Une comédie qui parle de crise cardiaque et qui donne envie de vivre. Le contrat est rempli.",
     ],
     momentGarde: "L'infarctus décrit comme la meilleure chose qui lui soit arrivée, et la salle qui rit sans culpabiliser.",
+    reprise: {
+      lieu: 'En tournée avec Les Béliers',
+      dates: 'Saison 2026-2027',
+      url: 'https://www.theatredesbeliersparisiens.com/spectacle/le-gros-qui-fume-beliers-paris/',
+    },
     sources: [
       'https://www.theatredesbeliersparisiens.com/spectacle/le-gros-qui-fume-beliers-paris/',
       'https://www.offi.fr/theatre/theatre-des-beliers-3223/le-gros-qui-fume-comme-une-cheminee-en-hiver-101488.html',
@@ -2039,6 +2062,15 @@ export const PIECES: Piece[] = [
       "Une comédienne, deux langues, vingt-cinq personnages. Le métier est là.",
     ],
     momentGarde: "Le passage du français à l'anglais en pleine phrase, quand le souvenir change de pays.",
+    reprise: {
+      lieu: 'La Scala Paris',
+      dates: 'Du 7 octobre 2026 au 6 mai 2027',
+      debut: '2026-10-07',
+      fin: '2027-05-06',
+      salle: 'La Scala Paris',
+      ville: 'Paris',
+      url: 'https://lascala-paris.fr/programmation/an-irish-story-une-histoire-irlandaise/',
+    },
     sources: [
       'https://lascala-paris.fr/programmation/an-irish-story-une-histoire-irlandaise/',
       'https://sceneweb.fr/an-irish-story-de-kelly-riviere/',
@@ -2197,6 +2229,13 @@ export const PIECES: Piece[] = [
       "Le record du monde tient toujours. Allez le voir avant qu'il ne devienne une carte postale.",
     ],
     momentGarde: "La pendule qui sonne n'importe comment, et la certitude que personne dans la salle ne trouve ça anormal.",
+    reprise: {
+      lieu: 'Théâtre de la Huchette, Paris',
+      dates: "À l'affiche sans interruption depuis le 16 février 1957",
+      salle: 'Théâtre de la Huchette',
+      ville: 'Paris',
+      url: 'https://www.theatre-huchette.com/',
+    },
     sources: [
       'https://www.theatre-huchette.com/en/la-cantatrice-chauve-en/',
       'https://fr.wikipedia.org/wiki/La_Cantatrice_chauve',
