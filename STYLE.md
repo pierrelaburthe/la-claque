@@ -57,8 +57,10 @@ recommandation directe. Pas de paragraphe de synthèse.
 - **Pas d'invention.** Aucun fait de production (distribution, lieu, date, prix,
   historique) qui ne soit pas dans les sources listées. Les impressions
   personnelles sont libres, les faits ne le sont pas.
-- **Pas de notes sur 10 dans le texte.** Elles restent internes, seules les
-  étoiles sont publiques.
+- **Pas de notes sur 10 dans le texte, sous aucune forme.** Ni « 8,5 », ni
+  « nos notes vont de 2 à 8 », ni « il a mis dix ». Les chiffres restent
+  internes, seules les étoiles sont publiques. Pour dire un désaccord, on décrit
+  l'écart avec des mots : « jamais nos avis ne se sont autant écartés ».
 - **Pas de formules de fin toutes faites** du type « une troupe qu'on a envie de
   suivre », « on assume notre enthousiasme », « une belle découverte ».
 

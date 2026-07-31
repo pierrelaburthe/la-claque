@@ -1867,6 +1867,15 @@ export const PIECES: Piece[] = [
       "Une claqueuse a vu la pièce et l'a défendue à table. C'est souvent comme ça que les titres arrivent sur ce site.",
     ],
     momentGarde: "La discussion sur le prix d'un tableau peint par quelqu'un qui n'a jamais eu le droit d'en acheter un.",
+    reprise: {
+      lieu: 'En tournée dans la métropole lyonnaise',
+      dates: 'Décines le 20 novembre 2026, Caluire-et-Cuire le 21 novembre 2026',
+      debut: '2026-11-20',
+      fin: '2026-11-21',
+      salle: 'Le Radiant-Bellevue',
+      ville: 'Caluire-et-Cuire',
+      url: 'https://69.agendaculturel.fr/theatre/caluire-et-cuire/les-peintres-au-charbon.html',
+    },
     sources: [
       'https://theatre13.com/spectacle/les-peintres-au-charbon/',
       'https://fr.wikipedia.org/wiki/Les_Peintres_au_charbon',
@@ -2186,6 +2195,15 @@ export const PIECES: Piece[] = [
       "Une claqueuse, une note solide, et le rappel qu'on n'a jamais fini d'ouvrir les tiroirs.",
     ],
     momentGarde: "La photo de 1940 qui passe de main en main, et qui ne raconte pas la même chose selon qui la commente.",
+    reprise: {
+      lieu: 'Théâtre Juliette Récamier, Paris',
+      dates: 'Du 17 septembre au 25 octobre 2026',
+      debut: '2026-09-17',
+      fin: '2026-10-25',
+      salle: 'Théâtre Juliette Récamier',
+      ville: 'Paris',
+      url: 'https://theatrejulietterecamier.fr/spectacles/',
+    },
     sources: [
       'https://www.offi.fr/theatre/theatre-recamier-7548/le-secret-des-ombres-107071.html',
       'https://lesarchivesduspectacle.net/s/128387-Le-Secret-des-ombres',
@@ -2277,7 +2295,7 @@ export const PIECES: Piece[] = [
     festival: 'Avignon OFF 2025',
     noteMoy: 5.5,
     notes: { julie: 6.5, pierre: 2, etienne: 8 },
-    chapo: "Trois cents entretiens, des comparutions immédiates, et une salle transformée en tribunal. Nos trois notes vont de 2 à 8. Autant dire qu'il faut y aller pour savoir.",
+    chapo: "Trois cents entretiens, des comparutions immédiates, et une salle transformée en tribunal. Jamais nos avis ne se sont autant écartés. Autant dire qu'il faut y aller pour savoir.",
     corps: [
       "Je commence par le désaccord, parce qu'il est spectaculaire. Sur ce spectacle, un claqueur n'a pas du tout adhéré au dispositif, un autre en a fait l'un des chocs de son année, et la troisième se situe quelque part au milieu. Je n'ai jamais vu un tel écart chez nous.",
       "Lorraine de Sagazan et Guillaume Poix ont mené trois cents entretiens autour de la justice, et en ont tiré ce troisième volet d'un cycle. La comparution immédiate en est le cœur : cette procédure où l'on juge vite, où l'on condamne vite, et où la personne en face n'a souvent pas compris ce qui lui arrivait. Le dispositif installe le public dans la position de l'audience, et c'est là que tout se joue.",
