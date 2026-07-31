@@ -655,6 +655,15 @@ export const PIECES: Piece[] = [
       "Chaque gag est un mécanisme d'horlogerie. Incendies, tempêtes, murs mitoyens trop poreux, problèmes d'évacuation : rien n'arrive par hasard et tout est réglé à la seconde. La poésie d'un Tati n'est pas loin, avec un humour parfois graveleux qui ne verse jamais dans le vulgaire gratuit.",
       "Mon avis, puisqu'il faut trancher : le sans-parole révèle l'essentiel, le corps, le rythme, la présence, et c'est de l'artisanat comique de haute volée. Ceux d'entre nous qui ont décroché ne se sont pas trompés pour autant, ils ont simplement vu la mécanique avant de voir les personnages. Allez-y en sachant cela.",
     ],
+    reprise: {
+      lieu: 'En tournée, MA scène nationale à Montbéliard',
+      dates: 'Du 3 au 6 février 2027',
+      debut: '2027-02-03',
+      fin: '2027-02-06',
+      salle: 'MA scène nationale',
+      ville: 'Montbéliard',
+      url: 'https://www.pierreguillois.fr/tournees/',
+    },
     sources: [
       'https://cult.news/scenes/theatre/off-davignon-bigre-a-la-scala-provence-un-burlesque-rejouissant/',
       'https://lascala-provence.fr/programmation/bigre/',
@@ -1169,6 +1178,14 @@ export const PIECES: Piece[] = [
       "L'écriture est bonne et le rythme est là, ce qui est déjà beaucoup pour une compagnie aussi jeune. Celui qui tient le rôle principal masculin est remarquable et porte une bonne partie des scènes à lui seul. Autour de lui, l'ensemble cherchait encore son équilibre quand nous y sommes passés, ce qui est exactement ce qu'une saison de tournée vient régler.",
       "Le spectacle a été primé au festival des 6 coups du Brigadier et aux Fous rires de Courbevoie, et son Avignon complet a tranché la question mieux que nous. On ira volontiers voir la version d'aujourd'hui.",
     ],
+    reprise: {
+      lieu: 'Le Funambule Montmartre, Paris',
+      dates: 'À partir du 7 septembre 2026',
+      debut: '2026-09-07',
+      salle: 'Le Funambule Montmartre',
+      ville: 'Paris',
+      url: 'https://www.offi.fr/theatre/theatre-le-passage-vers-les-etoiles-2956/limportance-detre-claire-98439.html',
+    },
     sources: [
       'https://www.limportancedetreclaire.com/',
       'https://www.festivaloffavignon.com/spectacles/5568-l-importance-d-etre-claire',
@@ -1245,6 +1262,14 @@ export const PIECES: Piece[] = [
       "Le spectacle tourne depuis longtemps et remplit ses salles, ce qui vaut mieux que mon impression d'un soir. J'y retournerais pour la scénographie, qui mérite franchement le détour.",
     ],
     momentGarde: "Les décors mobiles qui changent l'ambiance à vue, et qui font à eux seuls la moitié du travail de la soirée.",
+    reprise: {
+      lieu: 'Théâtre Michel, Paris',
+      dates: "Prolongé jusqu'au 31 décembre 2026",
+      fin: '2026-12-31',
+      salle: 'Théâtre Michel',
+      ville: 'Paris',
+      url: 'https://billetterie.theatre-michel.fr/en/event/401734-adn',
+    },
     sources: [
       'https://www.theatre-michel.fr/Spectacles/adn/',
       'https://www.billetreduc.com/spectacle/adn-347202',
@@ -1725,6 +1750,15 @@ export const PIECES: Piece[] = [
       "Une seule claqueuse y est allée. Elle a mis une note solide, et elle a prévenu qu'on ne sort pas de là en sifflotant.",
     ],
     momentGarde: "La façon dont les scènes se relaient sans coupure, et dont on comprend l'histoire complète avant que les personnages ne l'admettent.",
+    reprise: {
+      lieu: "En tournée, L'Embarcadère à Aubervilliers",
+      dates: 'Les 20 et 21 novembre 2026',
+      debut: '2026-11-20',
+      fin: '2026-11-21',
+      salle: "L'Embarcadère",
+      ville: 'Aubervilliers',
+      url: 'https://www.agendaculturel.fr/alexis-michalik',
+    },
     sources: [
       'https://www.offi.fr/artiste/alexis-michalik-69289.html',
       'https://www.sortiraparis.com/en/what-to-see-in-paris/theater/articles/300794-une-histoire-d-amour-the-alexis-michalik-play-at-le-splendid',
@@ -2438,6 +2472,15 @@ export const PIECES: Piece[] = [
       "Le Théâtre Edgar sait faire ça depuis quarante ans. Le public rit, et c'est le contrat.",
     ],
     momentGarde: "Le moment où le mort redevient sauvable, et où la question d'argent transforme le quiproquo en vrai dilemme.",
+    reprise: {
+      lieu: "En tournée, Odyssée à Pusignan",
+      dates: 'Le 12 décembre 2026',
+      debut: '2026-12-12',
+      fin: '2026-12-12',
+      salle: 'Odyssée',
+      ville: 'Pusignan',
+      url: 'https://69.agendaculturel.fr/theatre/pusignan/le-jambon.html',
+    },
     sources: [
       'https://www.theatre-edgar.com/le-jambon',
       'https://www.offi.fr/theatre/cafe-dedgar-1602/le-jambon-ils-vont-devoir-trancher-99571.html',
