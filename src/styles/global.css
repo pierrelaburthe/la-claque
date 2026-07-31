@@ -104,7 +104,11 @@ img { max-width: 100%; display: block; }
 .flag-pleb .dot, .flag-chef .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--red); display: inline-block; }
 
 /* ---------- Cartes ---------- */
-.cards { display: grid; gap: 30px 26px; grid-template-columns: repeat(auto-fill, minmax(258px, 1fr)); }
+/* 258 px de colonne minimum ne laissaient tenir que trois cartes dans les
+   1140 px de la page, soit des affiches de plus de 450 px de haut qui écrasaient
+   les titres. À 208 px, la même largeur en accueille quatre, et l'affiche
+   redescend autour de 340 px sans qu'on ait eu à la recadrer. */
+.cards { display: grid; gap: 28px 22px; grid-template-columns: repeat(auto-fill, minmax(208px, 1fr)); }
 
 .pcard { display: flex; flex-direction: column; text-decoration: none; color: inherit; }
 .pcard .frame {
