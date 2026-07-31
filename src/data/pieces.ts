@@ -1112,7 +1112,7 @@ export const PIECES: Piece[] = [
     corps: [
       "J'y suis allé sans rien attendre, ce qui est probablement la meilleure façon d'aborder un spectacle d'improvisation. Une troupe émergente, une toute petite salle à la Comédie des 3 Bornes, et une idée de départ qu'on pourrait prendre pour un gadget.",
       "Le principe : le public choisit les ingrédients de sa pizza, et chaque ingrédient commande une scène. Quatre improvisateurs se débrouillent avec ce qu'on leur envoie. Le dispositif a l'avantage de donner une contrainte nette à chaque séquence, ce qui évite l'écueil habituel de l'impro qui part dans tous les sens sans jamais atterrir.",
-      "Je n'ai pas accroché de la même façon à chaque interprète, ce qui est le jeu même de l'impro. Mais l'ambiance dans la salle compense largement, et c'est aussi ce qu'on vient chercher dans ce format : une petite jauge, un public embarqué, et des comédiens sans filet.",
+      "Je n'ai pas accroché de la même façon à chaque interprète, ce qui est le jeu même de l'impro. Mais l'ambiance dans la salle compense largement, et c'est aussi ce qu'on vient chercher dans ce format : une petite jauge, un public embarqué, des comédiens sans filet. On ressort en ayant bien ri et, effet secondaire imprévu du concept, franchement affamé.",
       "Une heure qu'on ne voit pas passer. Le concept mérite d'être piqué, d'ailleurs, et j'ai bien l'intention de m'en souvenir.",
     ],
     momentGarde: "L'idée de faire composer une pizza au public pour décider des scènes, une contrainte toute bête qui structure la soirée entière.",
@@ -1139,7 +1139,7 @@ export const PIECES: Piece[] = [
     corps: [
       "On y est allés à cause du palmarès. Cinq Molières en 2025, dont celui du meilleur spectacle de théâtre privé et celui de la mise en scène pour Jean-Philippe Daguerre : à ce niveau de reconnaissance, on veut voir de quoi il s'agit.",
       "Nous sommes en 1958 à Nœux-les-Mines. Pierre et Vlad, amis d'enfance, descendent à la mine, élèvent des pigeons voyageurs et jouent de l'accordéon dans l'orchestre de Sosthène. L'arrivée de Leila, qui vient y jouer à son tour, déplace les équilibres. Les décors sont très réussis et installent le contexte politique avec beaucoup de soin.",
-      "Les personnages sont attachants du début à la fin, et c'est peut-être ce qui m'a tenu à distance : je les ai regardés avec sympathie sans jamais craindre pour eux. La salle autour de moi vivait manifestement très bien ce régime-là, et je veux bien admettre que le tort était de mon côté.",
+      "Les personnages sont attachants du début à la fin, et c'est peut-être ce qui m'a tenu à distance : je les ai regardés avec sympathie sans jamais craindre pour eux. Une autre claqueuse est d'accord sur le constat et en tire l'inverse : elle pense que c'est justement le propos, que la pièce raconte la vie dans le Nord et qu'elle est poétique pour cette raison même. C'est un très bon argument, et il m'a fait relire ma soirée autrement.",
       "Ce sont de belles heures de théâtre bien fabriqué, portées par une distribution solide, et le public y trouve manifestement son compte. Nous sommes restés un cran en dessous de l'enthousiasme général.",
     ],
     reprise: {
@@ -1188,7 +1188,7 @@ export const PIECES: Piece[] = [
     corps: [
       "Le pitch est du genre qui donne envie d'acheter sa place immédiatement. Bernard Brunard, ancien politique assigné à résidence après une condamnation pour détournement, trouve un matin le corps sans vie d'un homme dans son salon. Il décide de le cacher. Problème : son bracelet électronique l'empêche de sortir de chez lui.",
       "Tout est là pour un huis clos réjouissant, et le texte de Sébastien de Cordes a le bon goût de faire débarquer sa femme, sa maîtresse et un policier pour resserrer l'étau. Sur le papier, la mécanique s'écrit toute seule.",
-      "Sur le plateau, c'est un exercice beaucoup plus ingrat qu'il n'y paraît. Une comédie de huis clos ne tient que si la panique circule d'un personnage à l'autre à la seconde près, et cette alchimie-là ne se décrète pas : elle vient avec les représentations. Le soir où nous y étions, au Petit Théâtre du Gymnase en 2024, elle n'était pas encore complètement en place.",
+      "Sur le plateau, c'est un exercice beaucoup plus ingrat qu'il n'y paraît. Une comédie de huis clos ne tient que si la panique circule d'un personnage à l'autre à la seconde près, et cette alchimie-là ne se décrète pas : elle vient avec les représentations. Le soir où nous y étions, au Petit Théâtre du Gymnase en 2024, elle n'était pas encore complètement en place. Le spectacle a depuis été remanié sous le titre « ChatGPT, comment cacher un corps ? », l'assistant vocal ayant vieilli plus vite que la pièce. Nous ne sommes pas retournés voir cette version-là, donc nous n'en disons rien.",
       "Je garde tout de même l'idée de départ en tête, parce qu'elle est excellente, et l'envie de voir ce que cette équipe en aurait fait deux cents dates plus tard.",
     ],
     sources: [
@@ -1324,7 +1324,7 @@ export const PIECES: Piece[] = [
     corps: [
       "On avait vu la compagnie Deraïdenz l'année précédente avec Les souffrances de Job, et on y est retournés les yeux fermés. C'est dire l'estime qu'on a pour ce travail. C'est aussi pourquoi la comparaison a pesé sur toute la soirée, et pourquoi nos deux notes se sont écartées.",
       "Baptiste Zsilina a conçu un conte sans texte, porté par une vingtaine de marionnettes à fils et leurs décors. L'ensemble est serein, lumineux, presque apaisant, et se trouve ponctué de ce que la compagnie appelle ses Brèches Noires : des apparitions sombres qui viennent trouer la douceur sans prévenir. Ce contraste est la signature de la maison, fondée à Avignon en 2017.",
-      "Techniquement, c'est du très grand art, et le prix Lueur de la meilleure création visuelle décroché en juillet 2025 ne surprend personne. Le souci du détail est proprement dingue : derrière chaque élément, on devine des mois d'atelier.",
+      "Techniquement, c'est du très grand art, et le prix Lueur de la meilleure création visuelle décroché en juillet 2025 ne surprend personne. Le souci du détail est proprement dingue : derrière chaque élément, on devine des mois d'atelier, et les décors comme les costumes sont d'une beauté qui coupe le sifflet. Une claqueuse y a découvert le théâtre d'horreur et en est sortie certaine de ne jamais revoir ça ailleurs.",
       "Ma réserve porte sur l'échelle. Il faut par moments une loupe pour voir ce qui se passe à l'intérieur des décors, et ce dispositif m'a davantage gêné qu'il ne m'a fasciné : j'aurais aimé que les choses soient simplement plus grandes. Cela dit, on ressort de là étrangement reposé, ce qui n'arrive pas si souvent au théâtre.",
     ],
     sources: [
@@ -1346,7 +1346,8 @@ export const PIECES: Piece[] = [
     corps: [
       "Le meilleur de cette adaptation tient dans son point de vue. Isobel McArthur a eu l'idée de raconter Orgueil et Préjugés depuis l'office : ce sont les servantes qui montent sur le plateau et revisitent le destin de leurs maîtresses, avec le recul qu'on imagine. Johanna Boyé met en scène la version française, traduite et adaptée par Virginie Hocq et Jean-Marc Victor.",
       "Elles sont cinq comédiennes, accompagnées d'une musicienne, et personne d'autre. La distribution est entièrement féminine et la soirée tient autant du concert que du théâtre : les tubes de la pop britannique sont réarrangés et chantés en direct. Elles chantent vraiment bien, et c'est le seul point sur lequel toute la bande est tombée d'accord.",
-      "Pour le reste nos avis divergent nettement, alors je donne le mien. L'histoire ne m'a pas emporté autant que je l'espérais, faute de vrais retournements, et il m'a manqué du liant entre les scènes : chaque tableau fonctionne, mais la couture entre eux se voit. La dernière partie m'a paru longue.",
+      "Pour le reste nos avis divergent nettement, alors je donne les deux. Le mien d'abord : l'histoire ne m'a pas emporté autant que je l'espérais, faute de vrais retournements, il m'a manqué du liant entre les scènes, et la dernière partie m'a paru longue.",
+      "Une autre claqueuse n'est pas d'accord du tout, et son argument tient debout : reprendre un monument de la littérature dans une version entièrement féminine fait du bien, et ces comédiennes sont épatantes dans tous les rôles, à commencer par les rôles d'hommes qu'elles s'attribuent. Elle y a trouvé le rythme, le chant, la drôlerie, quelque chose de pétillant et de frais que je n'ai pas su voir. Sur ce coup-là, je ne suis pas certain d'avoir raison.",
       "Un autre claqueur en est ressorti bien plus enthousiaste, et je comprends pourquoi : l'énergie est là, les interprètes sont attachantes, et faire cohabiter Austen avec la pop anglaise est un pari franchement culotté. Une soirée sympathique, portée par une belle troupe.",
     ],
     sources: [
@@ -1368,7 +1369,7 @@ export const PIECES: Piece[] = [
     corps: [
       "Le premier quart d'heure m'a paru lent, et j'ai commencé à me demander où on allait. C'est le risque de toutes les comédies à mécanique : il faut poser chaque pièce avant de pouvoir les faire tomber, et cette installation-là prend son temps.",
       "L'histoire tient du théorème. Arnaud soupçonne sa compagne Marion d'avoir un faible pour un agent immobilier, et décide d'engager un sosie pour le remplacer. Arrivent alors le véritable agent immobilier, puis son jumeau. Sébastien Castro a écrit la pièce et y tient trois rôles, José Paul et Agnès Boury la mettent en scène.",
-      "Une fois la machine lancée, l'enchaînement des gags fonctionne remarquablement, et surtout il accélère. C'est là qu'on comprend pourquoi elle a décroché le Molière de la meilleure comédie en 2023 et dépassé les sept cents représentations : la construction est d'une précision d'horloger, et chaque quiproquo en déclenche deux autres.",
+      "Une fois la machine lancée, l'enchaînement des gags fonctionne remarquablement, et surtout il accélère. C'est là qu'on comprend pourquoi elle a décroché le Molière de la meilleure comédie en 2023 et dépassé les sept cents représentations : la construction est d'une précision d'horloger, et chaque quiproquo en déclenche deux autres. Reste une prouesse qu'on n'a pas fini de commenter à la sortie : tenir trois rôles en même temps, sans qu'on comprenne jamais comment le passage se fait. On cherche encore le truc.",
       "C'est du boulevard assumé, dans la tradition britannique dont Castro se réclame, et ça ne prétend rien d'autre. Si vous acceptez de patienter un quart d'heure, la suite le rentabilise largement.",
     ],
     reprise: {
@@ -1398,7 +1399,7 @@ export const PIECES: Piece[] = [
     corps: [
       "Prendre le monument le plus intimidant du roman français et annoncer d'emblée qu'on va le faire en plus drôle et moins long, c'est déjà une bonne idée de spectacle. Camille Broquet et Marion Pouvreau ont eu le nez creux : elles ont fait complet deux étés de suite au Théâtre des Corps Saints, ce qui à Avignon ne trompe jamais.",
       "Elles sont deux, elles sont loufoques, et elles racontent. Le résumé fonctionne, l'énergie ne retombe pas, et le pari de rendre Emma Bovary accessible à des spectateurs de huit ans comme à des adultes qui ont lu le livre est tenu de bout en bout.",
-      "Ce qui manque, et c'est ma réserve principale, c'est le théâtre autour. La scénographie est à peu près inexistante, et l'ensemble finit par ressembler davantage à un exposé très drôle qu'à une pièce. Le texte porte absolument tout, et c'est beaucoup lui demander sur une heure quinze.",
+      "Ce qui manque, et c'est ma réserve principale, c'est le théâtre autour. La scénographie est à peu près inexistante, et l'ensemble finit par ressembler davantage à un exposé très drôle qu'à une pièce. Le texte porte absolument tout, et c'est beaucoup lui demander sur une heure quinze. Une claqueuse est allée plus loin en le comparant à Orgueil et préjugés ou presque, vu la même saison : elle aurait aimé que la matière soit incarnée plutôt que racontée. Le sujet est excellent, l'accord est unanime là-dessus.",
       "Reste que faire aimer Flaubert à une salle entière en le prenant par le rire relève du service public. On y retournera volontiers le jour où elles auront un décor.",
     ],
     reprise: {
@@ -1639,11 +1640,12 @@ export const PIECES: Piece[] = [
     festival: 'Avignon OFF 2025',
     noteMoy: 7.8,
     notes: { julie: 8, pierre: 7.5, etienne: 8 },
-    chapo: "Mike Tyson contre Steven Seagal, qui gagne ? La question a l'air idiote, et elle occupe une heure entière avec un sérieux imperturbable.",
+    chapo: "Un comédien part tenter sa chance dans le cinéma chinois. Il en revient avec une heure de mésaventures vraies et un PowerPoint.",
     corps: [
-      "Certains spectacles reposent entièrement sur une seule chose : la capacité d'un acteur à croire à ce qu'il raconte plus fort que le public n'y croit. Si ça flanche une seconde, tout s'écroule. Ici, ça ne flanche pas.",
-      "Clovis Fouin est seul, il raconte un pan de cinéma d'action et de kung-fu industriel, et il y met une conviction qui ne se relâche jamais. Ce que je repère depuis le plateau, c'est le dosage : il en fait juste assez pour déclencher le rire quand il le décide, jamais assez pour appuyer sur la blague. C'est un réglage difficile à tenir sur la durée, et il le tient.",
-      "Le spectacle a été créé au Théâtre du Train Bleu, salle où l'on repère souvent les formes qui vont durer. La bande y est allée à trois, et les trois notes sont pratiquement identiques, ce qui n'arrive presque jamais chez nous. Quand nos avis se rejoignent à ce point, c'est en général que le spectacle sait exactement ce qu'il fait.",
+      "Il y a un fantasme partagé par beaucoup de comédiens : partir loin, tenter sa chance ailleurs, revenir avec une carrière. Clovis Fouin est parti en Chine pour percer dans le cinéma, et il en a rapporté autre chose qu'une carrière.",
+      "Il est seul sur le plateau et raconte ses mésaventures, qui lui sont réellement arrivées, avec un PowerPoint qui tombe exactement là où il faut. L'objet est risible par nature, c'est l'outil de la réunion d'entreprise, et c'est précisément ce qui le rend drôle quand il sert à illustrer un casting raté à l'autre bout du monde.",
+      "Ce que je repère depuis le plateau, c'est le dosage. Il en fait juste assez pour déclencher le rire quand il le décide, jamais assez pour appuyer sur la blague. On n'est pas dans l'hilarité continue, personne dans la bande n'a prétendu le contraire, mais on est dans quelque chose de rare : quelqu'un qui raconte un échec sans en faire ni un drame ni un numéro.",
+      "Créé au Théâtre du Train Bleu, où l'on repère souvent les formes qui vont durer. Nos trois notes se touchent presque, ce qui n'arrive presque jamais chez nous.",
       "Une heure de récit, un plateau nu, un acteur qui ne s'excuse jamais. C'est le format que je préfère.",
     ],
     momentGarde: "La sincérité totale avec laquelle il défend une thèse de cour de récré, et la salle qui finit par la défendre avec lui.",
@@ -1698,7 +1700,7 @@ export const PIECES: Piece[] = [
     corps: [
       "Les comédies à pitch me rendent méfiant. Le pitch est souvent excellent sur l'affiche et épuisé au bout de vingt minutes, une fois que la mécanique a livré tout ce qu'elle avait. Celle-ci tient plus longtemps que ça, et c'est déjà une victoire.",
       "Mathias apprend qu'il est l'unique héritier de l'Église véritaniste, une secte américaine mystérieuse. Le magot est là, la clause aussi : relancer la boutique et réunir cinq mille adeptes en moins de six mois. Le spectacle déroule alors la fabrication d'un culte comme on monterait une start-up, avec les mêmes éléments de langage et le même vocabulaire de croissance.",
-      "C'est la première pièce de François Aubagnac, montée avec Suzanne Gardeux et des camarades passés par le Cours Florent, et ça se voit dans le bon sens : le plateau est plein, la troupe joue vite, et personne n'attend son tour de réplique. Une partie de la bande a trouvé le rythme un peu inégal sur la fin, l'autre est ressortie enchantée. Nos notes le disent assez clairement.",
+      "C'est la première pièce de François Aubagnac, montée avec Suzanne Gardeux et des camarades passés par le Cours Florent. On les avait croisés à Avignon, en slips, en train de tracter pour leur spectacle, ce qui annonçait assez bien la couleur. Et ça se voit dans le bon sens : le plateau est plein, la troupe joue vite, et personne n'attend son tour de réplique. Peu de décors, une mise en scène simple, et ça suffit largement : l'histoire embarque, et on ressort avec une envie coupable d'entrer dans la secte. Une partie de la bande a trouvé le rythme un peu inégal sur la fin, l'autre est ressortie enchantée. Nos notes le disent assez clairement.",
       "Une comédie de secte qui parle en fait de management. Je ne suis pas certain que ce soit involontaire.",
     ],
     momentGarde: "Le vocabulaire d'entreprise appliqué au recrutement de fidèles, qui devient de plus en plus drôle à mesure qu'il devient plausible.",
@@ -1784,7 +1786,7 @@ export const PIECES: Piece[] = [
     corps: [
       "Les claquettes ont un problème d'image en France : on les range du côté du numéro de variété, quelque chose qu'on regarde en attendant la suite. Il suffit d'un spectacle bien construit pour que cette idée tombe.",
       "L'histoire est simple et elle tient debout : la rencontre d'un soldat américain et d'une jeune Française sur fond de Seconde Guerre mondiale et de Libération, puis leurs retrouvailles trois quarts de siècle plus tard. Entre les deux, la narration passe par la danse, claquettes, lindy hop, swing, avec des passages contemporains quand le récit s'assombrit.",
-      "Ce qui m'intéresse ici, c'est le choix de faire porter la dramaturgie par le rythme plutôt que par le texte. Un pas plus lourd et l'on comprend qu'on a changé d'époque. Une reprise du même motif à deux vitesses différentes, et l'on comprend que les personnages ont vieilli. C'est une écriture, même si elle ne passe pas par des phrases. Nos deux notes ne sont pas identiques, l'un de nous ayant trouvé le récit un peu attendu, mais aucun des deux n'a boudé le plaisir.",
+      "Ce qui m'intéresse ici, c'est le choix de faire porter la dramaturgie par le rythme plutôt que par le texte. Un pas plus lourd et l'on comprend qu'on a changé d'époque. Une reprise du même motif à deux vitesses différentes, et l'on comprend que les personnages ont vieilli. C'est une écriture, même si elle ne passe pas par des phrases. Une claqueuse en est sortie les larmes aux yeux, ce qui n'est pas rien pour un spectacle de claquettes : la troupe transmet énormément par la danse, les costumes sont beaux, et la joie est contagieuse. On est plus réservés sur les scènes non dansées, mais ce n'est pas pour elles qu'on vient.",
       "Sortir d'un spectacle avec un tempo dans la tête, ça vaut bien une histoire compliquée.",
     ],
     momentGarde: "Le motif de claquettes de la rencontre, rejoué au ralenti soixante-quinze ans plus tard.",
@@ -1975,7 +1977,7 @@ export const PIECES: Piece[] = [
     corps: [
       "Transposer Ubu dans la politique contemporaine comporte un risque évident : la pièce est déjà une charge, et l'actualité est déjà grotesque, si bien qu'on peut se retrouver avec une satire qui n'a plus rien à ajouter à son sujet.",
       "L'adaptation de Mohamed Kacimi, mise en scène par Isabelle Starkier, choisit la version musicale et fait d'Ubu un candidat. Le personnage garde son vocabulaire, sa lâcheté et son appétit, et on lui donne les outils modernes de la conquête du pouvoir. La transposition tient parce qu'elle ne cherche pas à désigner quelqu'un en particulier : elle décrit un mécanisme, ce qui la rend plus durable qu'une imitation.",
-      "Trois claqueurs y sont allés, et pour une fois nos trois notes se touchent presque. C'est le signe d'un spectacle qui fait exactement ce qu'il annonce, sans surprise mais sans déception non plus. La musique évite l'effet conférence, et le rire vient du décalage entre le langage de Jarry et les codes de la communication politique.",
+      "Trois claqueurs y sont allés, et pour une fois nos trois notes se touchent presque. C'est le signe d'un spectacle qui fait exactement ce qu'il annonce, sans surprise mais sans déception non plus. Ce qu'on retient d'abord, ce sont les costumes, franchement somptueux, et une scénographie qui donne au grotesque un cadre digne de lui. L'accompagnement musical évite l'effet conférence, et le rire vient du décalage entre le langage de Jarry et les codes de la communication politique.",
       "Cent trente ans plus tard, le Père Ubu n'a pas pris une ride. C'est le compliment le plus inquiétant qu'on puisse faire à une pièce.",
     ],
     momentGarde: "Le vocabulaire de Jarry recraché dans un exercice de communication politique, où il ne détonne même pas.",
@@ -1998,7 +2000,7 @@ export const PIECES: Piece[] = [
     corps: [
       "Le titre à rallonge annonce la couleur, et je dois dire que je suis plutôt client de ces titres-là : ils promettent qu'on ne va pas se prendre au sérieux, ce qui est déjà un contrat.",
       "Juan anime une émission, il a du succès, il fume trop, il pèse trop lourd, il va être père et célibataire en même temps, et il refuse méthodiquement de regarder sa vie en face. Le pari perdu l'envoie en Argentine, où l'attendent l'hôpital, une propriétaire d'Airbnb, une histoire d'amour et une fille à retrouver. Élodie Menant écrit ça avec Gaston Ré, et la distribution réunit Pierre Bénézit, Lauriane Escaffre, Marc Pistolesi et Floriane Vincent.",
-      "Ce qui me plaît, c'est le refus du pathos. Le sujet aurait pu virer à la leçon de vie sur la deuxième chance, et le spectacle passe systématiquement par la blague quand l'émotion menace de s'installer. Menant, qui a décroché deux Molières en 2020, sait manifestement où placer ses virages. Nos deux notes sont proches et honnêtes : c'est très bien fait, sans nous retourner complètement.",
+      "Ce qui me plaît, c'est le refus du pathos. Le sujet aurait pu virer à la leçon de vie sur la deuxième chance, et le spectacle passe systématiquement par la blague quand l'émotion menace de s'installer. Menant, qui a décroché deux Molières en 2020, sait manifestement où placer ses virages. Une claqueuse a été franchement embarquée : quatre comédiens très bons, un récit haletant, quelque chose de joli et de joyeux qui l'a emportée sans résistance. Nos deux notes sont proches, et l'écart tient à ce qu'on attendait en entrant.",
       "Une comédie qui parle de crise cardiaque et qui donne envie de vivre. Le contrat est rempli.",
     ],
     momentGarde: "L'infarctus décrit comme la meilleure chose qui lui soit arrivée, et la salle qui rit sans culpabiliser.",
@@ -2112,8 +2114,8 @@ export const PIECES: Piece[] = [
     corps: [
       "C'est le spectacle sur lequel la bande s'est le plus divisée cette saison, et je préfère le dire tout de suite parce que c'est aussi ce qui le rend intéressant à raconter.",
       "Le collectif NOX prend l'histoire par la marge : Mercutio n'est ni Capulet ni Montaigu, il est le beau parleur, le boute-en-train, le meilleur ami de Roméo, et il commence à se demander si cette place lui suffit. Le spectacle se joue dans un décor de cabaret, avec un univers musical qui va de Brel aux battles de rap, et un ton burlesque assumé.",
-      "L'idée de départ est excellente, et c'est précisément pour ça qu'on n'est pas tombés d'accord. Une claqueuse a adoré l'énergie et la liberté de ton. Deux autres ont eu du mal à suivre le mélange des registres et ont perdu le personnage en route. Je note quand même que personne n'a parlé d'ennui, ce qui est rare quand des notes s'écartent à ce point.",
-      "Un Shakespeare survitaminé qu'il faut prendre pour ce qu'il est : une fête, pas une exégèse.",
+      "L'idée de départ est excellente, et c'est précisément pour ça qu'on n'est pas tombés d'accord. Une claqueuse a adoré l'énergie et la liberté de ton. Deux autres ont eu du mal à suivre le mélange des registres et ont perdu le personnage en route, le texte les ayant moins tenus que le reste. Sur un point pourtant, tout le monde s'accorde : Nox excelle dans tout ce qui n'est pas écrit, la scénographie, l'occupation de l'espace, la musique, les costumes. C'est déjà la marque de fabrique qu'on retrouvera, un cran au-dessus, dans leur Hercule.",
+      "Un Shakespeare survitaminé qu'il faut prendre pour ce qu'il est : une fête, pas une exégèse. Et une troupe qu'on avait raison de suivre.",
     ],
     momentGarde: "Mercutio seul après la fête, quand le boute-en-train n'a plus personne à faire rire.",
     sources: [
@@ -2368,7 +2370,7 @@ export const PIECES: Piece[] = [
     corps: [
       "Une bonne partie des spectacles du OFF repose entièrement sur le régime de l'accumulation : on empile les personnages, les décalages et les changements de costume jusqu'à ce que la salle craque. Ça marche formidablement bien sur certains, et pas du tout sur d'autres. Notre bande en est la preuve vivante.",
       "Clément Beauvoir et Vincent Bernard incarnent Gordon et Gordon, deux héros de la justice et de la vérité ridiculement invincibles, et convoquent autour d'eux une galerie qui n'a aucune raison de tenir ensemble. C'est parfaitement volontaire. Le spectacle avance par surenchère, chaque scène cherchant à dépasser la précédente en absurdité.",
-      "Deux claqueurs sur trois ont adoré cette mécanique et sont sortis en riant. La troisième n'est jamais entrée dedans, et c'est ce qui explique notre moyenne. C'est le genre de spectacle où la question n'est pas la qualité d'exécution, qui est là, mais l'accord avec un type d'humour. Il faut aimer qu'on en fasse trop, sur le principe.",
+      "Deux claqueurs sur trois ont adoré cette mécanique et sont sortis en riant. La troisième n'y est jamais entrée : elle y a vu une bande de copains qui s'amusent entre eux plus qu'un spectacle qui s'adresse à la salle, et ça ne l'a pas embarquée. C'est le genre de soirée où la question n'est pas l'exécution, mais l'accord avec un type d'humour très particulier. Il faut aimer qu'on en fasse trop, sur le principe.",
       "Si l'idée de deux super-héros nommés Gordon vous fait déjà sourire, vous savez ce qu'il vous reste à faire.",
     ],
     momentGarde: "L'arrivée des baleines, qui n'a aucune justification et que personne ne réclame de justifier.",
@@ -2391,7 +2393,7 @@ export const PIECES: Piece[] = [
     corps: [
       "Il y a des soirées où le sujet vous tient et où la forme vous laisse dehors. Celle-ci en fait partie pour nous, et c'est d'autant plus frustrant que la matière de départ est de premier ordre.",
       "Brecht observe son époque en direct et décompose la mécanique du fascisme par petites scènes indépendantes : le paysan, le soldat, le chercheur, le magistrat, le médecin. Chacun fait un compromis minuscule, parfaitement raisonnable pris isolément, et l'addition de ces compromis mène là où l'on sait. Julie Duclos monte ces instantanés dans un dispositif mobile aux combinaisons multiples, avec un travail précis sur les images, les sons et les silences.",
-      "Ce qui nous a tenus à distance, c'est le format en tableaux, qui est pourtant le principe même de l'œuvre : je n'ai pas réussi à m'attacher, et sur deux heures vingt j'ai senti la longueur passer. C'est notre limite de spectateurs bien plus qu'un défaut du spectacle, qui est sérieux, tenu, et porté sur un sujet qui n'a rien perdu de son urgence.",
+      "Ce qui nous a tenus à distance, c'est le format en tableaux, qui est pourtant le principe même de l'œuvre : je n'ai pas réussi à m'attacher, et sur deux heures vingt j'ai senti la longueur passer. Une autre claqueuse a buté sur le rythme et aurait aimé une soirée plus resserrée. Nous sommes donc deux à être restés dehors, sur un texte qui nous passionne par ailleurs et sur un sujet qui n'a rien perdu de son urgence. C'est notre limite de spectateurs, dite comme telle.",
       "On y retournerait sur une autre proposition. Le texte, lui, n'a pas pris une ride, et c'est ce qui inquiète.",
     ],
     momentGarde: "La scène du couple qui se déchire à voix basse en surveillant les murs, et l'idéologie qui entre par la conversation domestique.",
@@ -2414,7 +2416,7 @@ export const PIECES: Piece[] = [
     corps: [
       "Le quiproquo est la plus vieille machine du théâtre comique, et c'est aussi la plus impitoyable : soit le mensonge de départ tient jusqu'au bout, soit on voit la ficelle à la vingtième minute et il ne reste plus qu'à attendre.",
       "Rémi et Julie ont gagné au loto et viennent l'annoncer. Clément et Jessica pensent qu'ils sont là pour les soutenir après un deuil. Le malentendu s'installe, personne ne le corrige, et la situation s'aggrave quand on apprend que le mort n'est pas tout à fait mort et qu'il pourrait être sauvé avec l'argent. Le duo des Décaféinés joue ça avec Florence Brunold, dans une mise en scène de Luq Hamett, patron du Théâtre Edgar.",
-      "Le métier est là, et il faut le dire : le rythme ne faiblit pas, les comédiens tiennent la salle, et les répliques tombent. Notre réserve tient à ce qu'on a anticipé assez vite les étages du mécanisme, et nos deux notes s'écartent nettement selon qu'on a marché ou non. C'est de la comédie de boulevard revendiquée, avec ce que ça suppose de conventions.",
+      "Le métier est là, et il faut le dire : le rythme ne faiblit pas, les comédiens tiennent la salle, et les répliques tombent. Notre réserve tient à ce qu'on a anticipé assez vite les étages du mécanisme. Le public, lui, était hilare du début à la fin, et c'est une donnée qui compte autant que notre avis : ce théâtre-là fait très exactement ce qu'il promet, et il le fait devant une salle conquise. C'est de la comédie de boulevard revendiquée, avec ce que ça suppose de conventions.",
       "Le Théâtre Edgar sait faire ça depuis quarante ans. Le public rit, et c'est le contrat.",
     ],
     momentGarde: "Le moment où le mort redevient sauvable, et où la question d'argent transforme le quiproquo en vrai dilemme.",
@@ -2459,7 +2461,7 @@ export const PIECES: Piece[] = [
     corps: [
       "Voici le cas de figure le plus inconfortable pour qui écrit sur les spectacles : une salle pleine qui s'amuse franchement, et trois personnes de notre bande qui n'entrent pas dans le jeu. Ça arrive, et ça dit surtout quelque chose de nous ce soir-là.",
       "Émilie subit l'enterrement de vie de jeune fille qu'elle n'avait pas demandé. Entre l'enthousiasme écrasant de l'amie d'enfance qui a tout organisé et l'arrogance de la grande sœur, la journée déraille : un enlèvement, un parcours du combattant, une visite guidée. Trois comédiennes tiennent l'ensemble à une énergie qui ne retombe jamais, et le spectacle a affiché complet tout le festival avant d'être nommé aux Cyranos.",
-      "Ce qui nous a manqué, c'est la surprise : on a devancé les situations, et à partir de là on regarde au lieu de se laisser embarquer. C'est une affaire de goût bien plus que de qualité, et nos trois avis pèsent peu à côté d'une salle complète pendant tout le festival et d'une nomination aux Cyranos.",
+      "Ce qui nous a manqué, c'est la surprise : on a devancé les situations, et à partir de là on regarde au lieu de se laisser embarquer. Le spectacle est mignon, il porte bien son titre, et il vise un rire immédiat qui n'était pas le nôtre ce jour-là. C'est une affaire de goût bien plus que de qualité, et nos trois avis pèsent peu à côté d'une salle complète pendant tout le festival et d'une nomination aux Cyranos.",
       "Un désaccord franc avec le reste de la salle, et le reste de la salle avait le nombre pour lui. Allez vérifier par vous-mêmes.",
     ],
     sources: [
