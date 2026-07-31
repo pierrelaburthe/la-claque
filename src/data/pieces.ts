@@ -213,7 +213,11 @@ export const PIECES: Piece[] = [
     momentGarde: "Le vieux rideau et les tréteaux de bois, qui suffisent à faire tenir toute la cour de Louis XIV sur trois mètres carrés.",
     reprise: {
       lieu: "Théâtre des Célestins, Lyon, et en tournée",
-      dates: "En septembre 2026, puis saison 2026-2027",
+      dates: "Du 18 au 20 septembre 2026 à Lyon, puis en Normandie",
+      debut: '2026-09-18',
+      fin: '2026-09-20',
+      salle: 'Les Célestins, Théâtre de Lyon',
+      ville: 'Lyon',
       url: 'https://compagnielek.fr/project/moliere/',
     },
     sources: [
