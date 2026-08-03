@@ -6,7 +6,7 @@
 // session (ouverte, passée) se calcule à la compilation. Une session close
 // n'est pas retirée : elle indique la fenêtre à laquelle il faudra revenir.
 import Base from '../../layouts/Base.astro';
-import { APPELS, appelsOuverts, appelsPasses, appelsPermanents } from '../../data/appels';
+import { APPELS, appelsOuverts, appelsPasses, appelsPermanents, LIBELLE_FAMILLE } from '../../data/appels';
 import { THEATRES } from '../../data/theatres';
 import { url } from '../../lib/url';
 
@@ -33,6 +33,10 @@ const faqs = [
   {
     q: 'Quels concours existent pour un jeune metteur en scène ?',
     r: "Deux dispositifs comptent particulièrement en Île-de-France. Le Prix Théâtre 13 s'adresse aux metteuses et metteurs en scène en début de parcours et se joue devant le public. Le festival Impatience, au CENTQUATRE-PARIS, est réservé aux artistes ayant entre une et cinq créations à leur actif, sur un spectacle récent qui n'a pas encore beaucoup tourné en Île-de-France. Les deux sont très regardés par les programmateurs.",
+  },
+  {
+    q: "À quoi servent les aides de la SACD, de l'Adami et de la Spedidam ?",
+    r: "Ce sont des sociétés civiles qui perçoivent les droits des auteurs et des artistes-interprètes et en réinvestissent une part dans la création. Leur logique est différente de celle d'une subvention : l'aide est adossée à l'emploi. L'Adami prend en charge une partie des salaires bruts des artistes-interprètes, à condition d'un plateau et d'un nombre de représentations minimum. La Spedidam raisonne en pourcentage du coût total employeur, avec des minima de rémunération et des dates postérieures à sa commission. Du côté de la SACD, l'association Beaumarchais attribue des bourses d'écriture, pour un texte ou pour une mise en scène, sans exiger d'adhésion préalable.",
   },
   {
     q: 'Faut-il payer pour candidater ?',
@@ -101,7 +105,7 @@ const jsonld = [
           <div class="app-liste">
             {ouverts.map((a) => (
               <article class="app app-on">
-                <p class="app-org">{a.organisme}</p>
+                <p class="app-org"><span class="app-fam">{LIBELLE_FAMILLE[a.famille]}</span>{a.organisme}</p>
                 <h3><a href={a.url} rel="noopener nofollow">{a.nom}</a></h3>
                 <p class="app-date">Jusqu'au {jour(a.depot!.fin)}</p>
                 <p class="app-pour">{a.pour}</p>
@@ -118,14 +122,37 @@ const jsonld = [
         </>
       )}
 
-      <h2>À surveiller toute l'année</h2>
+      <h2>D'où vient l'argent</h2>
+      <p>
+        Quatre poches différentes financent un spectacle, et elles ne se demandent pas de la même façon.
+        L'argent public, celui de la DRAC, se demande sur dossier, une fois par an, très en avance, et regarde
+        d'abord le projet artistique. L'argent des sociétés civiles, l'Adami, la Spedidam, la SACD, vient des
+        droits perçus pour les artistes et les auteurs : il est presque toujours adossé à des salaires, donc il
+        se calcule à partir de votre plan d'embauche plutôt qu'à partir de votre note d'intention. Les aides à
+        l'emploi remboursent une part des rémunérations une fois les dates jouées. Les soutiens à la diffusion,
+        enfin, servent à tourner et se demandent le plus souvent par le théâtre qui vous accueille.
+      </p>
+      <p>
+        La conséquence est pratique : une compagnie qui n'a pas encore de dates fermes vise l'argent public et
+        les concours, une compagnie qui a des dates et un plateau nombreux vise les sociétés civiles, et une
+        compagnie qui tourne déjà regarde du côté de l'emploi et de la diffusion. Rien n'empêche de cumuler,
+        sauf mention contraire dans le règlement, et ces mentions existent.
+      </p>
+
+      <h2>Sans date fixe, ou au fil de l'eau</h2>
       <div class="app-liste">
         {permanents.map((a) => (
           <article class="app">
-            <p class="app-org">{a.organisme}</p>
+            <p class="app-org"><span class="app-fam">{LIBELLE_FAMILLE[a.famille]}</span>{a.organisme}</p>
             <h3><a href={a.url} rel="noopener nofollow">{a.nom}</a></h3>
             <p class="app-pour">{a.pour}</p>
             <p>{a.apporte}</p>
+            {a.conditions && (
+              <ul class="app-cond">
+                {a.conditions.map((c) => <li>{c}</li>)}
+              </ul>
+            )}
+            {a.suite && <p class="app-suite">{a.suite}</p>}
           </article>
         ))}
       </div>
@@ -140,7 +167,7 @@ const jsonld = [
           <div class="app-liste">
             {passes.map((a) => (
               <article class="app app-off">
-                <p class="app-org">{a.organisme}</p>
+                <p class="app-org"><span class="app-fam">{LIBELLE_FAMILLE[a.famille]}</span>{a.organisme}</p>
                 <h3><a href={a.url} rel="noopener nofollow">{a.nom}</a></h3>
                 <p class="app-date">Dernière session : {a.depot!.libelle}</p>
                 <p class="app-pour">{a.pour}</p>
@@ -234,6 +261,7 @@ const jsonld = [
   .app-on { border-left-color: var(--red); }
   .app-off { opacity: 0.92; }
   .app-org { font-family: var(--sans); font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--ink-3); margin: 0 0 4px; }
+  .app-fam { display: inline-block; border: 1px solid var(--rule-2); padding: 2px 7px; margin-right: 8px; color: var(--ink-2); }
   .app h3 { font-family: var(--display); font-size: 1.2rem; margin: 0 0 6px; }
   .app h3 a { text-decoration: none; }
   .app h3 a:hover { color: var(--red); }
