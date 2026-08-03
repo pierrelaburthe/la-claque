@@ -210,6 +210,16 @@ const jsonld = [
       ))}
     </ul>
 
+    <div class="th-postuler">
+      <p class="th-postuler-k">Vous cherchez où candidater</p>
+      <p>
+        Les portes officielles sont rares mais elles ont toutes un calendrier public. Nous avons rassemblé les
+        concours, les aides de la DRAC, l'aide nationale à la création de textes dramatiques et les salles qui
+        publient une procédure, avec les dates de dépôt et ce qui est ouvert en ce moment.
+      </p>
+      <a class="th-postuler-go" href={url('/guides/ou-deposer-son-dossier')}>Où déposer son dossier →</a>
+    </div>
+
     <p class="th-foot">
       Les adresses, les jauges et les directions viennent de sources publiques, citées sur chaque fiche. Quand
       une donnée n'est pas publiée, la fiche le dit plutôt que de l'inventer. Cet annuaire s'agrandira : si
@@ -388,6 +398,12 @@ const jsonld = [
   .th-modes li { border-top: 1px solid var(--rule-2); padding-top: 12px; }
   .th-modes p { font-family: var(--serif); font-size: 0.95rem; line-height: 1.55; color: var(--ink-2); margin: 0; }
   .th-modes-n { font-family: var(--sans) !important; font-size: 0.72rem !important; color: var(--ink-3) !important; margin-top: 8px !important; }
+
+  .th-postuler { background: var(--card); border: 1px solid var(--rule-2); border-left: 4px solid var(--red); padding: 18px 22px; margin: 0 0 26px; }
+  .th-postuler-k { font-family: var(--sans); font-size: 0.68rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--red); margin: 0 0 6px; }
+  .th-postuler p { font-family: var(--serif); font-size: 1rem; line-height: 1.6; color: var(--ink-2); margin: 0 0 10px; max-width: 74ch; }
+  .th-postuler-go { font-family: var(--sans); font-size: 0.85rem; font-weight: 700; color: var(--red); text-decoration: none; }
+  .th-postuler-go:hover { text-decoration: underline; }
 
   .th-foot { font-family: var(--serif); font-size: 0.95rem; color: var(--ink-2); border-top: 1px solid var(--rule); padding-top: 16px; max-width: 70ch; }
 </style>

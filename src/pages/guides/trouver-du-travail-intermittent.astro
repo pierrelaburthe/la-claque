@@ -1,0 +1,213 @@
+---
+// Guide « Trouver du travail quand on est intermittent ».
+//
+// Deux matières, séparées comme toujours : les services officiels, décrits
+// d'après ce qu'ils publient eux-mêmes et sourcés en bas de page, et la manière
+// dont ça se passe vraiment, qui vient de la bande et s'écrit à notre voix.
+// Aucun montant, aucun seuil chiffré n'est avancé ici : les règles de
+// l'indemnisation ont leur propre guide, et elles bougent.
+import Base from '../../layouts/Base.astro';
+import { url } from '../../lib/url';
+
+const abs = (p: string) => new URL(url(p), Astro.site).href;
+
+const outils = [
+  {
+    t: 'France Travail Spectacle',
+    d: "Le portail dédié aux intermittents et aux employeurs du spectacle : la réglementation, les démarches, les simulateurs de droits, l'attestation employeur mensuelle et des conseillers spécialisés qui connaissent les annexes 8 et 10. C'est l'adresse de référence pour tout ce qui touche au statut.",
+    u: 'https://www.francetravail.fr/spectacle/',
+  },
+  {
+    t: 'Clap Talents',
+    d: "La banque de profils de France Travail, gratuite, qui met en relation les salariés du spectacle et les recruteurs. On y renseigne son parcours, ses dates de disponibilité, et on peut y déposer un portfolio, des photos et des extraits de travail. Ce n'est pas un moteur de correspondance automatique : c'est une vitrine que les recruteurs consultent.",
+    u: 'https://claptalents.francetravail.fr/',
+  },
+  {
+    t: 'Les offres « Arts du spectacle »',
+    d: "La recherche d'offres de France Travail, filtrée sur le domaine du spectacle. C'est là qu'atterrissent les recrutements des structures qui passent par le circuit officiel, souvent côté technique et administration plus que côté plateau.",
+    u: 'https://candidat.francetravail.fr/rechercheoffre/emploi/arts-du-spectacle/s4',
+  },
+  {
+    t: 'ProfilCulture',
+    d: "La plateforme d'emploi de référence dans la culture, avec une rubrique spectacle vivant et un filtre par type de contrat, dont l'intermittence et le free-lance. Beaucoup d'offres d'administration, de production et de diffusion, donc utile aussi quand on veut vivre du théâtre autrement que sur le plateau.",
+    u: 'https://www.profilculture.com/annonce/Emplois-Spectacle-Vivant',
+  },
+  {
+    t: 'Le GUSO',
+    d: "Le guichet unique qui permet à une structure dont le spectacle n'est pas le métier, une mairie, un bar, un comité d'entreprise, de vous employer légalement en quelques minutes. Le connaître et savoir l'expliquer débloque des engagements que votre interlocuteur croyait impossibles.",
+    u: 'https://www.guso.fr/',
+  },
+  {
+    t: 'Culture et Spectacle',
+    d: "Le site de France Travail consacré aux métiers de la culture : fiches métiers, formations et ateliers, dont des séances collectives pour construire son profil et sa recherche.",
+    u: 'https://cultureetspectacle.francetravail.fr/',
+  },
+];
+
+const faqs = [
+  {
+    q: 'Où trouver des offres pour les intermittents du spectacle ?',
+    r: "Les offres officielles se concentrent sur France Travail, avec un portail dédié au spectacle et une recherche filtrée sur les arts du spectacle. ProfilCulture couvre l'ensemble du secteur culturel, avec un filtre intermittent et free-lance. Clap Talents fonctionne dans l'autre sens : vous y déposez votre profil et vos disponibilités, et ce sont les recruteurs qui viennent chercher. Une grande partie des engagements de plateau, cependant, ne passe par aucune annonce.",
+  },
+  {
+    q: "Qu'est-ce que Clap Talents ?",
+    r: "C'est le service gratuit de France Travail qui met en relation les salariés du spectacle et les employeurs. On y renseigne son parcours et ses dates de disponibilité, on y ajoute un portfolio, des photos ou des extraits de travail, et les recruteurs du spectacle vivant, de l'audiovisuel et du cinéma peuvent consulter le profil.",
+  },
+  {
+    q: 'Comment être employé quand la structure ne connaît rien au spectacle ?',
+    r: "Par le GUSO, le guichet unique du spectacle occasionnel. Une commune, un bar ou un comité d'entreprise peut y déclarer un engagement en ligne, ce qui règle en une fois le contrat et les cotisations. Beaucoup de dates se perdent simplement parce que personne n'a expliqué à l'organisateur que c'était possible.",
+  },
+  {
+    q: 'Faut-il un agent pour travailler au théâtre ?',
+    r: "Pas au début, et ce n'est pas ainsi que se remplit un début de parcours. Les engagements viennent des gens avec qui on a déjà travaillé, des stages, des écoles, des compagnies amies et des salles où l'on est passé. Un agent devient utile quand il y a déjà un mouvement à organiser.",
+  },
+  {
+    q: "Comment garder ses heures quand une saison est creuse ?",
+    r: "En élargissant ce qui compte : la technique, la régie, les ateliers de pratique artistique, les doublages ou l'animation relèvent souvent des mêmes annexes que le plateau. Le décompte des heures et des cachets obéit à des règles précises, que nous détaillons dans notre guide dédié, et qui méritent d'être vérifiées auprès d'un conseiller spécialisé plutôt que sur un forum.",
+  },
+];
+
+const jsonld = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: "Trouver du travail quand on est intermittent",
+    description:
+      "Les plateformes qui recensent vraiment les offres du spectacle, la banque de profils de France Travail, le GUSO, et la façon dont les engagements arrivent réellement.",
+    author: { '@type': 'Organization', name: 'La Claque' },
+    publisher: { '@type': 'Organization', name: 'La Claque' },
+    mainEntityOfPage: abs('/guides/trouver-du-travail-intermittent'),
+    inLanguage: 'fr',
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqs.map((f) => ({
+      '@type': 'Question',
+      name: f.q,
+      acceptedAnswer: { '@type': 'Answer', text: f.r },
+    })),
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Accueil', item: abs('/') },
+      { '@type': 'ListItem', position: 2, name: 'Guides', item: abs('/guides') },
+      {
+        '@type': 'ListItem',
+        position: 3,
+        name: 'Trouver du travail quand on est intermittent',
+        item: abs('/guides/trouver-du-travail-intermittent'),
+      },
+    ],
+  },
+];
+---
+<Base
+  title="Trouver du travail quand on est intermittent | La Claque"
+  description="Les plateformes d'offres du spectacle, la banque de profils Clap Talents, le GUSO et les circuits réels par lesquels arrivent les engagements au théâtre."
+  active="guides"
+  jsonld={jsonld}
+>
+  <article class="wrap-narrow guide">
+    <p class="breadcrumb">
+      <a href={url('/')}>Accueil</a> › <a href={url('/guides')}>Guides</a> › Trouver du travail en intermittence
+    </p>
+    <div class="guide-head">
+      <p class="kicker">Côté métier</p>
+      <h1>Trouver du travail quand on est intermittent</h1>
+      <p class="stand">
+        Personne ne vous explique où chercher. On vous laisse entendre que tout se joue au réseau, ce qui est
+        à moitié vrai et pas très utile quand on démarre. Voici les endroits qui recensent réellement des
+        offres, l'outil que peu de gens utilisent alors qu'il est fait pour eux, et la façon dont les
+        engagements arrivent vraiment.
+      </p>
+    </div>
+
+    <div class="prose">
+      <h2>Les six adresses à connaître</h2>
+      <div class="outils">
+        {outils.map((o) => (
+          <div class="ou-card">
+            <h3><a href={o.u} rel="noopener nofollow">{o.t}</a></h3>
+            <p>{o.d}</p>
+          </div>
+        ))}
+      </div>
+
+      <h2>Ce que les annonces ne disent pas</h2>
+      <p>
+        La plupart des engagements de plateau ne font l'objet d'aucune annonce. Une distribution se monte avec
+        des gens qu'on a vus jouer, une remplaçante se trouve en trois appels, une tournée se complète par la
+        personne qui était libre au bon moment. Cela n'a rien d'un club fermé : c'est simplement que le risque
+        est trop grand pour être confié à un curriculum vitae.
+      </p>
+      <p>
+        La conséquence pratique est simple. Être vu vaut mieux qu'être lu, donc tout ce qui vous met sur un
+        plateau compte, y compris une petite forme, un festival, un laboratoire ou une lecture. Et être
+        joignable vaut mieux qu'être disponible : un profil à jour avec vos dates, un numéro qui répond, une
+        réponse le jour même. Beaucoup de dates se donnent à celui qui a décroché.
+      </p>
+      <p>
+        Le troisième réflexe, le moins spontané, consiste à traiter les organisateurs qui ne sont pas du
+        métier comme des employeurs possibles. Une médiathèque, un festival de village, un comité
+        d'entreprise : ils veulent souvent programmer mais renoncent devant la paperasse. Le
+        <a href="https://www.guso.fr/" rel="noopener nofollow"> GUSO</a> existe exactement pour ça, et savoir
+        l'expliquer en deux phrases transforme un refus poli en date payée.
+      </p>
+
+      <h2>Faire compter ce qu'on fait déjà</h2>
+      <p>
+        Beaucoup de ce que fait une comédienne ou un comédien pour vivre relève des mêmes annexes que le
+        plateau : la technique, la régie, les ateliers de pratique artistique, le doublage. Le décompte des
+        heures obéit à des règles précises, que nous avons détaillées dans
+        <a href={url('/guides/le-cachet-et-le-decompte-des-heures')}> le guide du cachet</a>, et l'ouverture des
+        droits dans <a href={url('/guides/obtenir-son-intermittence')}>celui de l'intermittence pas à pas</a>.
+        Nous n'y donnons aucun montant, parce qu'ils sont revalorisés régulièrement, et qu'un chiffre périmé
+        fait plus de dégâts qu'une absence de chiffre.
+      </p>
+      <p>
+        Si votre projet est de monter vos propres spectacles plutôt que d'être engagé,
+        <a href={url('/guides/ou-deposer-son-dossier')}> le guide des dépôts de dossier</a> recense les concours,
+        les aides publiques et les rares salles qui publient une procédure, avec leurs dates.
+      </p>
+
+      <h2>Questions fréquentes</h2>
+      <div class="faq">
+        {faqs.map((f) => (
+          <details>
+            <summary>{f.q}</summary>
+            <p>{f.r}</p>
+          </details>
+        ))}
+      </div>
+
+      <p class="sources">
+        Sources :
+        <a href="https://www.francetravail.fr/spectacle/" rel="noopener nofollow">France Travail Spectacle</a>,
+        <a href="https://cultureetspectacle.francetravail.fr/je-me-forme-ou-je-travaille/clap-talents" rel="noopener nofollow">Clap Talents</a>,
+        <a href="https://www.profilculture.com/" rel="noopener nofollow">ProfilCulture</a>,
+        <a href="https://www.guso.fr/" rel="noopener nofollow">GUSO</a>.
+        Les règles d'indemnisation évoluent : pour votre situation, un conseiller spécialisé du spectacle
+        reste le seul interlocuteur fiable.
+      </p>
+    </div>
+
+    <div class="related">
+      <h2>À lire aussi</h2>
+      <a href={url('/guides/intermittence-spectacle')}>L'intermittence expliquée simplement</a>
+      <a href={url('/guides/obtenir-son-intermittence')}>Obtenir son intermittence, étape par étape</a>
+      <a href={url('/guides/ou-deposer-son-dossier')}>Où déposer son dossier</a>
+    </div>
+  </article>
+</Base>
+
+<style>
+  .outils { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 14px; margin: 16px 0 30px; }
+  .ou-card { background: var(--card); border: 1px solid var(--rule-2); border-left: 4px solid var(--red); padding: 16px 18px; }
+  .ou-card h3 { font-family: var(--display); font-size: 1.15rem; margin: 0 0 6px; }
+  .ou-card h3 a { text-decoration: none; }
+  .ou-card h3 a:hover { color: var(--red); }
+  .ou-card p { font-family: var(--serif); font-size: 0.96rem; line-height: 1.5; color: var(--ink-2); margin: 0; }
+</style>

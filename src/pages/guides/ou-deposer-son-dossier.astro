@@ -1,0 +1,253 @@
+---
+// Guide « Où déposer son dossier quand on monte un spectacle ».
+//
+// La page est construite sur src/data/appels.ts et sur l'annuaire des salles :
+// tout ce qui est daté vient de l'organisme lui-même, et le statut d'une
+// session (ouverte, passée) se calcule à la compilation. Une session close
+// n'est pas retirée : elle indique la fenêtre à laquelle il faudra revenir.
+import Base from '../../layouts/Base.astro';
+import { APPELS, appelsOuverts, appelsPasses, appelsPermanents } from '../../data/appels';
+import { THEATRES } from '../../data/theatres';
+import { url } from '../../lib/url';
+
+const abs = (p: string) => new URL(url(p), Astro.site).href;
+const aujourdhui = new Date().toISOString().slice(0, 10);
+
+const ouverts = appelsOuverts(aujourdhui);
+const passes = appelsPasses(aujourdhui);
+const permanents = appelsPermanents();
+const sallesAvecProcedure = THEATRES.filter((t) => t.accueil === 'projet');
+
+const jour = (iso: string) =>
+  new Date(iso + 'T12:00:00Z').toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' });
+
+const faqs = [
+  {
+    q: 'Comment proposer son spectacle à un théâtre ?',
+    r: "Presque aucune salle parisienne ne publie de procédure de dépôt : sur les soixante que nous avons documentées, deux le font. Partout ailleurs, il faut écrire directement à l'administration du théâtre, avec un dossier court, une captation, des dates de disponibilité et une idée précise du modèle proposé, coréalisation ou location. Les concours et les aides publiques, eux, ont des calendriers publics, et c'est par là qu'il est le plus simple de commencer.",
+  },
+  {
+    q: 'Quelles aides existent pour une jeune compagnie de théâtre ?',
+    r: "Côté État, la principale porte d'entrée est l'aide au projet des aides déconcentrées au spectacle vivant, instruite par la DRAC de votre région, pour une création ou une reprise. Les compagnies plus installées visent le conventionnement, qui finance plusieurs saisons. Les autrices et auteurs relèvent d'un autre dispositif, l'aide nationale à la création de textes dramatiques, gérée par ARTCENA. Ces trois calendriers sont publiés et se répètent chaque année.",
+  },
+  {
+    q: 'Quels concours existent pour un jeune metteur en scène ?',
+    r: "Deux dispositifs comptent particulièrement en Île-de-France. Le Prix Théâtre 13 s'adresse aux metteuses et metteurs en scène en début de parcours et se joue devant le public. Le festival Impatience, au CENTQUATRE-PARIS, est réservé aux artistes ayant entre une et cinq créations à leur actif, sur un spectacle récent qui n'a pas encore beaucoup tourné en Île-de-France. Les deux sont très regardés par les programmateurs.",
+  },
+  {
+    q: 'Faut-il payer pour candidater ?',
+    r: "Les aides publiques sont gratuites. Certains festivals demandent des frais de dossier, douze euros pour Impatience par exemple. Méfiez-vous en revanche des plateformes qui font payer une inscription en promettant une visibilité auprès de programmateurs : ce n'est pas ainsi que se décide une programmation.",
+  },
+  {
+    q: 'Quand faut-il déposer un dossier pour jouer la saison prochaine ?',
+    r: "Beaucoup plus tôt qu'on ne l'imagine. Les commissions publiques instruisent à l'automne pour l'année suivante, et les salles bouclent souvent leur saison entre janvier et mars pour septembre. Un projet déposé au printemps pour l'automne suivant arrive presque toujours trop tard.",
+  },
+];
+
+const jsonld = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: "Où déposer son dossier quand on monte un spectacle",
+    description:
+      "Concours, aides publiques et salles qui publient une procédure : les dispositifs où une compagnie de théâtre peut candidater, avec leur calendrier réel.",
+    author: { '@type': 'Organization', name: 'La Claque' },
+    publisher: { '@type': 'Organization', name: 'La Claque' },
+    mainEntityOfPage: abs('/guides/ou-deposer-son-dossier'),
+    inLanguage: 'fr',
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqs.map((f) => ({
+      '@type': 'Question',
+      name: f.q,
+      acceptedAnswer: { '@type': 'Answer', text: f.r },
+    })),
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Accueil', item: abs('/') },
+      { '@type': 'ListItem', position: 2, name: 'Guides', item: abs('/guides') },
+      { '@type': 'ListItem', position: 3, name: 'Où déposer son dossier', item: abs('/guides/ou-deposer-son-dossier') },
+    ],
+  },
+];
+---
+<Base
+  title="Où déposer son dossier quand on monte un spectacle | La Claque"
+  description="Concours, aides de la DRAC, appels à projets et salles qui publient une procédure : où une compagnie de théâtre peut vraiment candidater, avec les dates de dépôt."
+  active="guides"
+  jsonld={jsonld}
+>
+  <article class="wrap-narrow guide">
+    <p class="breadcrumb"><a href={url('/')}>Accueil</a> › <a href={url('/guides')}>Guides</a> › Où déposer son dossier</p>
+    <div class="guide-head">
+      <p class="kicker">Côté métier</p>
+      <h1>Où déposer son dossier quand on monte un spectacle</h1>
+      <p class="stand">
+        C'est la question qui revient toujours : à qui envoyer son projet, et quand. La réponse honnête est
+        qu'il existe peu de portes officielles, mais qu'elles ont toutes un calendrier public. Les voici,
+        avec leurs dates, celles qui sont ouvertes en ce moment et celles qui reviendront.
+      </p>
+    </div>
+
+    <div class="prose">
+      {ouverts.length > 0 && (
+        <>
+          <h2>Ouvert en ce moment</h2>
+          <div class="app-liste">
+            {ouverts.map((a) => (
+              <article class="app app-on">
+                <p class="app-org">{a.organisme}</p>
+                <h3><a href={a.url} rel="noopener nofollow">{a.nom}</a></h3>
+                <p class="app-date">Jusqu'au {jour(a.depot!.fin)}</p>
+                <p class="app-pour">{a.pour}</p>
+                <p>{a.apporte}</p>
+                {a.conditions && (
+                  <ul class="app-cond">
+                    {a.conditions.map((c) => <li>{c}</li>)}
+                  </ul>
+                )}
+                {a.suite && <p class="app-suite">{a.suite}</p>}
+              </article>
+            ))}
+          </div>
+        </>
+      )}
+
+      <h2>À surveiller toute l'année</h2>
+      <div class="app-liste">
+        {permanents.map((a) => (
+          <article class="app">
+            <p class="app-org">{a.organisme}</p>
+            <h3><a href={a.url} rel="noopener nofollow">{a.nom}</a></h3>
+            <p class="app-pour">{a.pour}</p>
+            <p>{a.apporte}</p>
+          </article>
+        ))}
+      </div>
+
+      {passes.length > 0 && (
+        <>
+          <h2>Sessions passées, à préparer pour la prochaine</h2>
+          <p>
+            Ces fenêtres sont refermées, mais elles reviennent à la même période. C'est précisément à ce
+            moment-là qu'il faut avoir un dossier prêt plutôt que de le commencer.
+          </p>
+          <div class="app-liste">
+            {passes.map((a) => (
+              <article class="app app-off">
+                <p class="app-org">{a.organisme}</p>
+                <h3><a href={a.url} rel="noopener nofollow">{a.nom}</a></h3>
+                <p class="app-date">Dernière session : {a.depot!.libelle}</p>
+                <p class="app-pour">{a.pour}</p>
+                <p>{a.apporte}</p>
+                {a.conditions && (
+                  <ul class="app-cond">
+                    {a.conditions.map((c) => <li>{c}</li>)}
+                  </ul>
+                )}
+                {a.suite && <p class="app-suite">{a.suite}</p>}
+              </article>
+            ))}
+          </div>
+        </>
+      )}
+
+      <h2>Les salles qui publient une procédure</h2>
+      <p>
+        Sur les {THEATRES.length} théâtres parisiens de <a href={url('/theatres')}>notre annuaire</a>,
+        {sallesAvecProcedure.length === 1 ? ' une seule salle publie' : ` ${sallesAvecProcedure.length} salles publient`} une
+        façon de déposer un projet. Ce n'est pas de la mauvaise volonté : une maison privée programme au
+        téléphone et sur la confiance, et n'a pas de commission à réunir. Mais cela veut dire que l'essentiel
+        du travail consiste à se faire voir, pas à envoyer des dossiers.
+      </p>
+      <ul class="app-salles">
+        {sallesAvecProcedure.map((t) => (
+          <li>
+            <a href={url(`/theatres/${t.slug}`)}>{t.nom}</a>
+            <span>{t.compagnies.procedure}</span>
+            {t.compagnies.url && (
+              <a class="app-lien" href={t.compagnies.url} rel="noopener nofollow">La page de la salle →</a>
+            )}
+          </li>
+        ))}
+      </ul>
+      <p>
+        Pour les autres, l'annuaire indique pour chaque maison son mode de sélection, coréalisation, location,
+        coproduction ou troupe permanente, avec le contact quand il est public. Le filtre « côté compagnie »
+        permet de ne voir que celles qui accueillent des équipes extérieures.
+      </p>
+
+      <h2>Ce qui compte plus que le dossier</h2>
+      <p>
+        Nous voyons beaucoup de spectacles, et nous voyons surtout comment ils arrivent jusqu'à une salle. Ce
+        n'est presque jamais par une enveloppe envoyée à l'aveugle. C'est parce qu'un programmateur a vu le
+        travail quelque part : dans un festival, dans une petite salle, à Avignon, ou parce qu'une compagnie
+        amie a parlé. Le dossier sert à confirmer une impression, rarement à la créer.
+      </p>
+      <p>
+        Ce qui se joue au OFF d'Avignon relève exactement de cette logique, et coûte cher :
+        nous en avons détaillé le budget poste par poste dans
+        <a href={url('/guides/budget-festival-off-avignon')}> notre simulateur</a>, et la façon dont on y attire
+        du monde dans <a href={url('/guides/tracter-au-off-avignon')}>le guide du tractage</a>. Avant tout cela,
+        il faut une structure : <a href={url('/guides/creer-sa-compagnie-de-theatre')}>créer sa compagnie</a> est
+        le préalable à toute demande d'aide publique.
+      </p>
+
+      <h2>Questions fréquentes</h2>
+      <div class="faq">
+        {faqs.map((f) => (
+          <details>
+            <summary>{f.q}</summary>
+            <p>{f.r}</p>
+          </details>
+        ))}
+      </div>
+
+      <p class="sources">
+        Sources : {APPELS.map((a, i) => (
+          <>
+            {i > 0 && <span>, </span>}
+            <a href={a.source} rel="noopener nofollow">{a.nom}</a>
+          </>
+        ))}
+        <span>. Les calendriers changent : vérifiez toujours la date sur la page de l'organisme avant de préparer un dépôt.</span>
+      </p>
+    </div>
+
+    <div class="related">
+      <h2>À lire aussi</h2>
+      <a href={url('/guides/trouver-du-travail-intermittent')}>Trouver du travail quand on est intermittent</a>
+      <a href={url('/guides/comment-se-faire-produire')}>Se faire produire et programmer</a>
+      <a href={url('/theatres')}>L'annuaire des théâtres parisiens</a>
+    </div>
+  </article>
+</Base>
+
+<style>
+  .app-liste { display: grid; gap: 14px; margin: 16px 0 30px; }
+  .app { background: var(--card); border: 1px solid var(--rule-2); border-left: 4px solid var(--rule-2); padding: 16px 18px; }
+  .app-on { border-left-color: var(--red); }
+  .app-off { opacity: 0.92; }
+  .app-org { font-family: var(--sans); font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--ink-3); margin: 0 0 4px; }
+  .app h3 { font-family: var(--display); font-size: 1.2rem; margin: 0 0 6px; }
+  .app h3 a { text-decoration: none; }
+  .app h3 a:hover { color: var(--red); }
+  .app-date { font-family: var(--sans); font-size: 0.78rem; font-weight: 700; color: var(--red); margin: 0 0 8px; }
+  .app-off .app-date { color: var(--ink-3); font-weight: 400; }
+  .app-pour { font-family: var(--serif); font-size: 0.98rem; color: var(--ink); margin: 0 0 6px; }
+  .app p { font-family: var(--serif); font-size: 0.96rem; line-height: 1.55; color: var(--ink-2); margin: 0 0 6px; }
+  .app-cond { margin: 8px 0 6px; padding-left: 20px; }
+  .app-cond li { font-family: var(--serif); font-size: 0.94rem; line-height: 1.5; color: var(--ink-2); margin-bottom: 3px; }
+  .app-suite { font-family: var(--sans) !important; font-size: 0.8rem !important; color: var(--ink-3) !important; }
+
+  .app-salles { list-style: none; margin: 14px 0 24px; padding: 0; }
+  .app-salles li { border-top: 1px solid var(--rule); padding: 12px 0; display: grid; gap: 4px; }
+  .app-salles li > a:first-child { font-family: var(--display); font-size: 1.1rem; text-decoration: none; }
+  .app-salles span { font-family: var(--serif); font-size: 0.95rem; color: var(--ink-2); line-height: 1.5; }
+  .app-lien { font-family: var(--sans); font-size: 0.8rem; font-weight: 700; color: var(--red); text-decoration: none; }
+</style>

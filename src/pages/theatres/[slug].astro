@@ -37,7 +37,9 @@ const total = jauges.reduce((s, x) => s + (x.places ?? 0), 0);
 const guides = [
   'theatre-a-paris-guide-des-salles',
   t.type === 'prive' || t.type === 'petite-salle' ? 'theatre-pas-cher-a-paris' : 'choisir-sa-place-au-theatre',
-  'comment-se-faire-produire',
+  // Sur une maison qui accueille des équipes, le guide des dépôts de dossier est
+  // plus utile que le rappel général sur la production.
+  t.accueil === 'projet' || t.accueil === 'coreal' ? 'ou-deposer-son-dossier' : 'comment-se-faire-produire',
 ];
 
 const description = `${t.nom}, ${t.arr}e arrondissement : adresse, jauge, direction, ligne de programmation, et ce qu'une compagnie doit savoir pour espérer y jouer.`;

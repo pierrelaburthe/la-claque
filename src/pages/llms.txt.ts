@@ -38,6 +38,8 @@ export const GET: APIRoute = ({ site }) => {
   L.push(`- [Comment obtenir son intermittence](${abs('/guides/obtenir-son-intermittence')}) : 507 heures, AEM, inscription France Travail, actualisation.`);
   L.push(`- [Le cachet et le décompte des heures](${abs('/guides/le-cachet-et-le-decompte-des-heures')}) : cachet = 12 h, plafonds mensuels, heures d'enseignement.`);
   L.push(`- [Combien coûte le OFF d’Avignon (simulateur de budget)](${abs('/guides/budget-festival-off-avignon')}) : salle (~100 €/place), transport, logement, repas.`);
+  L.push(`- [Où déposer son dossier quand on monte un spectacle](${abs('/guides/ou-deposer-son-dossier')}) : concours (Prix Théâtre 13, festival Impatience), aides déconcentrées au spectacle vivant de la DRAC, aide nationale à la création de textes dramatiques d'ARTCENA, salles qui publient une procédure, avec les fenêtres de dépôt datées.`);
+  L.push(`- [Trouver du travail quand on est intermittent](${abs('/guides/trouver-du-travail-intermittent')}) : France Travail Spectacle, la banque de profils Clap Talents, les offres arts du spectacle, ProfilCulture, le GUSO.`);
   L.push(`- [Tracter au OFF d’Avignon](${abs('/guides/tracter-au-off-avignon')}) : quantités autorisées par l'arrêté municipal, lieux d'affichage interdits, amendes, impression mutualisée AF&C, méthode de tractage.`);
   L.push(`- [Comment se faire produire et programmer](${abs('/guides/comment-se-faire-produire')}) : production, diffusion, modèle du OFF, aides à la création.`);
   L.push(`- [Créer sa compagnie de théâtre](${abs('/guides/creer-sa-compagnie-de-theatre')}) : association loi 1901, licence, GUSO.`);

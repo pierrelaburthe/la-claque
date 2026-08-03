@@ -141,6 +141,20 @@ export const GUIDES: Guide[] = [
     section: 'metier',
   },
   {
+    slug: 'ou-deposer-son-dossier',
+    k: 'Production et diffusion',
+    titre: 'Où déposer son dossier quand on monte un spectacle',
+    desc: "Concours, aides de la DRAC, appels à projets et salles qui publient une procédure, avec les dates de dépôt.",
+    section: 'metier',
+  },
+  {
+    slug: 'trouver-du-travail-intermittent',
+    k: 'Statut et droits',
+    titre: 'Trouver du travail quand on est intermittent',
+    desc: "Les plateformes qui recensent vraiment des offres, la banque de profils de France Travail, le GUSO, et comment arrivent les engagements.",
+    section: 'metier',
+  },
+  {
     slug: 'tracter-au-off-avignon',
     k: 'Production et diffusion',
     titre: "Tracter au OFF d'Avignon",
