@@ -1,0 +1,197 @@
+---
+// La fiche d'une salle : ce qu'il faut savoir avant d'y acheter une place, et
+// ce qu'il faut savoir avant d'espérer y jouer.
+//
+// Tout ce qui est affirmé ici vient des sources listées en bas de page. Quand
+// une donnée manque, on l'écrit noir sur blanc au lieu de la deviner.
+import Base from '../../layouts/Base.astro';
+import CarteParis from '../../components/CarteParis.astro';
+import PieceCard from '../../components/PieceCard.astro';
+import RelatedGuides from '../../components/RelatedGuides.astro';
+import { THEATRES, LIBELLE_TYPE, theatrePourSalle } from '../../data/theatres';
+import { PIECES } from '../../data/pieces';
+import { consensusScore } from '../../lib/rating';
+import { url } from '../../lib/url';
+
+export function getStaticPaths() {
+  return THEATRES.map((t) => ({ params: { slug: t.slug } }));
+}
+
+const { slug } = Astro.params;
+const t = THEATRES.find((x) => x.slug === slug)!;
+const abs = (p: string) => new URL(url(p), Astro.site).href;
+
+const vues = PIECES.filter((p) => theatrePourSalle(p.salle)?.slug === t.slug).sort(
+  (a, b) => consensusScore(b) - consensusScore(a),
+);
+
+const jauges = t.salles.filter((s) => s.places);
+const total = jauges.reduce((s, x) => s + (x.places ?? 0), 0);
+
+const guides = [
+  'theatre-a-paris-guide-des-salles',
+  t.type === 'prive' || t.type === 'petite-salle' ? 'theatre-pas-cher-a-paris' : 'choisir-sa-place-au-theatre',
+  'comment-se-faire-produire',
+];
+
+const description = `${t.nom}, ${t.arr}e arrondissement : adresse, jauge, direction, ligne de programmation, et ce qu'une compagnie doit savoir pour espérer y jouer.`;
+
+const jsonld = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'PerformingArtsTheater',
+    name: t.nom,
+    url: abs(`/theatres/${t.slug}`),
+    ...(t.site ? { sameAs: [t.site] } : {}),
+    address: {
+      '@type': 'PostalAddress',
+      streetAddress: t.adresse,
+      postalCode: t.cp,
+      addressLocality: 'Paris',
+      addressCountry: 'FR',
+    },
+    geo: { '@type': 'GeoCoordinates', latitude: t.lat, longitude: t.lon },
+    ...(t.tel ? { telephone: t.tel } : {}),
+    ...(total ? { maximumAttendeeCapacity: total } : {}),
+    ...(t.annee ? { foundingDate: String(t.annee) } : {}),
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Accueil', item: abs('/') },
+      { '@type': 'ListItem', position: 2, name: 'Théâtres de Paris', item: abs('/theatres') },
+      { '@type': 'ListItem', position: 3, name: t.nom, item: abs(`/theatres/${t.slug}`) },
+    ],
+  },
+];
+---
+<Base title={`${t.nom} : jauge, programmation et contact | La Claque`} description={description} jsonld={jsonld}>
+  <div class="wrap-narrow">
+    <p class="breadcrumb">
+      <a href={url('/')}>Accueil</a> › <a href={url('/theatres')}>Théâtres de Paris</a> › {t.nom}
+    </p>
+    <div class="guide-head">
+      <p class="kicker">{LIBELLE_TYPE[t.type]} · {t.arr}<sup>e</sup> arrondissement</p>
+      <h1>{t.nom}</h1>
+      <p class="stand">{t.ligne}</p>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <div class="fiche">
+      <div class="fi-main">
+        <div class="fi-block">
+          <h2>Ce qu'il faut savoir</h2>
+          <dl class="fi-dl">
+            <div><dt>Adresse</dt><dd>{t.adresse}, {t.cp} Paris</dd></div>
+            <div>
+              <dt>{t.salles.length > 1 ? 'Salles' : 'Salle'}</dt>
+              <dd>
+                {t.salles.map((s) => (
+                  <span class="fi-salle">{s.nom}{s.places ? ` : ${s.places} places` : ''}</span>
+                ))}
+                {jauges.length === 0 && <span class="fi-manque">Jauge non publiée</span>}
+              </dd>
+            </div>
+            {t.annee && <div><dt>Ouverture</dt><dd>{t.annee}</dd></div>}
+            {t.direction && <div><dt>Direction</dt><dd>{t.direction}</dd></div>}
+            {t.monument && <div><dt>Patrimoine</dt><dd>{t.monument}</dd></div>}
+            {t.tel && <div><dt>Téléphone</dt><dd>{t.tel}</dd></div>}
+            {t.site && (
+              <div>
+                <dt>Site</dt>
+                <dd><a href={t.site} rel="noopener nofollow">{new URL(t.site).hostname.replace(/^www\./, '')}</a></dd>
+              </div>
+            )}
+          </dl>
+        </div>
+
+        {t.spectateur && (
+          <div class="fi-block">
+            <h2>Côté salle</h2>
+            <p>{t.spectateur}</p>
+          </div>
+        )}
+
+        <div class="fi-block fi-cie">
+          <h2>Côté compagnie</h2>
+          <p>{t.compagnies.modele}</p>
+          {t.compagnies.procedure && <p>{t.compagnies.procedure}</p>}
+          {(t.compagnies.url || t.compagnies.contact) && (
+            <p class="fi-contact">
+              {t.compagnies.url && (
+                <a href={t.compagnies.url} rel="noopener nofollow">La page de la salle pour les compagnies →</a>
+              )}
+              {t.compagnies.contact && <span class="fi-mail">{t.compagnies.contact}</span>}
+            </p>
+          )}
+        </div>
+      </div>
+
+      <aside class="fi-side">
+        <CarteParis theatres={THEATRES} actif={t.slug} compacte={true} />
+        <p class="fi-situ">{t.arr}<sup>e</sup> arrondissement</p>
+        <a class="fi-back" href={url('/theatres')}>← Toutes les salles</a>
+      </aside>
+    </div>
+
+    {vues.length > 0 && (
+      <>
+        <div class="rubric">
+          <h2>Ce qu'on y a vu</h2><span class="line"></span>
+          <span class="note">{vues.length} critique{vues.length > 1 ? 's' : ''}</span>
+        </div>
+        <div class="cards">
+          {vues.map((p) => <PieceCard piece={p} />)}
+        </div>
+      </>
+    )}
+
+    <div class="wrap-narrow fi-narrow">
+      <RelatedGuides slugs={guides} />
+      <p class="fi-sources">
+        <span>Sources : </span>
+        {t.sources.map((s, i) => (
+          <>
+            {i > 0 && <span>, </span>}
+            <a href={s} rel="noopener nofollow">{new URL(s).hostname.replace(/^www\./, '')}</a>
+          </>
+        ))}
+        <span>. Une information a changé ? <a href={url('/devenir-claqueur')}>Dites-le-nous</a>.</span>
+      </p>
+    </div>
+  </div>
+</Base>
+
+<style>
+  .fiche { display: grid; grid-template-columns: minmax(0, 1fr) 300px; gap: 32px; align-items: start; margin-bottom: 10px; }
+  .fi-block { border-top: 2px solid var(--ink); padding-top: 12px; margin-bottom: 26px; }
+  .fi-block h2 { font-family: var(--display); font-size: 1.25rem; margin: 0 0 10px; }
+  .fi-block p { font-family: var(--serif); font-size: 1.02rem; line-height: 1.65; color: var(--ink-2); margin: 0 0 12px; max-width: 68ch; }
+  .fi-cie { border-top-color: var(--red); }
+
+  .fi-dl { margin: 0; }
+  .fi-dl > div { display: grid; grid-template-columns: 130px minmax(0, 1fr); gap: 12px; padding: 7px 0; border-bottom: 1px solid var(--rule); }
+  .fi-dl dt { font-family: var(--sans); font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--ink-3); }
+  .fi-dl dd { margin: 0; font-family: var(--serif); font-size: 0.98rem; color: var(--ink); }
+  .fi-salle { display: block; }
+  .fi-manque { color: var(--ink-3); font-style: italic; }
+  .fi-contact { font-family: var(--sans); font-size: 0.85rem; display: flex; flex-wrap: wrap; gap: 14px; align-items: center; }
+  .fi-mail { color: var(--ink-2); }
+
+  .fi-side { position: sticky; top: 18px; }
+  .fi-situ { font-family: var(--sans); font-size: 0.74rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--ink-3); margin: -14px 0 12px; }
+  .fi-back { font-family: var(--sans); font-size: 0.8rem; color: var(--red); text-decoration: none; }
+  .fi-back:hover { text-decoration: underline; }
+
+  .fi-narrow { padding: 0; margin: 30px auto 0; }
+  .fi-sources { font-family: var(--sans); font-size: 0.78rem; color: var(--ink-3); line-height: 1.6; border-top: 1px solid var(--rule); padding-top: 14px; margin-top: 26px; }
+  .fi-sources a { color: var(--ink-3); }
+  .fi-sources a:hover { color: var(--red); }
+
+  @media (max-width: 860px) {
+    .fiche { grid-template-columns: 1fr; }
+    .fi-side { position: static; order: -1; max-width: 320px; }
+  }
+</style>

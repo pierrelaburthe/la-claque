@@ -48,6 +48,7 @@ export const GET: APIRoute = ({ site }) => {
   L.push(`- [Palmarès 2026](${abs('/palmares')})`);
   L.push(`- [Qui écrit La Claque : ${AUTHOR.nom} et la bande](${abs('/equipe')})`);
   L.push(`- [À propos et méthode de notation](${abs('/a-propos')})`);
+  L.push(`- [Les théâtres de Paris](${abs('/theatres')}) : annuaire de salles parisiennes avec, pour chacune, une fiche donnant l'adresse, la jauge salle par salle, la direction, la ligne de programmation, le modèle d'accueil des compagnies (coréalisation, location, coproduction, appels à projets quand ils existent) et nos critiques jouées là. Chaque donnée est sourcée sur la fiche.`);
   L.push(`- [Devenir claqueur](${abs('/devenir-claqueur')}) : le site recrute des spectateurs bénévoles et anonymes pour noter les spectacles.`);
   L.push('');
   L.push('## Critiques');

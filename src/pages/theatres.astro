@@ -1,0 +1,231 @@
+---
+// L'annuaire des théâtres parisiens : une carte, des fiches, et deux entrées
+// différentes selon qu'on vient acheter une place ou proposer un spectacle.
+//
+// Les filtres sont en JavaScript de base, comme partout ailleurs sur le site :
+// tout est déjà dans la page, on ne fait que masquer.
+import Base from '../layouts/Base.astro';
+import CarteParis from '../components/CarteParis.astro';
+import { THEATRES, LIBELLE_TYPE, type TypeTheatre } from '../data/theatres';
+import { PIECES } from '../data/pieces';
+import { theatrePourSalle } from '../data/theatres';
+import { url } from '../lib/url';
+
+const abs = (p: string) => new URL(url(p), Astro.site).href;
+
+// Combien de nos critiques se sont jouées dans chaque salle.
+const critiquesPar = new Map<string, number>();
+for (const p of PIECES) {
+  const t = theatrePourSalle(p.salle);
+  if (t) critiquesPar.set(t.slug, (critiquesPar.get(t.slug) ?? 0) + 1);
+}
+
+const ORDRE: TypeTheatre[] = ['national', 'public', 'prive', 'petite-salle'];
+const liste = [...THEATRES].sort(
+  (a, b) => ORDRE.indexOf(a.type) - ORDRE.indexOf(b.type) || a.nom.localeCompare(b.nom, 'fr'),
+);
+const arrondissements = [...new Set(THEATRES.map((t) => t.arr))].sort((a, b) => a - b);
+const typesPresents = ORDRE.filter((t) => THEATRES.some((x) => x.type === t));
+
+const jauge = (t: (typeof THEATRES)[number]) => {
+  const chiffres = t.salles.filter((s) => s.places).map((s) => s.places!);
+  if (!chiffres.length) return null;
+  if (chiffres.length === 1) return `${chiffres[0]} places`;
+  return `${chiffres.length} salles, de ${Math.min(...chiffres)} à ${Math.max(...chiffres)} places`;
+};
+
+const description = `Les ${THEATRES.length} théâtres de Paris salle par salle : adresse, jauge, direction, ligne de programmation, et ce qu'il faut savoir quand on est une compagnie qui cherche où jouer. Avec une carte.`;
+
+const jsonld = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'CollectionPage',
+    name: 'Les théâtres de Paris',
+    description,
+    url: abs('/theatres'),
+    inLanguage: 'fr',
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'ItemList',
+    name: 'Annuaire des théâtres parisiens',
+    numberOfItems: liste.length,
+    itemListElement: liste.map((t, i) => ({
+      '@type': 'ListItem',
+      position: i + 1,
+      name: t.nom,
+      url: abs(`/theatres/${t.slug}`),
+    })),
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Accueil', item: abs('/') },
+      { '@type': 'ListItem', position: 2, name: 'Les théâtres de Paris', item: abs('/theatres') },
+    ],
+  },
+];
+---
+<Base title="Les théâtres de Paris : annuaire, carte et fiches | La Claque" description={description} jsonld={jsonld}>
+  <div class="wrap-narrow">
+    <p class="breadcrumb"><a href={url('/')}>Accueil</a> › Théâtres de Paris</p>
+    <div class="guide-head">
+      <p class="kicker">Annuaire</p>
+      <h1>Les théâtres de Paris</h1>
+      <p class="stand">
+        Paris compte plus de cent salles de théâtre, et rien ne ressemble moins à une autre qu'une maison de
+        mille places et une salle de soixante. Voici celles que nous suivons, avec leur adresse, leur jauge,
+        ce qu'elles programment et, pour chacune, la façon dont une compagnie peut espérer y entrer.
+      </p>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <CarteParis theatres={liste} />
+
+    <div class="chips" role="group" aria-label="Filtrer par type de salle">
+      <button class="chip active" data-type="" type="button">Toutes</button>
+      {typesPresents.map((t) => <button class="chip" data-type={t} type="button">{LIBELLE_TYPE[t]}</button>)}
+      <label class="arr-pick">
+        Arrondissement
+        <select id="arr">
+          <option value="">tous</option>
+          {arrondissements.map((a) => <option value={a}>{a}<sup>e</sup></option>)}
+        </select>
+      </label>
+      <span class="count" id="count"></span>
+    </div>
+
+    <ul class="th-grid" id="grid">
+      {liste.map((t) => {
+        const n = critiquesPar.get(t.slug) ?? 0;
+        const j = jauge(t);
+        return (
+          <li class="th-card" data-type={t.type} data-arr={t.arr}>
+            <a href={url(`/theatres/${t.slug}`)}>
+              <p class="th-kicker">{LIBELLE_TYPE[t.type]} · {t.arr}<sup>e</sup></p>
+              <h2>{t.nom}</h2>
+              <p class="th-jauge">{j ?? 'Jauge non publiée'}</p>
+              <p class="th-ligne">{t.ligne}</p>
+              {n > 0 && (
+                <p class="th-vu">
+                  {n === 1 ? 'Une de nos critiques y a été jouée' : `${n} de nos critiques y ont été jouées`}
+                </p>
+              )}
+            </a>
+          </li>
+        );
+      })}
+    </ul>
+
+    <p class="th-none" id="noresult" hidden>Aucune salle avec ces deux filtres. Essayez un autre arrondissement.</p>
+
+    <div class="rubric"><h2>Comment lire cet annuaire</h2><span class="line"></span><span class="note">Mode d'emploi</span></div>
+    <div class="th-legend">
+      <div>
+        <h3>Si vous cherchez une place</h3>
+        <p>
+          Le type de salle dit déjà beaucoup. Un théâtre national joue en alternance et affiche ses créations
+          des mois à l'avance. Une maison privée tient une série tous les soirs jusqu'à ce que le public
+          s'arrête de venir. Une petite salle change d'affiche chaque semaine, et c'est là qu'on découvre les
+          spectacles avant tout le monde. La jauge vous dit le reste : à cent places, il n'y a pas de mauvaise
+          place, à mille, le balcon est un autre spectacle que l'orchestre.
+        </p>
+      </div>
+      <div>
+        <h3>Si vous cherchez où jouer</h3>
+        <p>
+          Chaque fiche indique le modèle de la maison, parce que c'est lui qui commande. Les scènes publiques
+          coproduisent et accueillent, sur des saisons décidées un ou deux ans à l'avance. Les théâtres privés
+          fonctionnent en coréalisation ou en location, et presque aucun ne publie de procédure : le contact
+          direct reste la règle. Quand une salle publie vraiment un appel à projets, nous le disons et nous
+          mettons le lien.
+        </p>
+      </div>
+    </div>
+
+    <p class="th-foot">
+      Les adresses, les jauges et les directions viennent de sources publiques, citées sur chaque fiche. Quand
+      une donnée n'est pas publiée, la fiche le dit plutôt que de l'inventer. Cet annuaire s'agrandira : si
+      votre salle manque ou si une information a changé, <a href={url('/devenir-claqueur')}>écrivez-nous</a>.
+    </p>
+  </div>
+</Base>
+
+<script>
+  const grid = document.getElementById('grid');
+  const count = document.getElementById('count');
+  const noresult = document.getElementById('noresult');
+  const arrSel = document.getElementById('arr');
+  const chips = Array.from(document.querySelectorAll('.chip'));
+  const cards = Array.from(grid.querySelectorAll('.th-card'));
+  const points = Array.from(document.querySelectorAll('.pt-lien'));
+  let type = '';
+
+  const applique = () => {
+    const arr = arrSel.value;
+    let visibles = 0;
+    const ok = (t, a) => (!type || t === type) && (!arr || a === arr);
+    for (const c of cards) {
+      const on = ok(c.dataset.type, c.dataset.arr);
+      c.hidden = !on;
+      if (on) visibles++;
+    }
+    for (const p of points) p.classList.toggle('off', !ok(p.dataset.type, p.dataset.arr));
+    count.textContent = visibles > 0 ? `${visibles} salle${visibles > 1 ? 's' : ''}` : '';
+    noresult.hidden = visibles > 0;
+  };
+
+  for (const c of chips) {
+    c.addEventListener('click', () => {
+      chips.forEach((x) => x.classList.toggle('active', x === c));
+      type = c.dataset.type;
+      applique();
+    });
+  }
+  arrSel.addEventListener('change', applique);
+  applique();
+</script>
+
+<style>
+  .chips { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin: 6px 0 22px; }
+  .arr-pick {
+    font-family: var(--sans);
+    font-size: 0.74rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--ink-3);
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .arr-pick select {
+    font-family: var(--sans);
+    font-size: 0.8rem;
+    text-transform: none;
+    letter-spacing: 0;
+    padding: 5px 8px;
+    background: var(--card);
+    border: 1px solid var(--rule-2);
+    color: var(--ink);
+  }
+  .count { font-family: var(--sans); font-size: 0.74rem; color: var(--ink-3); }
+
+  .th-grid { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); gap: 16px; }
+  .th-card { background: var(--card); border: 1px solid var(--rule); border-top: 3px solid var(--red); }
+  .th-card > a { display: block; padding: 16px 18px 18px; text-decoration: none; color: inherit; height: 100%; }
+  .th-card:hover { border-color: var(--rule-2); }
+  .th-kicker { font-family: var(--sans); font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--ink-3); margin: 0 0 6px; }
+  .th-card h2 { font-family: var(--display); font-size: 1.25rem; line-height: 1.2; margin: 0 0 6px; }
+  .th-card:hover h2 { color: var(--red); }
+  .th-jauge { font-family: var(--sans); font-size: 0.76rem; color: var(--ink-2); margin: 0 0 10px; }
+  .th-ligne { font-family: var(--serif); font-size: 0.95rem; line-height: 1.5; color: var(--ink-2); margin: 0; }
+  .th-vu { font-family: var(--sans); font-size: 0.72rem; color: var(--red); margin: 10px 0 0; }
+  .th-none { font-family: var(--serif); color: var(--ink-2); margin: 18px 0; }
+
+  .th-legend { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 26px; margin-bottom: 30px; }
+  .th-legend h3 { font-family: var(--display); font-size: 1.1rem; margin: 0 0 8px; }
+  .th-legend p { font-family: var(--serif); font-size: 1rem; line-height: 1.6; color: var(--ink-2); margin: 0; }
+  .th-foot { font-family: var(--serif); font-size: 0.95rem; color: var(--ink-2); border-top: 1px solid var(--rule); padding-top: 16px; max-width: 70ch; }
+</style>

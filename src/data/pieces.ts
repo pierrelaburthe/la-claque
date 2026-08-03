@@ -2211,6 +2211,19 @@ export const PIECES: Piece[] = [
       "Un cours d'autodéfense intellectuelle déguisé en comédie. À voir avant la prochaine campagne.",
     ],
     momentGarde: "Le moment où la salle applaudit un raisonnement qu'on vient de lui prouver être un piège.",
+    // Le site de la compagnie s'arrête à mai 2026, mais deux saisons ont annoncé
+    // la pièce chez elles : l'ouverture de saison de Boissy-Saint-Léger et la
+    // saison 26-27 du centre culturel de Fougères. Les deux dates sont datées au
+    // jour près par les lieux eux-mêmes, `fin` porte donc la dernière connue.
+    reprise: {
+      lieu: 'Le Forum, Boissy-Saint-Léger, puis en tournée',
+      dates: 'Le 19 septembre 2026 à Boissy-Saint-Léger, le 17 novembre 2026 à Fougères',
+      debut: '2026-09-19',
+      fin: '2026-11-17',
+      salle: 'Le Forum',
+      ville: 'Boissy-Saint-Léger',
+      url: 'https://ville-boissy.fr/agenda/ouverture-de-saison-culturelle-2026-2027/',
+    },
     sources: [
       'https://www.artistikrezo.com/spectacle/lart-davoir-toujours-raison-ou-le-premier-cours-dautodefense-intellectuelle-au-theatre.html',
       'https://www.artcena.fr/magazine/critiques/lart-davoir-toujours-raison-de-sebastien-valignat-et-logan-de-carvalho-mise-en-scene-de-sebastien',

@@ -7,6 +7,7 @@ import RelatedGuides from '../../components/RelatedGuides.astro';
 import Claquer from '../../components/Claquer.astro';
 import { affiche } from '../../lib/images';
 import { PIECES } from '../../data/pieces';
+import { theatrePourSalle } from '../../data/theatres';
 import { AUTHOR } from '../../data/author';
 import { verdictFor, nbVus, estPlebiscite, starsFor, seenLabel } from '../../lib/rating';
 import { relatedPieces } from '../../lib/related';
@@ -32,6 +33,9 @@ const suggestions = relatedPieces(piece, PIECES, 3);
 // salles du OFF n'aurait aucun sens.
 const estAvignon = (piece.festival ?? '').includes('Avignon');
 const guideSalles = estAvignon ? 'salles-du-off-avignon' : 'theatre-a-paris-guide-des-salles';
+// Quand la salle a une fiche dans l'annuaire, le nom pointe dessus plutôt que
+// vers le guide général : c'est plus précis, et ça donne l'adresse et la jauge.
+const ficheSalle = theatrePourSalle(piece.salle);
 const guideSlugs = Array.from(new Set([
   ...(piece.salle ? [guideSalles] : []),
   ...(estAvignon ? ['off-avignon-mode-demploi'] : ['choisir-sa-place-au-theatre']),
@@ -244,7 +248,9 @@ const jsonld = [
       </div>
       <div class="crit-topics">
         <a href={url(`/critiques?cat=${encodeURIComponent(categorie)}`)}>{categorie}</a>
-        {piece.salle && <a href={url(`/guides/${guideSalles}`)}>{piece.salle}</a>}
+        {piece.salle && (
+          <a href={ficheSalle ? url(`/theatres/${ficheSalle.slug}`) : url(`/guides/${guideSalles}`)}>{piece.salle}</a>
+        )}
       </div>
     </div>
 
@@ -284,7 +290,14 @@ const jsonld = [
         </div>
       ) : (
         <div class="pr-rows">
-          {piece.salle && <div class="pr-row"><span>Salle</span><strong>{piece.salle}</strong></div>}
+          {piece.salle && (
+            <div class="pr-row">
+              <span>Salle</span>
+              <strong>
+                {ficheSalle ? <a href={url(`/theatres/${ficheSalle.slug}`)}>{piece.salle}</a> : piece.salle}
+              </strong>
+            </div>
+          )}
           {piece.festival && <div class="pr-row"><span>Dossier</span><strong>{piece.festival}</strong></div>}
           <div class="pr-row"><span>Genre</span><strong>{piece.style}</strong></div>
         </div>

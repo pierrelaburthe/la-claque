@@ -1,0 +1,110 @@
+---
+// La carte des salles : un fond de plan de Paris en SVG, dessiné à partir des
+// contours officiels des arrondissements, et un point par théâtre.
+//
+// Aucune tuile, aucun fournisseur extérieur, aucun script tiers : le site est
+// statique, la carte l'est aussi. Un point vaut environ douze mètres, donc deux
+// salles voisines de deux cents mètres restent distinctes à l'œil.
+import { CARTE, projeter } from '../data/paris-carte';
+import { url } from '../lib/url';
+import type { Theatre } from '../data/theatres';
+
+interface Props {
+  theatres: Theatre[];
+  /** Slug de la salle à mettre en avant, sur une fiche. */
+  actif?: string;
+  /** Sur une fiche, la carte est décorative et n'a pas besoin des liens. */
+  compacte?: boolean;
+}
+
+const { theatres, actif, compacte = false } = Astro.props;
+const { W, H } = CARTE.bounds;
+
+const points = theatres.map((t) => ({ ...t, ...projeter(t.lat, t.lon) }));
+
+// Sur une fiche, la carte garde Paris en entier : un gros plan sur le quartier
+// ne dit plus dans quelle ville on se trouve, alors que la silhouette complète
+// se reconnaît au premier coup d'œil.
+const viewBox = `0 0 ${W} ${H}`;
+---
+<figure class={`carte ${compacte ? 'carte-mini' : ''}`}>
+  <svg viewBox={viewBox} role="img" aria-label={compacte ? 'Situation de la salle dans Paris' : 'Carte des théâtres parisiens'}>
+    <g class="arr">
+      {CARTE.arrondissements.map((a) => <path d={a.d} />)}
+    </g>
+    {!compacte && (
+      <g class="num">
+        {CARTE.arrondissements.map((a) => <text x={a.cx} y={a.cy}>{a.num}</text>)}
+      </g>
+    )}
+    <g class="pts">
+      {points.map((p) =>
+        compacte ? (
+          <circle class={p.slug === actif ? 'pt pt-actif' : 'pt pt-autre'} cx={p.x} cy={p.y} r={p.slug === actif ? 13 : 4} />
+        ) : (
+          <a href={url(`/theatres/${p.slug}`)} class="pt-lien" data-type={p.type} data-arr={p.arr}>
+            <title>{p.nom}</title>
+            <circle class="pt" cx={p.x} cy={p.y} r="5.5" />
+            <text class="pt-nom" x={p.x} y={p.y - 11}>{p.nom}</text>
+          </a>
+        ),
+      )}
+    </g>
+  </svg>
+  {!compacte && (
+    <figcaption>
+      Les {theatres.length} salles de l'annuaire, situées à leur adresse réelle. Touchez ou survolez un point
+      pour lire le nom, cliquez pour ouvrir la fiche.
+    </figcaption>
+  )}
+</figure>
+
+<style>
+  .carte { margin: 0 0 26px; background: var(--card); border: 1px solid var(--rule); padding: 14px; }
+  .carte svg { display: block; width: 100%; height: auto; }
+  .arr path { fill: var(--panel); stroke: var(--rule-2); stroke-width: 1.1; stroke-linejoin: round; }
+  .num text {
+    font-family: var(--sans);
+    font-size: 13px;
+    fill: var(--ink-3);
+    text-anchor: middle;
+    dominant-baseline: middle;
+    opacity: 0.55;
+  }
+  .pt { fill: var(--red); stroke: var(--card); stroke-width: 1.6; }
+  /* Sur une fiche, les autres salles restent visibles mais s'effacent derrière
+     celle qu'on lit, qui est cerclée pour se repérer d'un coup d'œil. */
+  .pt-autre { fill: var(--rule-2); stroke: none; }
+  .pt-actif { fill: var(--red); stroke: var(--red); stroke-width: 2; fill-opacity: 0.28; }
+  .pt-lien { cursor: pointer; }
+  .pt-lien .pt { transition: r 0.12s ease; }
+  .pt-nom {
+    font-family: var(--sans);
+    font-size: 12px;
+    fill: var(--ink);
+    text-anchor: middle;
+    paint-order: stroke;
+    stroke: var(--card);
+    stroke-width: 4px;
+    opacity: 0;
+    pointer-events: none;
+  }
+  .pt-lien:hover .pt-nom,
+  .pt-lien:focus .pt-nom { opacity: 1; }
+  .pt-lien:hover .pt,
+  .pt-lien:focus .pt { r: 8; }
+  /* Salle masquée par un filtre : le point s'efface sans disparaître du DOM. */
+  .pt-lien.off { opacity: 0.16; pointer-events: none; }
+  figcaption {
+    font-family: var(--sans);
+    font-size: 0.76rem;
+    color: var(--ink-3);
+    margin-top: 10px;
+    line-height: 1.5;
+  }
+  .carte-mini { padding: 8px; }
+  @media (max-width: 700px) {
+    .num text { font-size: 18px; }
+    .pt-nom { font-size: 17px; }
+  }
+</style>
