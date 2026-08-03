@@ -84,17 +84,24 @@ const jsonld = [
   <div class="wrap">
     <CarteParis theatres={liste} />
 
-    <div class="chips" role="group" aria-label="Filtrer par type de salle">
-      <button class="chip active" data-type="" type="button">Toutes</button>
-      {typesPresents.map((t) => <button class="chip" data-type={t} type="button">{LIBELLE_TYPE[t]}</button>)}
-      <label class="arr-pick">
-        Arrondissement
-        <select id="arr">
-          <option value="">tous</option>
-          {arrondissements.map((a) => <option value={a}>{a}<sup>e</sup></option>)}
-        </select>
-      </label>
-      <span class="count" id="count"></span>
+    <div class="filtres">
+      <div class="fl-row" role="group" aria-label="Filtrer par type de salle">
+        <span class="fl-lbl">Type de salle</span>
+        <div class="chips">
+          <button class="chip active" data-type="" type="button">Toutes</button>
+          {typesPresents.map((t) => <button class="chip" data-type={t} type="button">{LIBELLE_TYPE[t]}</button>)}
+        </div>
+        <span class="count" id="count"></span>
+      </div>
+      <div class="fl-row" role="group" aria-label="Filtrer par arrondissement">
+        <span class="fl-lbl">Arrondissement</span>
+        <div class="chips arrs">
+          <button class="num active" data-arr="" type="button">Tous</button>
+          {arrondissements.map((a) => (
+            <button class="num" data-arr={a} type="button" aria-label={`${a}e arrondissement`}>{a}</button>
+          ))}
+        </div>
+      </div>
     </div>
 
     <ul class="th-grid" id="grid">
@@ -157,14 +164,14 @@ const jsonld = [
   const grid = document.getElementById('grid');
   const count = document.getElementById('count');
   const noresult = document.getElementById('noresult');
-  const arrSel = document.getElementById('arr');
   const chips = Array.from(document.querySelectorAll('.chip'));
+  const nums = Array.from(document.querySelectorAll('.num'));
   const cards = Array.from(grid.querySelectorAll('.th-card'));
   const points = Array.from(document.querySelectorAll('.pt-lien'));
   let type = '';
+  let arr = '';
 
   const applique = () => {
-    const arr = arrSel.value;
     let visibles = 0;
     const ok = (t, a) => (!type || t === type) && (!arr || a === arr);
     for (const c of cards) {
@@ -184,33 +191,76 @@ const jsonld = [
       applique();
     });
   }
-  arrSel.addEventListener('change', applique);
+  for (const n of nums) {
+    n.addEventListener('click', () => {
+      nums.forEach((x) => x.classList.toggle('active', x === n));
+      arr = n.dataset.arr;
+      applique();
+    });
+  }
   applique();
 </script>
 
 <style>
-  .chips { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin: 6px 0 22px; }
-  .arr-pick {
+  /* La barre de filtres est traitée comme un ours de journal : deux filets, des
+     intitulés en petites capitales, et les boutons alignés dessous. */
+  .filtres { border-top: 2px solid var(--ink); border-bottom: 1px solid var(--rule); margin: 4px 0 24px; }
+  .fl-row { display: flex; align-items: center; flex-wrap: wrap; gap: 10px 16px; padding: 11px 0; }
+  .fl-row + .fl-row { border-top: 1px solid var(--rule); }
+  .fl-lbl {
+    font-family: var(--sans);
+    font-size: 0.66rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--ink-3);
+    width: 128px;
+    flex: none;
+  }
+  .chips { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+
+  .chip {
     font-family: var(--sans);
     font-size: 0.74rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
     text-transform: uppercase;
-    letter-spacing: 0.08em;
-    color: var(--ink-3);
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-  }
-  .arr-pick select {
-    font-family: var(--sans);
-    font-size: 0.8rem;
-    text-transform: none;
-    letter-spacing: 0;
-    padding: 5px 8px;
-    background: var(--card);
+    cursor: pointer;
+    padding: 7px 14px;
+    border-radius: 999px;
+    background: transparent;
+    color: var(--ink-2);
     border: 1px solid var(--rule-2);
-    color: var(--ink);
+    transition: all 0.12s ease;
   }
-  .count { font-family: var(--sans); font-size: 0.74rem; color: var(--ink-3); }
+  .chip:hover { border-color: var(--ink-3); color: var(--ink); }
+  .chip.active { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+
+  /* Les arrondissements sont des pastilles carrées, comme les numéros sur la
+     carte : vingt pilules auraient mangé toute la largeur. */
+  .num {
+    font-family: var(--sans);
+    font-size: 0.76rem;
+    font-weight: 700;
+    cursor: pointer;
+    min-width: 30px;
+    height: 30px;
+    padding: 0 7px;
+    background: transparent;
+    color: var(--ink-2);
+    border: 1px solid var(--rule-2);
+    transition: all 0.12s ease;
+  }
+  .num:first-child { text-transform: uppercase; letter-spacing: 0.04em; font-size: 0.7rem; padding: 0 12px; }
+  .num:hover { border-color: var(--red); color: var(--red); }
+  .num.active { background: var(--red); color: var(--paper); border-color: var(--red); }
+
+  .count { font-family: var(--sans); font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--ink-3); margin-left: auto; }
+
+  @media (max-width: 640px) {
+    .fl-lbl { width: 100%; }
+    .count { margin-left: 0; }
+  }
 
   .th-grid { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); gap: 16px; }
   .th-card { background: var(--card); border: 1px solid var(--rule); border-top: 3px solid var(--red); }
