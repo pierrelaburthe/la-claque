@@ -15,6 +15,18 @@
 
 export type TypeTheatre = 'national' | 'public' | 'prive' | 'petite-salle';
 
+/**
+ * Par où une compagnie peut entrer, ce qui n'est pas la même chose que la
+ * qualité de l'accueil : c'est le mode de sélection de la maison.
+ *  - projet  : la salle publie un dépôt de dossier, un appel ou un concours ;
+ *  - coreal  : elle accueille des spectacles en coréalisation ou en location,
+ *              sans procédure écrite, donc par contact direct ;
+ *  - reseau  : ni dépôt ni location, on y entre par la coproduction, la
+ *              tournée ou l'invitation, décidées une à deux saisons avant ;
+ *  - troupe  : la maison joue avec sa troupe et n'accueille pas d'équipe.
+ */
+export type ModeAccueil = 'projet' | 'coreal' | 'reseau' | 'troupe';
+
 export interface SalleTheatre {
   nom: string;
   places?: number;
@@ -39,6 +51,7 @@ export interface Theatre {
   lat: number;
   lon: number;
   type: TypeTheatre;
+  accueil: ModeAccueil;
   salles: SalleTheatre[];
   annee?: number;
   direction?: string;
@@ -73,6 +86,7 @@ export const THEATRES: Theatre[] = [
     lat: 48.863356,
     lon: 2.336069,
     type: 'national',
+    accueil: 'troupe',
     salles: [
       { nom: 'Salle Richelieu', places: 862 },
       { nom: 'Théâtre du Vieux-Colombier (6e)', places: 300 },
@@ -102,6 +116,7 @@ export const THEATRES: Theatre[] = [
     lat: 48.849853,
     lon: 2.338715,
     type: 'national',
+    accueil: 'reseau',
     salles: [
       { nom: 'Odéon (6e)', places: 800 },
       { nom: 'Ateliers Berthier (17e)', places: 450 },
@@ -131,6 +146,7 @@ export const THEATRES: Theatre[] = [
     lat: 48.864546,
     lon: 2.397659,
     type: 'national',
+    accueil: 'reseau',
     salles: [
       { nom: 'Grand théâtre', places: 655 },
       { nom: 'Petit théâtre', places: 160 },
@@ -160,6 +176,7 @@ export const THEATRES: Theatre[] = [
     lat: 48.862905,
     lon: 2.288342,
     type: 'national',
+    accueil: 'reseau',
     salles: [
       { nom: 'Salle Jean-Vilar', places: 1250 },
       { nom: 'Salle Gémier', places: 420 },
@@ -188,6 +205,7 @@ export const THEATRES: Theatre[] = [
     lat: 48.857346,
     lon: 2.347790,
     type: 'public',
+    accueil: 'reseau',
     salles: [
       { nom: 'Salle principale', places: 1000 },
       { nom: 'Théâtre des Abbesses (18e)', places: 400 },
@@ -213,6 +231,7 @@ export const THEATRES: Theatre[] = [
     lat: 48.867784,
     lon: 2.310549,
     type: 'public',
+    accueil: 'reseau',
     salles: [{ nom: 'Salle Renaud-Barrault', places: 760 }, { nom: 'Salle Jean-Tardieu' }, { nom: 'Salle Roland-Topor' }],
     direction: 'Laurence de Magalhaes et Stéphane Ricordel, depuis 2023, après Jean-Michel Ribes',
     ligne:
@@ -237,6 +256,7 @@ export const THEATRES: Theatre[] = [
     lat: 48.855861,
     lon: 2.375555,
     type: 'public',
+    accueil: 'reseau',
     salles: [
       { nom: 'Grande salle', places: 261 },
       { nom: 'Petite salle', places: 155 },
@@ -266,6 +286,7 @@ export const THEATRES: Theatre[] = [
     lat: 48.888952,
     lon: 2.392454,
     type: 'public',
+    accueil: 'projet',
     salles: [{ nom: 'Salle principale' }, { nom: 'Le Grand Parquet (18e)' }],
     direction: 'Adrien de Van',
     ligne:
@@ -291,6 +312,7 @@ export const THEATRES: Theatre[] = [
     lat: 48.827622,
     lon: 2.377256,
     type: 'public',
+    accueil: 'projet',
     salles: [
       { nom: 'Théâtre 13 / Bibliothèque' },
       { nom: 'Théâtre 13 / Glacière, 103A boulevard Auguste-Blanqui' },
@@ -318,6 +340,7 @@ export const THEATRES: Theatre[] = [
     lat: 48.825896,
     lon: 2.306846,
     type: 'public',
+    accueil: 'coreal',
     salles: [{ nom: 'Salle principale' }],
     ligne:
       "Une salle de quartier soutenue par la Ville, à Porte de Vanves, qui programme du théâtre de texte et des formes plus larges sans chercher la mode.",
@@ -340,6 +363,7 @@ export const THEATRES: Theatre[] = [
     lat: 48.870599,
     lon: 2.355207,
     type: 'prive',
+    accueil: 'coreal',
     salles: [{ nom: 'Salle', places: 780 }],
     annee: 1866,
     direction: 'Jean-Marc Dumontet, depuis 2011',
@@ -360,6 +384,7 @@ export const THEATRES: Theatre[] = [
     lat: 48.883380,
     lon: 2.342473,
     type: 'prive',
+    accueil: 'coreal',
     salles: [{ nom: 'Salle', places: 563 }],
     annee: 1822,
     direction: 'Rose Berthet, depuis janvier 2022',
@@ -380,6 +405,7 @@ export const THEATRES: Theatre[] = [
     lat: 48.839499,
     lon: 2.323534,
     type: 'prive',
+    accueil: 'coreal',
     salles: [
       { nom: 'Grande salle', places: 715 },
       { nom: 'Petit Montparnasse', places: 200 },
@@ -403,6 +429,7 @@ export const THEATRES: Theatre[] = [
     lat: 48.878145,
     lon: 2.337392,
     type: 'prive',
+    accueil: 'coreal',
     salles: [{ nom: 'Salle', places: 490 }],
     annee: 1929,
     direction: 'Pascal Guillaume, Sébastien Azzopardi, Francis Nani et Romain Frobert',
@@ -422,6 +449,7 @@ export const THEATRES: Theatre[] = [
     lat: 48.871471,
     lon: 2.342142,
     type: 'prive',
+    accueil: 'coreal',
     salles: [{ nom: 'Salle' }],
     annee: 1807,
     direction: 'Jean-Manuel Bajen, depuis 2005',
@@ -442,6 +470,7 @@ export const THEATRES: Theatre[] = [
     lat: 48.866057,
     lon: 2.337508,
     type: 'prive',
+    accueil: 'coreal',
     salles: [{ nom: 'Salle', places: 716 }],
     annee: 1831,
     direction: 'Francis Nani et Sébastien Azzopardi, depuis 2013',
@@ -462,6 +491,7 @@ export const THEATRES: Theatre[] = [
     lat: 48.870746,
     lon: 2.348839,
     type: 'prive',
+    accueil: 'coreal',
     salles: [
       { nom: 'Grande salle', places: 800 },
       { nom: 'Petit Gymnase', places: 160 },
@@ -486,6 +516,7 @@ export const THEATRES: Theatre[] = [
     lat: 48.869011,
     lon: 2.356402,
     type: 'prive',
+    accueil: 'coreal',
     salles: [{ nom: 'Salle', places: 650 }],
     annee: 1873,
     direction: 'Christian Spillemaecker et Bruno Moynot',
@@ -506,6 +537,7 @@ export const THEATRES: Theatre[] = [
     lat: 48.839319,
     lon: 2.323170,
     type: 'prive',
+    accueil: 'coreal',
     salles: [{ nom: 'Salle', places: 399 }],
     annee: 1868,
     direction: 'Louis-Michel Colla et Angélique Thomas-Colla, depuis 1998',
@@ -526,6 +558,7 @@ export const THEATRES: Theatre[] = [
     lat: 48.868382,
     lon: 2.335318,
     type: 'prive',
+    accueil: 'coreal',
     salles: [{ nom: 'Salle', places: 600 }],
     annee: 1827,
     direction: 'Dominique Dumond',
@@ -544,6 +577,7 @@ export const THEATRES: Theatre[] = [
     lat: 48.868965,
     lon: 2.356716,
     type: 'prive',
+    accueil: 'coreal',
     salles: [{ nom: 'Salle', places: 1050 }],
     annee: 1781,
     direction: 'Jean Robert-Charrier, avec Jean-Claude Camus depuis 2003',
@@ -563,6 +597,7 @@ export const THEATRES: Theatre[] = [
     lat: 48.884177,
     lon: 2.358623,
     type: 'prive',
+    accueil: 'reseau',
     salles: [{ nom: 'Salle', places: 503 }],
     annee: 1876,
     direction: 'Olivier Mantei et Olivier Poubelle, depuis 2010',
@@ -589,6 +624,7 @@ export const THEATRES: Theatre[] = [
     lat: 48.878671,
     lon: 2.331518,
     type: 'prive',
+    accueil: 'coreal',
     salles: [
       { nom: 'Grande salle', places: 1100 },
       { nom: 'Salle Réjane', places: 300 },
@@ -610,6 +646,7 @@ export const THEATRES: Theatre[] = [
     lat: 48.871314,
     lon: 2.329345,
     type: 'prive',
+    accueil: 'coreal',
     salles: [{ nom: 'Salle', places: 720 }],
     annee: 1913,
     direction: 'Pascal Legros, depuis 2018',
@@ -628,6 +665,7 @@ export const THEATRES: Theatre[] = [
     lat: 48.870982,
     lon: 2.320443,
     type: 'prive',
+    accueil: 'coreal',
     salles: [{ nom: 'Salle', places: 709 }],
     annee: 1924,
     direction: 'Michel Lumbroso et Dominique Bergin, direction artistique Philippe Lellouche',
@@ -646,6 +684,7 @@ export const THEATRES: Theatre[] = [
     lat: 48.870018,
     lon: 2.315458,
     type: 'prive',
+    accueil: 'coreal',
     salles: [
       { nom: 'Grande salle', places: 1000 },
       { nom: 'Studio Marigny, salle Popesco', places: 300 },
@@ -666,6 +705,7 @@ export const THEATRES: Theatre[] = [
     lat: 48.882013,
     lon: 2.318984,
     type: 'prive',
+    accueil: 'coreal',
     salles: [
       { nom: 'Grande salle', places: 630 },
       { nom: 'Petite salle', places: 110 },
@@ -688,6 +728,7 @@ export const THEATRES: Theatre[] = [
     lat: 48.880871,
     lon: 2.328213,
     type: 'prive',
+    accueil: 'coreal',
     salles: [{ nom: 'Salle', places: 326 }],
     annee: 1893,
     direction: 'Kim Poignant',
@@ -706,6 +747,7 @@ export const THEATRES: Theatre[] = [
     lat: 48.878811,
     lon: 2.319220,
     type: 'prive',
+    accueil: 'coreal',
     salles: [{ nom: 'Salle' }],
     annee: 1912,
     direction: 'Pascal Guillaume, depuis 2013',
@@ -725,6 +767,7 @@ export const THEATRES: Theatre[] = [
     lat: 48.868598,
     lon: 2.332236,
     type: 'prive',
+    accueil: 'coreal',
     salles: [{ nom: 'Salle', places: 347 }],
     annee: 1919,
     direction: 'Caroline Verdu-Sap',
@@ -743,6 +786,7 @@ export const THEATRES: Theatre[] = [
     lat: 48.870710,
     lon: 2.356726,
     type: 'prive',
+    accueil: 'coreal',
     salles: [{ nom: 'Salle', places: 300 }],
     annee: 1974,
     direction: 'Bruno Moynot et Christian Spillemaecker',
@@ -761,6 +805,7 @@ export const THEATRES: Theatre[] = [
     lat: 48.873274,
     lon: 2.325636,
     type: 'prive',
+    accueil: 'coreal',
     salles: [{ nom: 'Salle à l’italienne', places: 386 }],
     annee: 1898,
     direction: 'Dominique Bergin, Pierre Callegari et Louis-Michel Colla, depuis 2019',
@@ -779,6 +824,7 @@ export const THEATRES: Theatre[] = [
     lat: 48.843728,
     lon: 2.324991,
     type: 'prive',
+    accueil: 'coreal',
     salles: [
       { nom: 'Grand Poche', places: 100 },
       { nom: 'Petit Poche', places: 60 },
@@ -806,6 +852,7 @@ export const THEATRES: Theatre[] = [
     lat: 48.870299,
     lon: 2.354572,
     type: 'prive',
+    accueil: 'coreal',
     salles: [
       { nom: 'Grande salle', places: 550 },
       { nom: 'Piccola Scala', places: 180 },
@@ -832,6 +879,7 @@ export const THEATRES: Theatre[] = [
     lat: 48.853025,
     lon: 2.345354,
     type: 'prive',
+    accueil: 'coreal',
     salles: [{ nom: 'Salle', places: 85 }],
     annee: 1948,
     direction: 'Franck Desmedt, depuis 2016',
@@ -854,6 +902,7 @@ export const THEATRES: Theatre[] = [
     lat: 48.873287,
     lon: 2.325460,
     type: 'prive',
+    accueil: 'coreal',
     salles: [{ nom: 'Salle', places: 350 }],
     annee: 1908,
     direction: 'Karim Daghefali, président-directeur général depuis juin 2025, direction artistique Sébastien Azzopardi',
@@ -874,6 +923,7 @@ export const THEATRES: Theatre[] = [
     lat: 48.840770,
     lon: 2.324362,
     type: 'prive',
+    accueil: 'coreal',
     salles: [{ nom: 'Salle', places: 400 }],
     direction: "Repris par l'équipe de la Gaîté-Montparnasse",
     ligne:
@@ -892,6 +942,7 @@ export const THEATRES: Theatre[] = [
     lat: 48.869821,
     lon: 2.354771,
     type: 'prive',
+    accueil: 'coreal',
     salles: [{ nom: 'Grande salle', places: 934 }, { nom: 'La Scène Libre' }],
     ligne:
       "Une grande salle moderne du boulevard de Strasbourg, doublée d'une seconde plus petite. Théâtre, seuls en scène, spectacles musicaux et jeune public s'y succèdent.",
@@ -909,6 +960,7 @@ export const THEATRES: Theatre[] = [
     lat: 48.832118,
     lon: 2.354705,
     type: 'prive',
+    accueil: 'coreal',
     salles: [
       { nom: 'Grande salle', places: 900 },
       { nom: 'Petite salle', places: 130 },
@@ -931,6 +983,7 @@ export const THEATRES: Theatre[] = [
     lat: 48.890751,
     lon: 2.340416,
     type: 'petite-salle',
+    accueil: 'coreal',
     salles: [{ nom: 'Salle', places: 120 }],
     direction: 'Sandra Everro et Julien Héteau, depuis 2006',
     ligne:
@@ -955,6 +1008,7 @@ export const THEATRES: Theatre[] = [
     lat: 48.893710,
     lon: 2.344278,
     type: 'petite-salle',
+    accueil: 'coreal',
     salles: [{ nom: 'Salle', places: 195 }],
     annee: 2012,
     direction: 'Florent Bruneau, Arthur Jugnot, David Roussel et Frédéric Thibault',
@@ -979,6 +1033,7 @@ export const THEATRES: Theatre[] = [
     lat: 48.887636,
     lon: 2.337265,
     type: 'petite-salle',
+    accueil: 'coreal',
     salles: [{ nom: 'Salle', places: 120 }],
     annee: 1982,
     ligne:
@@ -1001,6 +1056,7 @@ export const THEATRES: Theatre[] = [
     lat: 48.841509,
     lon: 2.324432,
     type: 'petite-salle',
+    accueil: 'coreal',
     salles: [{ nom: 'Salle', places: 132 }],
     annee: 1973,
     direction: 'Luq Hamett, depuis 2014',
@@ -1024,6 +1080,7 @@ export const THEATRES: Theatre[] = [
     lat: 48.862856,
     lon: 2.382571,
     type: 'petite-salle',
+    accueil: 'coreal',
     salles: [
       { nom: 'Salle 1', places: 100 },
       { nom: 'Salle 2', places: 70 },
@@ -1049,6 +1106,7 @@ export const THEATRES: Theatre[] = [
     lat: 48.851482,
     lon: 2.349954,
     type: 'petite-salle',
+    accueil: 'coreal',
     salles: [{ nom: 'Salle', places: 110 }],
     ligne:
       "Une péniche amarrée face à Notre-Dame, avec un restaurant sous verrière et la salle en contrebas. Humour, seuls en scène et cabaret.",
@@ -1071,6 +1129,7 @@ export const THEATRES: Theatre[] = [
     lat: 48.844242,
     lon: 2.330403,
     type: 'petite-salle',
+    accueil: 'coreal',
     salles: [{ nom: 'Théâtre Rouge' }, { nom: 'Théâtre Noir' }, { nom: 'Théâtre Paradis' }],
     ligne:
       "Un centre culturel plus qu'un théâtre : trois salles, deux cinémas d'art et essai, un restaurant, et une programmation qui va du classique au jeune public dans la même journée.",
@@ -1102,3 +1161,25 @@ export const LIBELLE_TYPE: Record<TypeTheatre, string> = {
   prive: 'Théâtre privé',
   'petite-salle': 'Petite salle',
 };
+
+/** Libellé court, pour les pastilles et les filtres. */
+export const LIBELLE_ACCUEIL: Record<ModeAccueil, string> = {
+  projet: 'Dépôt de projet publié',
+  coreal: 'Coréalisation ou location',
+  reseau: 'Coproduction et invitation',
+  troupe: 'Troupe permanente',
+};
+
+/** La même chose en une phrase, pour les listes et les fiches. */
+export const EXPLIQUE_ACCUEIL: Record<ModeAccueil, string> = {
+  projet:
+    "La salle publie une procédure : dépôt de dossier, appel à projets ou concours, avec des dates. C'est la porte la plus ouverte de l'annuaire.",
+  coreal:
+    "La salle accueille des spectacles en coréalisation ou en location, mais ne publie pas de procédure : il faut écrire directement à l'administration.",
+  reseau:
+    "Ni dépôt ni location : on y entre par la coproduction, la tournée ou l'invitation, décidées souvent deux saisons à l'avance.",
+  troupe: "La maison joue avec sa troupe permanente et n'accueille pas de compagnie extérieure.",
+};
+
+/** De la porte la plus ouverte à la plus fermée, pour trier et filtrer. */
+export const ORDRE_ACCUEIL: ModeAccueil[] = ['projet', 'coreal', 'reseau', 'troupe'];

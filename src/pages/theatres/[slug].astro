@@ -8,7 +8,13 @@ import Base from '../../layouts/Base.astro';
 import CarteParis from '../../components/CarteParis.astro';
 import PieceCard from '../../components/PieceCard.astro';
 import RelatedGuides from '../../components/RelatedGuides.astro';
-import { THEATRES, LIBELLE_TYPE, theatrePourSalle } from '../../data/theatres';
+import {
+  THEATRES,
+  LIBELLE_TYPE,
+  LIBELLE_ACCUEIL,
+  EXPLIQUE_ACCUEIL,
+  theatrePourSalle,
+} from '../../data/theatres';
 import { PIECES } from '../../data/pieces';
 import { consensusScore } from '../../lib/rating';
 import { url } from '../../lib/url';
@@ -116,6 +122,10 @@ const jsonld = [
 
         <div class="fi-block fi-cie">
           <h2>Côté compagnie</h2>
+          <p class="fi-mode">
+            <span class={`fi-acc fi-acc-${t.accueil}`}>{LIBELLE_ACCUEIL[t.accueil]}</span>
+            <span class="fi-mode-txt">{EXPLIQUE_ACCUEIL[t.accueil]}</span>
+          </p>
           <p>{t.compagnies.modele}</p>
           {t.compagnies.procedure && <p>{t.compagnies.procedure}</p>}
           {(t.compagnies.url || t.compagnies.contact) && (
@@ -177,6 +187,21 @@ const jsonld = [
   .fi-dl dd { margin: 0; font-family: var(--serif); font-size: 0.98rem; color: var(--ink); }
   .fi-salle { display: block; }
   .fi-manque { color: var(--ink-3); font-style: italic; }
+  .fi-mode { display: flex; flex-wrap: wrap; align-items: baseline; gap: 8px 12px; }
+  .fi-acc {
+    font-family: var(--sans);
+    font-size: 0.66rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    padding: 4px 9px;
+    border: 1px solid var(--rule-2);
+    color: var(--ink-2);
+    white-space: nowrap;
+  }
+  .fi-acc-projet { border-color: var(--red); background: color-mix(in srgb, var(--red) 10%, transparent); color: var(--red); }
+  .fi-acc-reseau, .fi-acc-troupe { border-style: dashed; color: var(--ink-3); }
+  .fi-mode-txt { flex: 1; min-width: 240px; font-family: var(--serif); font-size: 1rem; color: var(--ink-2); }
   .fi-contact { font-family: var(--sans); font-size: 0.85rem; display: flex; flex-wrap: wrap; gap: 14px; align-items: center; }
   .fi-mail { color: var(--ink-2); }
 

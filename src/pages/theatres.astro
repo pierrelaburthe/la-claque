@@ -6,7 +6,14 @@
 // tout est déjà dans la page, on ne fait que masquer.
 import Base from '../layouts/Base.astro';
 import CarteParis from '../components/CarteParis.astro';
-import { THEATRES, LIBELLE_TYPE, type TypeTheatre } from '../data/theatres';
+import {
+  THEATRES,
+  LIBELLE_TYPE,
+  LIBELLE_ACCUEIL,
+  EXPLIQUE_ACCUEIL,
+  ORDRE_ACCUEIL,
+  type TypeTheatre,
+} from '../data/theatres';
 import { PIECES } from '../data/pieces';
 import { theatrePourSalle } from '../data/theatres';
 import { url } from '../lib/url';
@@ -26,6 +33,26 @@ const liste = [...THEATRES].sort(
 );
 const arrondissements = [...new Set(THEATRES.map((t) => t.arr))].sort((a, b) => a - b);
 const typesPresents = ORDRE.filter((t) => THEATRES.some((x) => x.type === t));
+const accueilsPresents = ORDRE_ACCUEIL.filter((a) => THEATRES.some((x) => x.accueil === a));
+
+// La recherche est côté client : on prépare ici le texte dans lequel elle va
+// chercher, accents retirés, pour qu'« theatre de la huchette » trouve la salle.
+const sansAccent = (s: string) => s.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
+const texteDe = (t: (typeof THEATRES)[number]) =>
+  sansAccent(
+    [
+      t.nom,
+      ...(t.alias ?? []),
+      t.adresse,
+      `${t.arr}e arrondissement`,
+      t.cp,
+      LIBELLE_TYPE[t.type],
+      LIBELLE_ACCUEIL[t.accueil],
+      ...t.salles.map((s) => s.nom),
+      t.direction ?? '',
+      t.ligne,
+    ].join(' '),
+  );
 
 const jauge = (t: (typeof THEATRES)[number]) => {
   const chiffres = t.salles.filter((s) => s.places).map((s) => s.places!);
@@ -85,6 +112,25 @@ const jsonld = [
     <CarteParis theatres={liste} />
 
     <div class="filtres">
+      <div class="fl-row fl-search">
+        <label class="fl-lbl" for="q">Chercher une salle</label>
+        <input
+          id="q"
+          type="search"
+          placeholder="Un nom, une rue, un arrondissement…"
+          autocomplete="off"
+          spellcheck="false"
+        />
+      </div>
+      <div class="fl-row" role="group" aria-label="Filtrer par accueil des compagnies">
+        <span class="fl-lbl">Côté compagnie</span>
+        <div class="chips">
+          <button class="chip active" data-acc="" type="button">Tous</button>
+          {accueilsPresents.map((a) => (
+            <button class="chip" data-acc={a} type="button" title={EXPLIQUE_ACCUEIL[a]}>{LIBELLE_ACCUEIL[a]}</button>
+          ))}
+        </div>
+      </div>
       <div class="fl-row" role="group" aria-label="Filtrer par type de salle">
         <span class="fl-lbl">Type de salle</span>
         <div class="chips">
@@ -109,11 +155,12 @@ const jsonld = [
         const n = critiquesPar.get(t.slug) ?? 0;
         const j = jauge(t);
         return (
-          <li class="th-card" data-type={t.type} data-arr={t.arr}>
+          <li class="th-card" data-type={t.type} data-arr={t.arr} data-acc={t.accueil} data-text={texteDe(t)}>
             <a href={url(`/theatres/${t.slug}`)}>
               <p class="th-kicker">{LIBELLE_TYPE[t.type]} · {t.arr}<sup>e</sup></p>
               <h2>{t.nom}</h2>
               <p class="th-jauge">{j ?? 'Jauge non publiée'}</p>
+              <p class={`th-acc th-acc-${t.accueil}`}>{LIBELLE_ACCUEIL[t.accueil]}</p>
               <p class="th-ligne">{t.ligne}</p>
               {n > 0 && (
                 <p class="th-vu">
@@ -143,14 +190,25 @@ const jsonld = [
       <div>
         <h3>Si vous cherchez où jouer</h3>
         <p>
-          Chaque fiche indique le modèle de la maison, parce que c'est lui qui commande. Les scènes publiques
-          coproduisent et accueillent, sur des saisons décidées un ou deux ans à l'avance. Les théâtres privés
-          fonctionnent en coréalisation ou en location, et presque aucun ne publie de procédure : le contact
-          direct reste la règle. Quand une salle publie vraiment un appel à projets, nous le disons et nous
-          mettons le lien.
+          Le filtre « côté compagnie » range les salles par mode de sélection, c'est-à-dire par la porte
+          qu'elles laissent ouverte. Ce classement ne dit pas si une maison est accueillante, il dit comment
+          elle choisit. Quand une salle publie vraiment un appel à projets, nous le disons et nous mettons le
+          lien vers sa page.
         </p>
       </div>
     </div>
+
+    <ul class="th-modes">
+      {accueilsPresents.map((a) => (
+        <li>
+          <span class={`th-acc th-acc-${a}`}>{LIBELLE_ACCUEIL[a]}</span>
+          <p>{EXPLIQUE_ACCUEIL[a]}</p>
+          <p class="th-modes-n">
+            {THEATRES.filter((t) => t.accueil === a).length} salles de l'annuaire
+          </p>
+        </li>
+      ))}
+    </ul>
 
     <p class="th-foot">
       Les adresses, les jauges et les directions viennent de sources publiques, citées sur chaque fiche. Quand
@@ -164,40 +222,59 @@ const jsonld = [
   const grid = document.getElementById('grid');
   const count = document.getElementById('count');
   const noresult = document.getElementById('noresult');
-  const chips = Array.from(document.querySelectorAll('.chip'));
+  const champ = document.getElementById('q');
+  const chips = Array.from(document.querySelectorAll('.chip[data-type]'));
+  const accs = Array.from(document.querySelectorAll('.chip[data-acc]'));
   const nums = Array.from(document.querySelectorAll('.num'));
   const cards = Array.from(grid.querySelectorAll('.th-card'));
   const points = Array.from(document.querySelectorAll('.pt-lien'));
+  // Les points de la carte ne portent pas le texte des fiches : on retrouve
+  // leur salle par le slug pour que la recherche les éteigne aussi.
+  const parSlug = new Map(cards.map((c) => [c.querySelector('a').getAttribute('href'), c]));
   let type = '';
   let arr = '';
+  let acc = '';
+  let q = '';
+
+  const sansAccent = (s) => s.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
 
   const applique = () => {
     let visibles = 0;
-    const ok = (t, a) => (!type || t === type) && (!arr || a === arr);
+    const ok = (c) =>
+      (!type || c.dataset.type === type) &&
+      (!arr || c.dataset.arr === arr) &&
+      (!acc || c.dataset.acc === acc) &&
+      (!q || c.dataset.text.includes(q));
     for (const c of cards) {
-      const on = ok(c.dataset.type, c.dataset.arr);
+      const on = ok(c);
       c.hidden = !on;
       if (on) visibles++;
     }
-    for (const p of points) p.classList.toggle('off', !ok(p.dataset.type, p.dataset.arr));
+    for (const p of points) {
+      const c = parSlug.get(p.getAttribute('href'));
+      p.classList.toggle('off', !c || !ok(c));
+    }
     count.textContent = visibles > 0 ? `${visibles} salle${visibles > 1 ? 's' : ''}` : '';
     noresult.hidden = visibles > 0;
   };
 
-  for (const c of chips) {
-    c.addEventListener('click', () => {
-      chips.forEach((x) => x.classList.toggle('active', x === c));
-      type = c.dataset.type;
-      applique();
-    });
-  }
-  for (const n of nums) {
-    n.addEventListener('click', () => {
-      nums.forEach((x) => x.classList.toggle('active', x === n));
-      arr = n.dataset.arr;
-      applique();
-    });
-  }
+  const groupe = (liste, cle, set) => {
+    for (const b of liste) {
+      b.addEventListener('click', () => {
+        liste.forEach((x) => x.classList.toggle('active', x === b));
+        set(b.dataset[cle]);
+        applique();
+      });
+    }
+  };
+  groupe(chips, 'type', (v) => (type = v));
+  groupe(accs, 'acc', (v) => (acc = v));
+  groupe(nums, 'arr', (v) => (arr = v));
+
+  champ.addEventListener('input', () => {
+    q = sansAccent(champ.value.trim());
+    applique();
+  });
   applique();
 </script>
 
@@ -218,6 +295,19 @@ const jsonld = [
     flex: none;
   }
   .chips { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+
+  .fl-search input {
+    flex: 1;
+    min-width: 220px;
+    font-family: var(--serif);
+    font-size: 1rem;
+    padding: 9px 12px;
+    background: var(--card);
+    border: 1px solid var(--rule-2);
+    color: var(--ink);
+  }
+  .fl-search input:focus { outline: 2px solid var(--red); outline-offset: -1px; }
+  .fl-search input::placeholder { color: var(--ink-3); }
 
   .chip {
     font-family: var(--sans);
@@ -270,6 +360,23 @@ const jsonld = [
   .th-card h2 { font-family: var(--display); font-size: 1.25rem; line-height: 1.2; margin: 0 0 6px; }
   .th-card:hover h2 { color: var(--red); }
   .th-jauge { font-family: var(--sans); font-size: 0.76rem; color: var(--ink-2); margin: 0 0 10px; }
+  /* La pastille dit d'un coup d'œil par où une compagnie peut entrer. */
+  .th-acc {
+    display: inline-block;
+    font-family: var(--sans);
+    font-size: 0.66rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    padding: 4px 9px;
+    margin: 0 0 12px;
+    border: 1px solid var(--rule-2);
+    color: var(--ink-2);
+  }
+  .th-acc-projet { border-color: var(--red); background: color-mix(in srgb, var(--red) 10%, transparent); color: var(--red); }
+  .th-acc-coreal { border-color: var(--ink-3); color: var(--ink-2); }
+  .th-acc-reseau { border-style: dashed; color: var(--ink-3); }
+  .th-acc-troupe { border-style: dashed; color: var(--ink-3); }
   .th-ligne { font-family: var(--serif); font-size: 0.95rem; line-height: 1.5; color: var(--ink-2); margin: 0; }
   .th-vu { font-family: var(--sans); font-size: 0.72rem; color: var(--red); margin: 10px 0 0; }
   .th-none { font-family: var(--serif); color: var(--ink-2); margin: 18px 0; }
@@ -277,5 +384,10 @@ const jsonld = [
   .th-legend { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 26px; margin-bottom: 30px; }
   .th-legend h3 { font-family: var(--display); font-size: 1.1rem; margin: 0 0 8px; }
   .th-legend p { font-family: var(--serif); font-size: 1rem; line-height: 1.6; color: var(--ink-2); margin: 0; }
+  .th-modes { list-style: none; margin: 0 0 30px; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px; }
+  .th-modes li { border-top: 1px solid var(--rule-2); padding-top: 12px; }
+  .th-modes p { font-family: var(--serif); font-size: 0.95rem; line-height: 1.55; color: var(--ink-2); margin: 0; }
+  .th-modes-n { font-family: var(--sans) !important; font-size: 0.72rem !important; color: var(--ink-3) !important; margin-top: 8px !important; }
+
   .th-foot { font-family: var(--serif); font-size: 0.95rem; color: var(--ink-2); border-top: 1px solid var(--rule); padding-top: 16px; max-width: 70ch; }
 </style>

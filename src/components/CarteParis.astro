@@ -5,7 +5,13 @@
 // Aucune tuile, aucun fournisseur extérieur, aucun script tiers : le site est
 // statique, la carte l'est aussi. Un point vaut environ douze mètres, donc deux
 // salles voisines de deux cents mètres restent distinctes à l'œil.
+//
+// L'interaction tient compte du doigt autant que de la souris. Chaque point
+// porte une cible invisible bien plus large que la pastille, et sur un écran
+// tactile, où le survol n'existe pas, la première touche affiche la salle sous
+// la carte au lieu d'ouvrir la fiche. La seconde touche y va.
 import { CARTE, projeter } from '../data/paris-carte';
+import { LIBELLE_TYPE, LIBELLE_ACCUEIL } from '../data/theatres';
 import { url } from '../lib/url';
 import type { Theatre } from '../data/theatres';
 
@@ -26,6 +32,12 @@ const points = theatres.map((t) => ({ ...t, ...projeter(t.lat, t.lon) }));
 // ne dit plus dans quelle ville on se trouve, alors que la silhouette complète
 // se reconnaît au premier coup d'œil.
 const viewBox = `0 0 ${W} ${H}`;
+
+const jauge = (t: Theatre) => {
+  const c = t.salles.filter((s) => s.places).map((s) => s.places!);
+  if (!c.length) return null;
+  return c.length === 1 ? `${c[0]} places` : `${c.length} salles`;
+};
 ---
 <figure class={`carte ${compacte ? 'carte-mini' : ''}`}>
   <svg viewBox={viewBox} role="img" aria-label={compacte ? 'Situation de la salle dans Paris' : 'Carte des théâtres parisiens'}>
@@ -33,7 +45,7 @@ const viewBox = `0 0 ${W} ${H}`;
       {CARTE.arrondissements.map((a) => <path d={a.d} />)}
     </g>
     {!compacte && (
-      <g class="num">
+      <g class="numeros">
         {CARTE.arrondissements.map((a) => <text x={a.cx} y={a.cy}>{a.num}</text>)}
       </g>
     )}
@@ -42,10 +54,20 @@ const viewBox = `0 0 ${W} ${H}`;
         compacte ? (
           <circle class={p.slug === actif ? 'pt pt-actif' : 'pt pt-autre'} cx={p.x} cy={p.y} r={p.slug === actif ? 13 : 4} />
         ) : (
-          <a href={url(`/theatres/${p.slug}`)} class="pt-lien" data-type={p.type} data-arr={p.arr}>
+          <a
+            href={url(`/theatres/${p.slug}`)}
+            class="pt-lien"
+            data-type={p.type}
+            data-arr={p.arr}
+            data-slug={p.slug}
+            data-nom={p.nom}
+            data-meta={[LIBELLE_TYPE[p.type], `${p.arr}e`, jauge(p)].filter(Boolean).join(' · ')}
+            data-accueil={LIBELLE_ACCUEIL[p.accueil]}
+          >
             <title>{p.nom}</title>
-            <circle class="pt" cx={p.x} cy={p.y} r="5.5" />
-            <text class="pt-nom" x={p.x} y={p.y - 11}>{p.nom}</text>
+            <circle class="pt-hit" cx={p.x} cy={p.y} r="15" />
+            <circle class="pt" cx={p.x} cy={p.y} r="6" />
+            <text class="pt-nom" x={p.x} y={p.y - 12}>{p.nom}</text>
           </a>
         ),
       )}
@@ -53,17 +75,60 @@ const viewBox = `0 0 ${W} ${H}`;
   </svg>
   {!compacte && (
     <figcaption>
-      Les {theatres.length} salles de l'annuaire, situées à leur adresse réelle. Touchez ou survolez un point
-      pour lire le nom, cliquez pour ouvrir la fiche.
+      <span class="cap-vide" data-vide>
+        Les {theatres.length} salles de l'annuaire, à leur adresse réelle. Touchez un point pour savoir laquelle,
+        touchez-le à nouveau pour ouvrir sa fiche.
+      </span>
+      <a class="cap-salle" data-choisie hidden href="#">
+        <strong data-nom></strong>
+        <span data-meta></span>
+        <span class="cap-acc" data-accueil></span>
+        <span class="cap-go">Ouvrir la fiche →</span>
+      </a>
     </figcaption>
   )}
 </figure>
 
+<script>
+  // La carte n'est interactive que sur l'annuaire, où la légende existe.
+  const fig = document.querySelector('.carte:not(.carte-mini)');
+  if (fig) {
+    const vide = fig.querySelector('[data-vide]');
+    const bloc = fig.querySelector('[data-choisie]');
+    const tactile = !window.matchMedia('(hover: hover)').matches;
+    let choisi = null;
+
+    const montre = (a) => {
+      bloc.href = a.getAttribute('href');
+      bloc.querySelector('[data-nom]').textContent = a.dataset.nom;
+      bloc.querySelector('[data-meta]').textContent = a.dataset.meta;
+      bloc.querySelector('[data-accueil]').textContent = a.dataset.accueil;
+      bloc.hidden = false;
+      vide.hidden = true;
+    };
+
+    for (const a of fig.querySelectorAll('.pt-lien')) {
+      // Souris et clavier : la légende suit le survol, le clic ouvre la fiche.
+      a.addEventListener('mouseenter', () => montre(a));
+      a.addEventListener('focus', () => montre(a));
+      // Doigt : la première touche nomme la salle, la seconde ouvre la fiche.
+      a.addEventListener('click', (e) => {
+        if (!tactile) return;
+        if (choisi === a) return;
+        e.preventDefault();
+        choisi = a;
+        for (const x of fig.querySelectorAll('.pt-lien')) x.classList.toggle('choisi', x === a);
+        montre(a);
+      });
+    }
+  }
+</script>
+
 <style>
   .carte { margin: 0 0 26px; background: var(--card); border: 1px solid var(--rule); padding: 14px; }
-  .carte svg { display: block; width: 100%; height: auto; }
+  .carte svg { display: block; width: 100%; height: auto; overflow: visible; }
   .arr path { fill: var(--panel); stroke: var(--rule-2); stroke-width: 1.1; stroke-linejoin: round; }
-  .num text {
+  .numeros text {
     font-family: var(--sans);
     font-size: 13px;
     fill: var(--ink-3);
@@ -71,16 +136,17 @@ const viewBox = `0 0 ${W} ${H}`;
     dominant-baseline: middle;
     opacity: 0.55;
   }
-  .pt { fill: var(--red); stroke: var(--card); stroke-width: 1.6; }
+  .pt { fill: var(--red); stroke: var(--card); stroke-width: 1.6; pointer-events: none; }
+  /* Cible de touche : invisible, mais assez large pour un doigt. */
+  .pt-hit { fill: transparent; }
   /* Sur une fiche, les autres salles restent visibles mais s'effacent derrière
      celle qu'on lit, qui est cerclée pour se repérer d'un coup d'œil. */
   .pt-autre { fill: var(--rule-2); stroke: none; }
   .pt-actif { fill: var(--red); stroke: var(--red); stroke-width: 2; fill-opacity: 0.28; }
   .pt-lien { cursor: pointer; }
-  .pt-lien .pt { transition: r 0.12s ease; }
   .pt-nom {
     font-family: var(--sans);
-    font-size: 12px;
+    font-size: 13px;
     fill: var(--ink);
     text-anchor: middle;
     paint-order: stroke;
@@ -90,21 +156,25 @@ const viewBox = `0 0 ${W} ${H}`;
     pointer-events: none;
   }
   .pt-lien:hover .pt-nom,
-  .pt-lien:focus .pt-nom { opacity: 1; }
+  .pt-lien:focus .pt-nom,
+  .pt-lien.choisi .pt-nom { opacity: 1; }
   .pt-lien:hover .pt,
-  .pt-lien:focus .pt { r: 8; }
+  .pt-lien:focus .pt,
+  .pt-lien.choisi .pt { fill: var(--ink); r: 8; }
   /* Salle masquée par un filtre : le point s'efface sans disparaître du DOM. */
   .pt-lien.off { opacity: 0.16; pointer-events: none; }
-  figcaption {
-    font-family: var(--sans);
-    font-size: 0.76rem;
-    color: var(--ink-3);
-    margin-top: 10px;
-    line-height: 1.5;
-  }
+
+  figcaption { font-family: var(--sans); font-size: 0.76rem; color: var(--ink-3); margin-top: 10px; line-height: 1.5; }
+  .cap-salle { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 12px; text-decoration: none; color: var(--ink-2); }
+  .cap-salle strong { font-family: var(--display); font-size: 1.05rem; color: var(--ink); }
+  .cap-acc { border: 1px solid var(--rule-2); padding: 2px 8px; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.06em; }
+  .cap-go { color: var(--red); font-weight: 700; margin-left: auto; }
+  .cap-salle:hover strong { color: var(--red); }
+
   .carte-mini { padding: 8px; }
   @media (max-width: 700px) {
-    .num text { font-size: 18px; }
+    .numeros text { font-size: 18px; }
     .pt-nom { font-size: 17px; }
+    .cap-go { margin-left: 0; }
   }
 </style>
