@@ -26,7 +26,25 @@ interface Props {
 const { theatres, actif, compacte = false } = Astro.props;
 const { W, H } = CARTE.bounds;
 
-const points = theatres.map((t) => ({ ...t, ...projeter(t.lat, t.lon) }));
+// Les quatre salles de la Cartoucherie partagent la même adresse postale, donc
+// le même point : sans rien changer aux coordonnées, on les écarte de quelques
+// pixels à l'affichage pour qu'elles restent toutes cliquables.
+const brut = theatres.map((t) => ({ ...t, ...projeter(t.lat, t.lon) }));
+const paquets = new Map<string, number>();
+for (const p of brut) {
+  const cle = `${p.x.toFixed(1)}|${p.y.toFixed(1)}`;
+  paquets.set(cle, (paquets.get(cle) ?? 0) + 1);
+}
+const rangs = new Map<string, number>();
+const points = brut.map((p) => {
+  const cle = `${p.x.toFixed(1)}|${p.y.toFixed(1)}`;
+  const total = paquets.get(cle)!;
+  if (total < 2) return p;
+  const rang = rangs.get(cle) ?? 0;
+  rangs.set(cle, rang + 1);
+  const angle = (rang / total) * 2 * Math.PI;
+  return { ...p, x: p.x + Math.cos(angle) * 9, y: p.y + Math.sin(angle) * 9 };
+});
 
 // Sur une fiche, la carte garde Paris en entier : un gros plan sur le quartier
 // ne dit plus dans quelle ville on se trouve, alors que la silhouette complète

@@ -636,6 +636,15 @@ export const PIECES: Piece[] = [
       "Le sujet, sous le rire, est le poids des injonctions faites au corps féminin, et l'écriture est franchement onirique. Tout ne m'a pas atteint au même endroit, et certains partis pris m'ont laissé sur le seuil. Mais je préfère très largement ça à une soirée sagement calibrée qui ne tenterait rien.",
       "Ce qui reste, c'est un autoportrait fêlé et captivant, et une artiste qui a décidé d'abandonner l'humour superficiel pour dire quelque chose de vrai. On a envie de l'encourager, et surtout de voir la suite.",
     ],
+    reprise: {
+      lieu: 'La Manufacture des Abbesses, Paris 18e',
+      dates: 'Du 23 août au 28 octobre 2026',
+      debut: '2026-08-23',
+      fin: '2026-10-28',
+      salle: 'La Manufacture des Abbesses',
+      ville: 'Paris',
+      url: 'https://www.offi.fr/theatre/la-manufacture-des-abbesses-2715.html',
+    },
     sources: [
       'https://www.offavignon.com/critique-spectacle-a-voir-avignon-off/',
       'https://www.surlesplanches.org/en-aparte-a-avignon-avec-marion-claisse/',
