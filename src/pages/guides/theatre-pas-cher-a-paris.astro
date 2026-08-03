@@ -1,0 +1,187 @@
+---
+// Guide « Le théâtre pas cher à Paris ».
+//
+// Règle appliquée ici comme ailleurs : aucun montant qui bouge d'une saison à
+// l'autre n'est affirmé sans source. Les horaires des kiosques et les crédits
+// du Pass Culture changent régulièrement, on décrit donc le mécanisme et on
+// renvoie au guichet officiel plutôt que de publier un chiffre périmé.
+import Base from '../../layouts/Base.astro';
+import { url } from '../../lib/url';
+
+const abs = (p: string) => new URL(url(p), Astro.site).href;
+
+const faqs = [
+  {
+    q: 'Comment avoir des places de théâtre à moitié prix à Paris ?',
+    r: "Le moyen le plus simple reste le Kiosque Théâtre, qui vend le jour même, sur place, les places invendues de la plupart des théâtres parisiens à moitié prix. Deux guichets : place de la Madeleine et place Raoul Dautry, à Montparnasse. On ne réserve pas, on se déplace, on regarde ce qui reste, et on choisit. C'est la meilleure façon de voir beaucoup de théâtre pour pas cher, à condition d'accepter de décider le jour même.",
+  },
+  {
+    q: 'Existe-t-il un tarif jeune au théâtre à Paris ?',
+    r: "Oui. Les salles privées adhérentes à l'Association pour le soutien du théâtre privé proposent une place à 10 euros aux moins de 26 ans, pour la plupart de leurs spectacles. L'achat se fait au guichet du théâtre, sur présentation d'une pièce d'identité. C'est le meilleur rapport qualité-prix du théâtre parisien, et il est très peu connu de celles et ceux qui y auraient droit.",
+  },
+  {
+    q: "Qu'est-ce que l'opération « Premiers aux premières » ?",
+    r: "C'est une réduction de 50 % accordée sur les toutes premières représentations d'un spectacle, dans les théâtres privés parisiens. La durée de l'opération varie selon les salles, souvent une à deux semaines. Il faut acheter directement auprès du théâtre concerné. Voir un spectacle dans ses premiers jours a un autre avantage : la troupe est encore en train de trouver son rythme, et c'est passionnant à observer.",
+  },
+  {
+    q: 'Le Pass Culture fonctionne-t-il pour le théâtre ?',
+    r: "Oui, les places de théâtre font partie des offres réservables dans l'application, auprès des salles partenaires. Le montant du crédit dépend de l'âge et a été réformé en mars 2025, avec un plafond spécifique pour les dépenses en ligne destiné à encourager les sorties réelles. Les montants évoluant régulièrement, le plus sûr est de consulter directement l'application.",
+  },
+  {
+    q: 'Faut-il réserver à l’avance ou attendre le dernier moment ?',
+    r: "Les deux stratégies marchent, mais pas pour les mêmes spectacles. Pour un succès annoncé ou une petite jauge, réservez tôt : les places partent et les tarifs réduits disparaissent en premier. Pour une grande salle un soir de semaine, attendre le jour même au kiosque est souvent gagnant. Notre agenda indique les salles et les dates de ce qu'on a aimé, ce qui aide à savoir dans quel cas on se trouve.",
+  },
+];
+
+const pistes = [
+  {
+    t: 'Le Kiosque Théâtre, le jour même',
+    d: "Deux guichets, place de la Madeleine et place Raoul Dautry à Montparnasse, vendent à moitié prix les places du soir restées invendues. On ne choisit pas parmi tout le répertoire parisien, seulement parmi ce qui reste, ce qui est aussi une façon de se laisser surprendre. Vérifiez les horaires d'ouverture avant de vous déplacer, ils varient selon les jours et les saisons.",
+  },
+  {
+    t: 'La place à 10 euros pour les moins de 26 ans',
+    d: "Les théâtres privés adhérents à l'ASTP appliquent un tarif unique de 10 euros aux moins de 26 ans. On achète au guichet, avec une pièce d'identité. C'est le dispositif le plus avantageux de tout ce guide, et le plus sous-utilisé : beaucoup de gens y ont droit sans le savoir.",
+  },
+  {
+    t: 'Les premières représentations à moitié prix',
+    d: "L'opération « Premiers aux premières » applique 50 % de réduction sur les premiers jours d'exploitation d'un spectacle, en achetant directement auprès du théâtre. La durée varie, généralement une à deux semaines.",
+  },
+  {
+    t: 'Les plateformes à tarif réduit',
+    d: "BilletRéduc et les billetteries en ligne proposent des places à prix cassés, en particulier sur les petites salles et les spectacles qui démarrent. C'est aussi là que se trouvent les avis du public, à lire avec la même prudence que n'importe quel avis en ligne.",
+  },
+  {
+    t: 'Les abonnements des théâtres publics',
+    d: "Les grandes maisons subventionnées proposent des formules d'abonnement qui font tomber le prix à la place dès trois ou quatre spectacles. C'est le meilleur calcul si vous savez déjà que vous irez plusieurs fois dans l'année, et cela donne souvent accès aux meilleures places avant tout le monde.",
+  },
+  {
+    t: 'Le Pass Culture, si vous avez l’âge',
+    d: "L'application recense les offres près de chez vous et permet de réserver des places de théâtre chez les partenaires. Le crédit dépend de l'âge et évolue au fil des réformes, donc regardez ce que vous avez avant de faire des plans.",
+  },
+];
+
+const jsonld = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: 'Le théâtre pas cher à Paris',
+    description: "Kiosque à moitié prix, tarif jeune à 10 euros, premières représentations à 50 %, abonnements : toutes les façons de voir du théâtre à Paris sans se ruiner.",
+    author: { '@type': 'Organization', name: 'La Claque' },
+    publisher: { '@type': 'Organization', name: 'La Claque' },
+    mainEntityOfPage: abs('/guides/theatre-pas-cher-a-paris'),
+    inLanguage: 'fr',
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqs.map((f) => ({
+      '@type': 'Question',
+      name: f.q,
+      acceptedAnswer: { '@type': 'Answer', text: f.r },
+    })),
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Accueil', item: abs('/') },
+      { '@type': 'ListItem', position: 2, name: 'Guides', item: abs('/guides') },
+      { '@type': 'ListItem', position: 3, name: 'Théâtre pas cher à Paris', item: abs('/guides/theatre-pas-cher-a-paris') },
+    ],
+  },
+];
+---
+<Base
+  title="Le théâtre pas cher à Paris : tous les bons plans | La Claque"
+  description="Kiosque à moitié prix, tarif jeune à 10 euros, premières représentations à 50 %, abonnements et Pass Culture : comment voir beaucoup de théâtre à Paris sans y laisser son salaire."
+  active="guides"
+  jsonld={jsonld}
+>
+  <article class="wrap-narrow guide">
+    <p class="breadcrumb"><a href={url('/')}>Accueil</a> › <a href={url('/guides')}>Guides</a> › Théâtre pas cher</p>
+    <div class="guide-head">
+      <p class="kicker">Guide pratique</p>
+      <h1>Le théâtre pas cher à Paris</h1>
+      <p class="stand">
+        Une place de théâtre à Paris coûte souvent plus cher qu'une place de cinéma, et c'est la première
+        raison pour laquelle les gens n'y vont pas. Pourtant, il existe une demi-douzaine de façons parfaitement
+        officielles de diviser la note par deux, et parfois plus. Les voici, dans l'ordre où nous les utilisons.
+      </p>
+    </div>
+
+    <div class="prose">
+      <p>
+        Nous allons au théâtre plusieurs fois par semaine, à plusieurs, toute l'année. Au plein tarif, ce serait
+        intenable. Ce guide rassemble ce qu'on utilise réellement, sans code promotionnel miracle ni combine :
+        seulement des dispositifs publics, connus des professionnels, et étrangement peu connus du public.
+      </p>
+
+      <h2>Les six pistes qui marchent</h2>
+      <div class="cards-lite">
+        {pistes.map((p) => (
+          <div class="cl-card">
+            <h3>{p.t}</h3>
+            <p>{p.d}</p>
+          </div>
+        ))}
+      </div>
+
+      <h2>Notre méthode, concrètement</h2>
+      <p>
+        Si vous avez moins de 26 ans, arrêtez de lire le reste : allez au guichet du théâtre avec une pièce
+        d'identité, et payez dix euros. Aucun autre dispositif ne fera mieux, et cela vaut pour une bonne partie
+        des salles privées parisiennes.
+      </p>
+      <p>
+        Si vous avez passé cet âge, le réflexe le plus rentable est de renverser votre façon de choisir. Au lieu
+        de décider quel spectacle voir puis de chercher une place, décidez que vous sortez ce soir, passez au
+        kiosque, et prenez ce qu'il y a. Nous avons fait quelques-unes de nos plus belles découvertes comme ça,
+        et jamais nous n'aurions payé plein tarif pour un titre dont nous n'avions jamais entendu parler.
+      </p>
+      <p>
+        Troisième réflexe, celui qui coûte le moins d'efforts : allez voir les spectacles dans leurs premiers
+        jours. C'est moitié prix chez beaucoup de théâtres privés, et c'est aussi le moment où une troupe joue
+        avec le trac, ce qui donne des soirées plus vivantes qu'à la deux-centième.
+      </p>
+
+      <h2>Un mot sur ce que le prix ne dit pas</h2>
+      <p>
+        Un billet cher n'est pas la promesse d'une bonne soirée, et un billet à dix euros n'est pas un lot de
+        consolation. La plupart des spectacles qui nous ont le plus marqués cette année se jouaient dans des
+        salles de moins de cent places, à des tarifs modestes. C'est d'ailleurs le principe du
+        <a href={url('/guides/off-avignon-mode-demploi')}> OFF d'Avignon</a>, où tout se joue à prix unique et
+        où l'on voit cinq spectacles par jour sans se ruiner.
+      </p>
+      <p>
+        Pour savoir quoi choisir une fois la place trouvée, <a href={url('/agenda')}>notre agenda</a> réunit ce
+        qu'on a vu et aimé et qui se joue encore, avec les salles et les dates. Et si vous hésitez sur la place
+        elle-même, on a écrit un guide pour <a href={url('/guides/choisir-sa-place-au-theatre')}>bien la choisir</a>.
+      </p>
+
+      <h2>Questions fréquentes</h2>
+      <div class="faq">
+        {faqs.map((f) => (
+          <details>
+            <summary>{f.q}</summary>
+            <p>{f.r}</p>
+          </details>
+        ))}
+      </div>
+
+      <p class="sources">
+        Sources :
+        <a href="https://www.kiosqueculture.com/" rel="noopener nofollow">Kiosque Culture</a>,
+        <a href="https://tpa.fr/reduction-spectacle-paris" rel="noopener nofollow">Théâtres Parisiens Associés</a>,
+        <a href="https://astp.asso.fr/" rel="noopener nofollow">Association pour le soutien du théâtre privé</a>,
+        <a href="https://pass.culture.fr/" rel="noopener nofollow">Pass Culture</a>.
+      </p>
+    </div>
+  </article>
+</Base>
+
+<style>
+  .cards-lite { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 14px; margin: 18px 0 28px; }
+  .cl-card { background: var(--card); border: 1px solid var(--rule-2); border-left: 4px solid var(--red); padding: 16px 18px; }
+  .cl-card h3 { font-family: var(--display); font-size: 1.15rem; margin: 0 0 6px; }
+  .cl-card p { font-family: var(--serif); font-size: 0.98rem; line-height: 1.5; color: var(--ink-2); margin: 0; }
+</style>

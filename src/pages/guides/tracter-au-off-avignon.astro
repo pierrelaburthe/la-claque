@@ -1,0 +1,204 @@
+---
+// Guide « Tracter au OFF d'Avignon », côté métier.
+//
+// Deux matières distinctes, et il faut qu'elles le restent :
+//  - la règle (arrêté municipal, quantités, amendes, Écopack) est SOURCÉE ;
+//  - la pratique (comment on tracte bien) vient de la bande, qui a joué au OFF,
+//    et s'écrit à notre voix, sans jamais se déguiser en règlement.
+import Base from '../../layouts/Base.astro';
+import { url } from '../../lib/url';
+
+const abs = (p: string) => new URL(url(p), Astro.site).href;
+
+const faqs = [
+  {
+    q: 'Combien de tracts et d’affiches a-t-on le droit d’imprimer au OFF ?',
+    r: "La ville d'Avignon publie chaque année un arrêté municipal qui encadre l'affichage pendant le festival. Pour l'édition 2026, les quantités autorisées étaient de 150 affiches et 5 000 tracts maximum par spectacle. Ces plafonds sont réévalués chaque année : vérifiez l'arrêté en vigueur avant de lancer une impression, car il fixe aussi les dates d'autorisation.",
+  },
+  {
+    q: 'Où l’affichage est-il interdit à Avignon pendant le festival ?',
+    r: "L'arrêté interdit d'afficher avec des clous, des punaises ou des agrafes, et proscrit les troncs d'arbres, les monuments historiques, les remparts, les fils électriques, les jardinières, les poubelles, les palissades de chantier et les gouttières. Plusieurs lieux sont entièrement interdits, dont la place Pie, la place de l'Horloge, la place du Palais des Papes, la place Crillon, la place Saint-Jean le Vieux et la place du Petit Palais, ainsi que les grilles de plusieurs jardins publics.",
+  },
+  {
+    q: 'Que risque-t-on à afficher n’importe où ?',
+    r: "Une amende de 150 euros, à laquelle s'ajoutent 52 euros de frais d'enlèvement, soit 202 euros par affiche. Les agents assermentés de la ville décrochent immédiatement les dispositifs non conformes. Pour une compagnie qui compte ses euros, deux affiches mal posées coûtent plus cher qu'une journée de salle.",
+  },
+  {
+    q: 'Faut-il passer par le service d’impression du festival ?',
+    r: "Ce n'est pas obligatoire, mais l'Écopack proposé par Avignon Festival & Compagnies depuis 2017 mutualise l'impression des affiches et des tracts à des tarifs négociés, avec des imprimeurs situés à moins de 150 kilomètres d'Avignon, du papier certifié, des encres végétales et des livraisons à vélo. Le dispositif a permis d'éviter 35 tonnes de déchets. Les inscriptions ferment tôt dans l'année.",
+  },
+  {
+    q: 'La parade du OFF sert-elle vraiment à quelque chose ?',
+    r: "Elle ne remplit pas une salle à elle seule, mais elle donne le coup d'envoi et met tout le monde dans le même bain la veille de l'ouverture. En 2026, elle est partie de la place Pie à 18 h 30 le 3 juillet pour rejoindre le Village du OFF. C'est le seul moment du festival où les compagnies se regardent les unes les autres au lieu de se disputer les mêmes passants.",
+  },
+];
+
+const etapes = [
+  {
+    t: 'Avant de partir : comptez vos tracts',
+    d: "Le plafond légal fixe le cadre, mais votre vraie limite est le nombre de mains disponibles. Cinq mille tracts sur vingt jours, cela fait deux cent cinquante par jour, soit une heure ou deux de présence quotidienne à deux personnes. Un stock qu'on n'écoule pas finit à la poubelle, ce qui coûte de l'argent et de la crédibilité.",
+  },
+  {
+    t: 'Choisir son heure plutôt que son lieu',
+    d: "Le réflexe est de viser la rue la plus passante. L'erreur est là : à midi rue de la République, vous êtes le douzième à tendre un papier au même passant. Les moments qui comptent sont les sorties de salle, quand les gens viennent de voir un spectacle et cherchent le suivant, et le créneau qui précède votre propre représentation, près de votre théâtre.",
+  },
+  {
+    t: 'Parler avant de tendre',
+    d: "Un tract tendu sans un mot finit dans la poche puis à la corbeille. Une phrase, une seule, qui dit de quoi ça parle et à quelle heure ça se joue, change tout. Ceux qui refusent le papier écoutent parfois la phrase, et c'est la phrase qui les fait venir.",
+  },
+  {
+    t: 'Ne pas mentir sur la marchandise',
+    d: "Le OFF est un village. Vendre une comédie hilarante pour un drame intime se retourne contre vous en trois jours, par le bouche-à-oreille et par les avis. Dire exactement ce qu'on joue attire moins de monde le premier jour et beaucoup plus le dixième.",
+  },
+  {
+    t: 'Se faire remarquer sans se faire détester',
+    d: "Costumes, fanfares, numéros de rue : tout est permis et tout se voit. La limite est simple à sentir, c'est celle du festivalier qui recule. Une compagnie qu'on a critiquée cette année tractait en slip, et on s'en souvient encore, ce qui prouve que ça marche quand c'est joyeux et jamais insistant.",
+  },
+  {
+    t: 'Tenir la distance',
+    d: "Trois semaines de tractage après une représentation quotidienne, c'est un marathon. Les compagnies qui finissent le festival dans un état correct sont celles qui ont réparti les tours, protégé la voix de celles et ceux qui jouent, et accepté de ne pas tracter tous les jours.",
+  },
+];
+
+const jsonld = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: "Tracter au OFF d'Avignon : la règle et la pratique",
+    description: "Quantités autorisées, lieux interdits, amendes, impression mutualisée, et la façon de tracter qui fonctionne vraiment quand on joue au OFF.",
+    author: { '@type': 'Organization', name: 'La Claque' },
+    publisher: { '@type': 'Organization', name: 'La Claque' },
+    mainEntityOfPage: abs('/guides/tracter-au-off-avignon'),
+    inLanguage: 'fr',
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqs.map((f) => ({
+      '@type': 'Question',
+      name: f.q,
+      acceptedAnswer: { '@type': 'Answer', text: f.r },
+    })),
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Accueil', item: abs('/') },
+      { '@type': 'ListItem', position: 2, name: 'Guides', item: abs('/guides') },
+      { '@type': 'ListItem', position: 3, name: 'Tracter au OFF', item: abs('/guides/tracter-au-off-avignon') },
+    ],
+  },
+];
+---
+<Base
+  title="Tracter au OFF d'Avignon : règles, quantités et méthode | La Claque"
+  description="Quantités autorisées, lieux d'affichage interdits, amendes, impression mutualisée par AF&C, et la façon de tracter qui fonctionne vraiment quand on joue au OFF d'Avignon."
+  active="guides"
+  jsonld={jsonld}
+>
+  <article class="wrap-narrow guide">
+    <p class="breadcrumb"><a href={url('/')}>Accueil</a> › <a href={url('/guides')}>Guides</a> › Tracter au OFF</p>
+    <div class="guide-head">
+      <p class="kicker">Côté métier</p>
+      <h1>Tracter au OFF d'Avignon</h1>
+      <p class="stand">
+        Personne ne vous apprend à tracter. On vous donne une pile de papiers, on vous montre la rue, et
+        débrouillez-vous. Voici ce que dit la règle, et ce que nous avons appris en le faisant.
+      </p>
+    </div>
+
+    <div class="prose">
+      <p>
+        Tracter fait partie du métier au OFF, autant que jouer. Une compagnie qui ne tracte pas joue devant
+        quinze personnes, quelle que soit la qualité de son spectacle. Et le tractage a ses lois, dont une
+        partie est écrite noir sur blanc par la mairie, avec des amendes à la clé.
+      </p>
+
+      <h2>Ce que dit l'arrêté municipal</h2>
+      <p>
+        Chaque année, la ville d'Avignon autorise l'affichage à titre exceptionnel pendant la durée du festival,
+        par un arrêté qui en fixe les conditions : dates d'ouverture et de fin de l'autorisation, qualité des
+        impressions, quantités. Pour 2026, le plafond était de <strong>150 affiches et 5 000 tracts par
+        spectacle</strong>, sur papier certifié FSC mix, encres végétales et attaches biodégradables.
+      </p>
+      <p>
+        Les interdictions sont précises et méritent d'être lues avant de sortir le marteau. Ni clous, ni
+        punaises, ni agrafes. Pas d'affichage sur les troncs d'arbres, les monuments historiques, les remparts,
+        les fils électriques, les jardinières, les poubelles, les palissades de chantier ni les gouttières.
+        Plusieurs places sont entièrement interdites, dont la place Pie, la place de l'Horloge, la place du
+        Palais des Papes et la place Crillon, ainsi que les grilles de plusieurs jardins.
+      </p>
+      <p>
+        La sanction n'est pas symbolique : <strong>150 euros d'amende plus 52 euros de frais d'enlèvement, soit
+        202 euros par affiche</strong>, et un décrochage immédiat par les agents assermentés. Rapporté au budget
+        d'une compagnie du OFF, que nous avons détaillé dans
+        <a href={url('/guides/budget-festival-off-avignon')}> notre guide du budget</a>, deux affiches mal posées
+        coûtent plus cher qu'une journée de location de salle.
+      </p>
+
+      <h2>L'impression mutualisée</h2>
+      <p>
+        Depuis 2017, Avignon Festival &amp; Compagnies propose l'Écopack, un service d'impression groupée des
+        affiches et des tracts. L'intérêt est double : des tarifs négociés pour des compagnies qui n'ont pas de
+        pouvoir d'achat, et un cahier des charges écologique avec des imprimeurs situés à moins de 150 kilomètres
+        d'Avignon, du papier certifié, des encres végétales et des livraisons à vélo. Le dispositif revendique
+        35 tonnes de déchets évitées. Les inscriptions ferment plusieurs mois avant le festival, ce qui suppose
+        de s'y prendre à l'hiver.
+      </p>
+
+      <h2>Six choses que nous avons apprises en tractant</h2>
+      <p>
+        Ce qui suit ne figure dans aucun arrêté. C'est notre expérience, celle d'une bande de comédiennes et de
+        comédiens qui ont joué au OFF et distribué beaucoup de papier.
+      </p>
+      <div class="cards-lite">
+        {etapes.map((e) => (
+          <div class="cl-card">
+            <h3>{e.t}</h3>
+            <p>{e.d}</p>
+          </div>
+        ))}
+      </div>
+
+      <h2>La parade, et le reste</h2>
+      <p>
+        La Grande Parade du OFF ouvre le festival la veille du premier jour. En 2026, année des soixante ans du
+        OFF, elle est partie de la place Pie à 18 h 30 le 3 juillet pour rejoindre le Village du OFF. Elle ne
+        remplira pas votre salle, mais elle a une vertu que le reste du festival n'a pas : ce jour-là, les
+        compagnies se regardent au lieu de se disputer les mêmes passants.
+      </p>
+      <p>
+        Pour le reste, tout est affaire d'endurance et de justesse. Si vous montez pour la première fois, lisez
+        aussi <a href={url('/guides/comment-se-faire-produire')}>comment se faire produire et programmer</a> et
+        <a href={url('/guides/creer-sa-compagnie-de-theatre')}> créer sa compagnie</a>, qui traitent de ce qui se
+        passe avant que la première pile de tracts n'arrive dans vos mains.
+      </p>
+
+      <h2>Questions fréquentes</h2>
+      <div class="faq">
+        {faqs.map((f) => (
+          <details>
+            <summary>{f.q}</summary>
+            <p>{f.r}</p>
+          </details>
+        ))}
+      </div>
+
+      <p class="sources">
+        Sources :
+        <a href="https://www.festivaloffavignon.com/page/affichage" rel="noopener nofollow">AF&amp;C, l'affichage</a>,
+        <a href="https://www.festivaloffavignon.com/revue-de-presse/festival-off-d-avignon-que-dit-l-arrete-municipal-sur-l-affichage-dans-le-detail--2068" rel="noopener nofollow">l'arrêté municipal en détail</a>,
+        <a href="https://www.festivaloffavignon.com/plateforme-solidaire/tractage-et-affichage-1188" rel="noopener nofollow">tractage et affichage</a>,
+        <a href="https://www.festivaloffavignon.com/page/parade-du-off" rel="noopener nofollow">la Grande Parade du OFF</a>.
+      </p>
+    </div>
+  </article>
+</Base>
+
+<style>
+  .cards-lite { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 14px; margin: 18px 0 28px; }
+  .cl-card { background: var(--card); border: 1px solid var(--rule-2); border-left: 4px solid var(--red); padding: 16px 18px; }
+  .cl-card h3 { font-family: var(--display); font-size: 1.15rem; margin: 0 0 6px; }
+  .cl-card p { font-family: var(--serif); font-size: 0.98rem; line-height: 1.5; color: var(--ink-2); margin: 0; }
+</style>

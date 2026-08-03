@@ -104,6 +104,13 @@ export const GUIDES: Guide[] = [
     desc: "Grands Boulevards, rive gauche, théâtres nationaux : comment s'y retrouver dans la géographie théâtrale parisienne, toute l'année.",
     section: 'spectateur',
   },
+  {
+    slug: 'theatre-pas-cher-a-paris',
+    k: 'À Paris',
+    titre: 'Le théâtre pas cher à Paris',
+    desc: "Kiosque à moitié prix, tarif jeune à 10 euros, premières représentations à 50 %, abonnements et Pass Culture.",
+    section: 'spectateur',
+  },
   // ---- Côté métier ----
   {
     slug: 'intermittence-spectacle',
@@ -131,6 +138,13 @@ export const GUIDES: Guide[] = [
     k: 'Production et diffusion',
     titre: "Combien coûte le OFF d'Avignon ?",
     desc: "Le budget d'une compagnie poste par poste, avec un simulateur : salle, transport, logement, repas, com.",
+    section: 'metier',
+  },
+  {
+    slug: 'tracter-au-off-avignon',
+    k: 'Production et diffusion',
+    titre: "Tracter au OFF d'Avignon",
+    desc: "Quantités autorisées, lieux d'affichage interdits, amendes, impression mutualisée, et la méthode qui marche vraiment dans la rue.",
     section: 'metier',
   },
   {

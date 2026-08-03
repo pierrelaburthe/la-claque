@@ -35,6 +35,9 @@ const guideSalles = estAvignon ? 'salles-du-off-avignon' : 'theatre-a-paris-guid
 const guideSlugs = Array.from(new Set([
   ...(piece.salle ? [guideSalles] : []),
   ...(estAvignon ? ['off-avignon-mode-demploi'] : ['choisir-sa-place-au-theatre']),
+  // Le lecteur d'une critique parisienne cherche souvent d'abord une place
+  // abordable ; sur un spectacle d'Avignon, la question ne se pose pas pareil.
+  ...(estAvignon ? [] : ['theatre-pas-cher-a-paris']),
   'lexique-du-theatre',
 ]));
 
