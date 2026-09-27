@@ -858,6 +858,7 @@ export const THEATRES: Theatre[] = [
   {
     slug: 'la-pepiniere-theatre',
     nom: 'La Pépinière-Théâtre',
+    alias: ['La Pépinière Théâtre'],
     adresse: '7 rue Louis-le-Grand',
     cp: '75002',
     arr: 2,
